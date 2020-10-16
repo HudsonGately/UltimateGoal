@@ -77,7 +77,7 @@ public class VisionDatasetsChecker
 
         if(!checkFiles())
         {
-            showError("Missing files!", "Some Vuforia / TensorFlow dataset files are missing from the FIRST folder on the internal storage. Please check to make sure you copied them as per the setup instructions in the readme");
+            showError("Missing files!", "Some Vuforia / TensorFlow dataset files are missing from the FIRST/vision folder on the internal storage. Please check to make sure you copied them as per the setup instructions in the readme");
         }
 
         alreadyCheckedThisSession = true;
@@ -90,28 +90,27 @@ public class VisionDatasetsChecker
                 /*
                  * Velocity Vortex
                  */
-                "/sdcard/FIRST/FTC_2016-17.dat",
-                "/sdcard/FIRST/FTC_2016-17.xml",
+                "/sdcard/FIRST/vision/FTC_2016-17.dat",
+                "/sdcard/FIRST/vision/FTC_2016-17.xml",
 
                 /*
                  * Relic Recovery
                  */
-                "/sdcard/FIRST/RelicVuMark.dat",
-                "/sdcard/FIRST/RelicVuMark.xml",
+                "/sdcard/FIRST/vision/RelicVuMark.dat",
+                "/sdcard/FIRST/vision/RelicVuMark.xml",
 
                 /*
-                 * Rover Ruckus
+                 * Generic
                  */
-                "/sdcard/FIRST/RoverRuckus.dat",
-                "/sdcard/FIRST/RoverRuckus.xml",
-                "/sdcard/FIRST/RoverRuckus.tflite",
+                "/sdcard/FIRST/vision/StonesAndChips.dat",
+                "/sdcard/FIRST/vision/StonesAndChips.xml",
 
                 /*
-                 * SkyStone
+                 * Ultimate goal
                  */
-                "/sdcard/FIRST/Skystone.xml",
-                "/sdcard/FIRST/Skystone.dat",
-                "/sdcard/FIRST/Skystone.tflite"};
+                "/sdcard/FIRST/vision/UltimateGoal.xml",
+                "/sdcard/FIRST/vision/UltimateGoal.dat",
+                "/sdcard/FIRST/vision/UltimateGoal.tflite"};
 
         for(String s : files)
         {

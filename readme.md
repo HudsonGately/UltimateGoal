@@ -52,7 +52,7 @@ Normal SDK 5.5 APK size: 42MB
  1. Fork this repository
  2. Clone your fork
  3. Do `git remote add upstream https://github.com/OpenFTC/OpenRC-Turbo.git`
- 4. Copy all of the files found in the `filesForDynamicLoad` folder of this repo into the `FIRST` folder on the RC's internal storage
+ 4. Copy all of the files found in the `filesForDynamicLoad` folder of this repo into the `FIRST/vision` folder on the RC's internal storage
  5. Select your desired build variant (see the *Switching Build Variants* section)
 
 ## Update Process
@@ -94,7 +94,7 @@ In order to reduce APK size, the Turbo and Extreme Turbo variants do not bundle 
 // Find a line similar to this in the program
 vuforia.loadTrackablesFromAsset("DatasetName");
 // And replace it with this (obviously adjusting the DatasetName)
-vuforia.loadTrackablesFromFile("/sdcard/FIRST/DatasetName");
+vuforia.loadTrackablesFromFile("/sdcard/FIRST/vision/DatasetName");
 
 /*
  * For TensorFlow
@@ -102,13 +102,20 @@ vuforia.loadTrackablesFromFile("/sdcard/FIRST/DatasetName");
 // Find a line similar to this in the program
 tfod.loadModelFromAsset("DatasetName.tflite");
 // And replace it with this (obviously adjusting the DatasetName)
-tfod.loadModelFromFile("/sdcard/FIRST/DatasetName.tflite");
+tfod.loadModelFromFile("/sdcard/FIRST/vision/DatasetName.tflite");
 
 ```
 
 
 
 ## Release Notes:
+
+### 6.0A
+
+Released on 25 September 2020
+
+ - Updates to SDK v6.0
+ - Changes vision datasets to be loaded from `vision` subfolder of `FIRST` folder to prevent the Vuforia XML files from appearing in the configuration editor
 
 ### 5.5B
 
