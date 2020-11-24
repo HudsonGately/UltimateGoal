@@ -26,11 +26,11 @@ public class Drivetrain extends SubsystemBase {
         this(backLeft, backRight, frontLeft, frontRight, gyro, backLeft.encoder, backRight.encoder);
     }
 
-    public void tankDrive(int left, int right) {
+    public void tankDrive(double left, double right) {
         drive.tankDrive(left, right);
     }
 
-    public void arcadeDrive(int forward, int rotate) {
+    public void arcadeDrive(double forward, double rotate) {
         drive.arcadeDrive(forward, rotate);
     }
 
