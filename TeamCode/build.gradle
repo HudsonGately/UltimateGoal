@@ -14,5 +14,8 @@ dependencies {
     /*
      * Other Modules
      */
+    dependencies {
+        implementation 'com.arcrobotics:ftclib:1.1.0'
+    }
     implementation project(':FtcRobotController')
 }
