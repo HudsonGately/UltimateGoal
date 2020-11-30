@@ -33,7 +33,7 @@ public class ShooterAngleCommand extends CommandBase {
         double output = controlLoop.calculate(shooter.getShooterAngle());
 
         if (Math.abs(output) > maxSpeed) {
-            output = Math.signum(output);
+            output = Math.signum(output) * maxSpeed;
         }
 
         shooter.setAngler(output);
