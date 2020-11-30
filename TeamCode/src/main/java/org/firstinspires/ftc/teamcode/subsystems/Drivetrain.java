@@ -15,7 +15,7 @@ public class Drivetrain extends SubsystemBase {
     private GyroEx gyro;
     private Motor.Encoder left, right;
 
-    Drivetrain(MotorEx backLeft, MotorEx backRight, MotorEx frontLeft, MotorEx frontRight, GyroEx gyro, Motor.Encoder leftEncoder, Motor.Encoder rightEncoder) {
+    public Drivetrain(MotorEx backLeft, MotorEx backRight, MotorEx frontLeft, MotorEx frontRight, GyroEx gyro, Motor.Encoder leftEncoder, Motor.Encoder rightEncoder) {
         this.gyro = gyro;
         drive = new DifferentialDrive(new MotorGroup(backLeft, frontLeft), new MotorGroup(backRight, frontRight));
         this.left = leftEncoder;

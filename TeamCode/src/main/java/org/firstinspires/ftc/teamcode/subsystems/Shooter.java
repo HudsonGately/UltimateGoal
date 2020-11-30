@@ -15,16 +15,14 @@ public class Shooter extends SubsystemBase {
     private MotorGroup shooterMotors;
     private Motor.Encoder shooterEncoder, anglerEncoder;
     private Motor anglerMotor;
-    private ServoEx feedServo;
 
-    Shooter(MotorEx frontMotor, MotorEx backMotor, MotorEx anglerMotor, ServoEx feedServo) {
+    public Shooter(MotorEx frontMotor, MotorEx backMotor, MotorEx anglerMotor) {
         shooterMotors = new MotorGroup(frontMotor, backMotor);
         shooterEncoder = backMotor.encoder;
 
         this.anglerMotor = anglerMotor;
         this.anglerEncoder = anglerMotor.encoder;
         this.anglerEncoder.reset();
-        this.feedServo = feedServo;
     }
 
     public void setShooter(double speed) {
@@ -43,9 +41,6 @@ public class Shooter extends SubsystemBase {
         anglerMotor.stopMotor();
     }
 
-    public void setFeedServo(double position) {
-        feedServo.setPosition(position);
-    }
 
     public double getShooterRPM() {
         return 60 * ((double) shooterEncoder.getCorrectedVelocity() / (double) Constants.SHOOTER_TPR);

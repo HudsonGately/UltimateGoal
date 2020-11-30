@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.Subsystem;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
@@ -10,16 +11,14 @@ import java.util.function.DoubleSupplier;
 
 public class DefaultDriveCommand extends CommandBase {
     private Drivetrain drive;
-    private DoubleSupplier leftX, leftY, rightX, rightY;
+    private GamepadEx driverGamepad;
 
     protected double multiplier;
 
-    public DefaultDriveCommand(Drivetrain drive, DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX, DoubleSupplier rightY) {
+    public DefaultDriveCommand(Drivetrain drive, GamepadEx driverGamepad) {
+
         this.drive = drive;
-        this.leftX = leftX;
-        this.rightX = rightX;
-        this.leftY = leftY;
-        this.rightY = rightY;
+        this.driverGamepad = driverGamepad;
 
         this.multiplier = 1;
         addRequirements(this.drive);
@@ -28,10 +27,10 @@ public class DefaultDriveCommand extends CommandBase {
     @Override
     public void execute() {
         // Arcade Drive
-        // drive.arcadeDrive(leftY.getAsDouble() * multiplier, rightX.getAsDouble() * multiplier);
+        // drive.arcadeDrive(driverGamepad.getLeftY(), driverGamepad.getRightX());
 
         // Tank Drive
-        drive.tankDrive(leftY.getAsDouble() * multiplier, rightY.getAsDouble() * multiplier);
+        drive.tankDrive(driverGamepad.getLeftY(), driverGamepad.getRightY());
     }
 
 }
