@@ -12,10 +12,10 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
-import org.firstinspires.ftc.teamcode.commands.ShootRPMCommand;
-import org.firstinspires.ftc.teamcode.commands.SlowDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.intake.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.SlowDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -66,8 +66,8 @@ public class Teleop extends CommandOpMode {
 
         // Subsystems
         drivetrain = new Drivetrain(leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor, gyro);
-        intake = new Intake(intakeMotor);
-        shooter = new Shooter(shooterMotorFront, shooterMotorBack, anglerMotor, feedServo);
+        intake = new Intake(intakeMotor, feedServo);
+        shooter = new Shooter(shooterMotorFront, shooterMotorBack, anglerMotor);
 
         // Gamepad
         driverGamepad = new GamepadEx(gamepad1);
@@ -75,7 +75,7 @@ public class Teleop extends CommandOpMode {
         // Buttons/commands
         intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).whenPressed(new IntakeCommand(intake));
         slowButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whenPressed(new SlowDriveCommand(drivetrain, driverGamepad));
-        shootFastButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).whenHeld(new ShootRPMCommand(shooter, 300));
+        shootFastButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).whenHeld(new ShootRingsCommand(shooter, intake, 30, 300, 3));
 
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
         register(drivetrain, intake);

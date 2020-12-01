@@ -1,20 +1,20 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.intake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 
-public class OuttakeCommand extends CommandBase {
+public class IntakeCommand extends CommandBase {
     Intake intake;
 
-    OuttakeCommand(Intake intake) {
+    public IntakeCommand(Intake intake) {
         this.intake = intake;
         this.addRequirements(this.intake);
     }
 
     @Override
     public void initialize() {
-        intake.outtake();
+        intake.intake();
     }
 
     public void end(boolean interrupted) {

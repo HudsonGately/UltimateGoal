@@ -1,10 +1,8 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.drive;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-
-import java.util.function.DoubleSupplier;
 
 public class SlowDriveCommand extends DefaultDriveCommand {
     public SlowDriveCommand(Drivetrain drive, GamepadEx driverGamepad) {
