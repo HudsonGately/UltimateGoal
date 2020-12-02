@@ -19,8 +19,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SlowDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.FeedRingsCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.OuttakeCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.ShootRPMCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.ShooterAngleCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -102,8 +100,8 @@ public class TeleopTest extends CommandOpMode {
         driverGamepad = new GamepadEx(gamepad1);
 
         // Buttons/commands
-        intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whenPressed(new IntakeCommand(intake));
-        outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).whenPressed(new OuttakeCommand(intake));
+        intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whenPressed(new InstantCommand(intake::intake));
+        outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).whenPressed(new InstantCommand(intake::outtake));
         slowModeTrigger = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)).whenPressed(new SlowDriveCommand(drivetrain, driverGamepad));
         tripleShotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whenPressed(new FeedRingsCommand(intake, 3));
         singleShotButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whenPressed(new FeedRingsCommand(intake, 1));
