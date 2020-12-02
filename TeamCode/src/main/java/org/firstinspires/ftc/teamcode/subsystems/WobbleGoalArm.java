@@ -8,7 +8,7 @@ public class WobbleGoalArm extends SubsystemBase {
     private CRServo arm;
     private ServoEx claw;
 
-    WobbleGoalArm(CRServo arm, ServoEx claw) {
+    public WobbleGoalArm(CRServo arm, ServoEx claw) {
         this.arm = arm;
         this.claw = claw;
     }

@@ -58,12 +58,12 @@ public class DriveDistanceCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(getAverageDistance()) >= distance;
+        return controlLoop.atSetPoint();
     }
 
     private double getAverageDistance() {
 
-        return drive.getRightDistance() / 2;
+        return (drive.getLeftDistance() + drive.getRightDistance()) / 2;
     }
 }
 

@@ -14,7 +14,7 @@ public class Constants {
     public static final int DRIVE_STRAIGHT_P = 0;
     public static final int DRIVE_STRAIGHT_D = 0;
     public static final int DRIVE_GYRO_P = 0;
-    public static final int DRIVE_GYRO_D = 0;
+    public static final int DRDIVE_GYRO_D = 0;
     /** Shooter Constants **/
     public static final int SHOOTER_WHEEL_DIAMETER = 4;
     public static final int SHOOTER_TPR = 225;

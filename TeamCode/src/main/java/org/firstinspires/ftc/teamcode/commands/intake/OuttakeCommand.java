@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 public class OuttakeCommand extends CommandBase {
     Intake intake;
 
-    OuttakeCommand(Intake intake) {
+    public OuttakeCommand(Intake intake) {
         this.intake = intake;
         this.addRequirements(this.intake);
     }
