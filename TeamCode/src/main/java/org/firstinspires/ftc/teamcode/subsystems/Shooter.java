@@ -42,6 +42,7 @@ public class Shooter extends SubsystemBase {
     }
 
 
+    
     public double getShooterRPM() {
         return 60 * ((double) shooterEncoder.getCorrectedVelocity() / (double) Constants.SHOOTER_TPR);
     }
