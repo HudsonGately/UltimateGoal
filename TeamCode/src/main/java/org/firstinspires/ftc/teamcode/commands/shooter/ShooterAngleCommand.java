@@ -4,48 +4,45 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PDController;
 
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterAngler;
 
 public class ShooterAngleCommand extends CommandBase {
-    private Shooter shooter;
+    private ShooterAngler shooterAngler;
     private double angle, maxSpeed;
 
     private PDController controlLoop;
 
-    public ShooterAngleCommand(Shooter shooter, double angle, double maxSpeed) {
-        this.shooter = shooter;
+    public ShooterAngleCommand(ShooterAngler shooterAngler, double angle, double maxSpeed) {
+        this.shooterAngler = shooterAngler;
         this.angle = angle;
         this.maxSpeed = maxSpeed;
 
-        this.addRequirements(shooter);
+        this.addRequirements(shooterAngler);
 
-        controlLoop = new PDController(Constants.ANGLER_P, Constants.ANGLER_D, angle, shooter.getShooterAngle());
+        controlLoop = new PDController(Constants.ANGLER_P, Constants.ANGLER_D, angle, shooterAngler.getShooterAngle());
     }
 
     @Override
     public void initialize() {
         controlLoop.setTolerance(1);
-        controlLoop.calculate(shooter.getShooterAngle());
+        controlLoop.calculate(shooterAngler.getShooterAngle());
     }
 
     @Override
     public void execute() {
-        double output = controlLoop.calculate(shooter.getShooterAngle());
+        double output = controlLoop.calculate(shooterAngler.getShooterAngle());
 
         if (Math.abs(output) > maxSpeed) {
             output = Math.signum(output) * maxSpeed;
         }
-
-        shooter.setAngler(output);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return controlLoop.atSetPoint();
+        if (controlLoop.atSetPoint()) {
+            output = 0;
+        }
+        shooterAngler.setAngler(output);
     }
 
     @Override
     public void end(boolean interrupted) {
-        shooter.stopAngler();
+        shooterAngler.stopAngler();
     }
 }

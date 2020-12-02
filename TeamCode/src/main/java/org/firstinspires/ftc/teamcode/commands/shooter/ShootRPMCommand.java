@@ -1,36 +1,35 @@
 package org.firstinspires.ftc.teamcode.commands.shooter;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.controller.PController;
 
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 
 public class ShootRPMCommand extends CommandBase {
-    private Shooter shooter;
+    private ShooterWheels shooterWheels;
     private double rpm, error, feedforward;
 
 
-    public ShootRPMCommand(Shooter shooter, double rpm) {
-        this.shooter = shooter;
+    public ShootRPMCommand(ShooterWheels shooterWheels, double rpm) {
+        this.shooterWheels = shooterWheels;
         this.rpm = rpm;
 
-        this.addRequirements(shooter);
+        this.addRequirements(shooterWheels);
     }
 
     @Override
     public void execute() {
-        error = rpm - shooter.getShooterRPM();
+        error = rpm - shooterWheels.getShooterRPM();
         feedforward = rpm * Constants.SHOOTER_F;
         double output = error * Constants.SHOOTER_P + feedforward;
 
         if (Math.abs(output) > 1) {
             output = Math.signum(output);
         }
-        shooter.setShooter(output);
+        shooterWheels.setShooter(output);
     }
 
     public void end(boolean interrupted) {
-        shooter.setShooter(0);
+        shooterWheels.setShooter(0);
     }
 }

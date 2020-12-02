@@ -8,10 +8,8 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 public class Intake extends SubsystemBase {
     private MotorEx intake;
-    private ServoEx feedServo; 
 
-    public Intake(MotorEx intake, ServoEx feedServo) {
-        this.feedServo = feedServo;
+    public Intake(MotorEx intake) {
         this.intake = intake;
     }
 
@@ -23,9 +21,6 @@ public class Intake extends SubsystemBase {
         set(Constants.INTAKE_SPEED);
     }
 
-    public void setFeedServo(double position) {
-        feedServo.setPosition(position);
-    }
     public void outtake() {
         set(Constants.OUTAKE_SPEED);
     }
