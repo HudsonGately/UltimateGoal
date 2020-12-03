@@ -49,9 +49,7 @@ public class ShooterAngler extends SubsystemBase {
         double output = pidController.calculate(getShooterAngle(), angleTarget);
         if (pidController.atSetPoint()) {
             setAngler(0);
-            return;
         }
-        setAngler(output);
     }
 
 
