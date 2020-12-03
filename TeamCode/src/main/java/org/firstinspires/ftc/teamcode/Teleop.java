@@ -128,7 +128,7 @@ public class Teleop extends CommandOpMode {
         outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).whileHeld(intake::outtake).whenReleased(intake::stop);
 
         liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whileHeld(wobbleGoalArm::liftArm).whenReleased(wobbleGoalArm::stopArm);
-        lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whileHeld(wobbleGoalArm::lowerArm).whenReleased(wobbleGoalArm::stopArm);
+        lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whileHeld(wobbleGoalArm::lowerArm).whenReleased(wobbleGoalArm::stopArm);
 
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
         register(drivetrain, shooterWheels, shooterAngler, feeder, wobbleGoalArm);
