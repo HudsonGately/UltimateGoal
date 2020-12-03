@@ -1,9 +1,5 @@
-package org.firstinspires.ftc.teamcode;
-
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -16,11 +12,10 @@ import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.GamepadTrigger;
 import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SlowDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
-import org.firstinspires.ftc.teamcode.commands.shooter.ShootRPMCommand;
-import org.firstinspires.ftc.teamcode.commands.shooter.ShooterAngleCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterAngler;
@@ -29,8 +24,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 @TeleOp(name = "TeleOp")
-public class TeleopTest extends CommandOpMode {
-
+public class Teleop extends CommandOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
@@ -93,44 +87,36 @@ public class TeleopTest extends CommandOpMode {
 
 
         // Subsystems
-        drivetrain = new Drivetrain(leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor, gyro);
-        intake = new Intake(intakeMotor);
-        shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack);
-        shooterAngler = new ShooterAngler(anglerMotor);
-        feeder = new ShooterFeeder(feedServo);
-        wobbleGoalArm = new WobbleGoalArm(arm, clawServo);
+        drivetrain = new Drivetrain(leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor, gyro, telemetry);
+        intake = new Intake(intakeMotor, telemetry);
+        shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
+        shooterAngler = new ShooterAngler(anglerMotor, telemetry);
+        feeder = new ShooterFeeder(feedServo, telemetry);
+        wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry);
 
         // Gamepad
         driverGamepad = new GamepadEx(gamepad1);
 
-        // Buttons/commands
-        intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whenPressed(new InstantCommand(intake::intake));
-        outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).whenPressed(new InstantCommand(intake::outtake));
-        slowModeTrigger = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)).whenPressed(new SlowDriveCommand(drivetrain, driverGamepad));
-        tripleShotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whenPressed(new FeedRingsCommand(feeder, 3));
+        slowModeTrigger = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)).whileHeld(new SlowDriveCommand(drivetrain, driverGamepad));
         singleShotButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whenPressed(new FeedRingsCommand(feeder, 1));
 
-        liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whenHeld(new InstantCommand(wobbleGoalArm::liftArm));
-        lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whenHeld(new InstantCommand(wobbleGoalArm::lowerArm));
+        intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(intake::intake);
+        tripleShotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whileHeld(new FeedRingsCommand(feeder, 3));
 
-        // Make a button to toggle the claw
-        toggleClawButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A))
-                .whenPressed(new InstantCommand(wobbleGoalArm::toggleClaw));
-        // Toggles shooter from 300 RPM to stopped (default command)
-        shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y))
-                .toggleWhenPressed(new ShootRPMCommand(shooterWheels, 300));
-        // Toggles angle
-        angleToggleButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X))
-                .toggleWhenPressed(new ShooterAngleCommand(shooterAngler, 30, 0.75));
+        shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).toggleWhenPressed(new InstantCommand(() -> shooterWheels.setShooterRPM(300)));
+        angleToggleButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).toggleWhenPressed(new InstantCommand(() -> shooterAngler.setShooterAngle(30)));
+        toggleClawButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).toggleWhenPressed(new InstantCommand(() -> wobbleGoalArm.toggleClaw()));
+        outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).whileHeld(intake::outtake);
 
+        liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whileHeld(wobbleGoalArm::liftArm);
+        lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whileHeld(wobbleGoalArm::lowerArm);
 
-        intake.setDefaultCommand(new InstantCommand(intake::stop));
-        wobbleGoalArm.setDefaultCommand(new InstantCommand(wobbleGoalArm::openClaw));
-        shooterWheels.setDefaultCommand(new InstantCommand(shooterWheels::stopShooter));
-        shooterAngler.setDefaultCommand(new ShooterAngleCommand(shooterAngler, 0, 0.75));
+        shooterWheels.setDefaultCommand(new InstantCommand(() -> shooterWheels.setShooterRPM(0)));
+        shooterAngler.setDefaultCommand(new InstantCommand(() -> shooterAngler.setShooterAngle(0)));
+        wobbleGoalArm.setDefaultCommand(new InstantCommand(() -> wobbleGoalArm.setArmSpeed(0)));
+        intake.setDefaultCommand(new InstantCommand(() -> intake.stop()));
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
-        register(drivetrain, shooterWheels, shooterAngler, feeder, intake, wobbleGoalArm);
 
+        register(drivetrain, shooterWheels, shooterAngler, feeder, wobbleGoalArm);
     }
-
 }
