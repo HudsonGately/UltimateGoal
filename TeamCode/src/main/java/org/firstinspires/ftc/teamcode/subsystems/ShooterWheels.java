@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
@@ -17,14 +18,14 @@ public class ShooterWheels extends SubsystemBase {
     private Telemetry telemetry;
 
     private MotorGroup shooterMotors;
-    private Motor.Encoder shooterEncoder, anglerEncoder;
-    private PIDController shooterWheelsPID;
+    private Motor.Encoder shooterEncoder;
+    private PIDFController shooterWheelsPID;
     private double shooterTarget;
 
     public ShooterWheels(MotorEx frontMotor, MotorEx backMotor, Telemetry tl) {
         shooterMotors = new MotorGroup(frontMotor, backMotor);
         shooterEncoder = backMotor.encoder;
-        shooterWheelsPID = new PIDController(Constants.SHOOTER_P, 0, 0);
+        shooterWheelsPID = new PIDFController(Constants.SHOOTER_P, 0, 0, Constants.SHOOTER_F);
 
         shooterTarget = 0;
         telemetry = tl;
@@ -43,7 +44,7 @@ public class ShooterWheels extends SubsystemBase {
             return;
         }
 
-        double output = shooterWheelsPID.calculate(getShooterRPM(), shooterTarget) + shooterTarget * Constants.SHOOTER_F;
+        double output = shooterWheelsPID.calculate(getShooterRPM(), shooterTarget);
         setShooterPower(output);
 
     }
