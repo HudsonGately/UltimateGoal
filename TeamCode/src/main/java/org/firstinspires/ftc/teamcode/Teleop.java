@@ -114,12 +114,12 @@ public class Teleop extends CommandOpMode {
                     shooterWheels.setShooterRPM(0);
                 }, shooterWheels
         ));
+
         angleToggleButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).toggleWhenPressed(new StartEndCommand(
                 () -> shooterAngler.setShooterAngle(30),
                 () -> shooterAngler.setShooterAngle(0),
                 shooterAngler
         ));
-
         toggleClawButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).toggleWhenPressed(new StartEndCommand(
                 wobbleGoalArm::openClaw,
                 wobbleGoalArm::closeClaw,
