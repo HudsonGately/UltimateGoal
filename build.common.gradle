@@ -106,6 +106,7 @@ apply from: '../moduleFlavors.gradle'
 
 repositories {
     jcenter()
+    mavenLocal()
     flatDir {
         dirs rootProject.file('libs')
     }

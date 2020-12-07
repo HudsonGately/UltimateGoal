@@ -30,7 +30,11 @@ public class DefaultDriveCommand extends CommandBase {
         // drive.arcadeDrive(driverGamepad.getLeftY(), driverGamepad.getRightX());
 
         // Tank Drive
-        drive.tankDrive(driverGamepad.getLeftY(), -driverGamepad.getRightY());
+        drive.tankDrive(driverGamepad.getLeftY() * multiplier, -driverGamepad.getRightY() * multiplier);
     }
 
+    @Override
+    public void end(boolean interrupted) {
+        drive.stop();
+    }
 }
