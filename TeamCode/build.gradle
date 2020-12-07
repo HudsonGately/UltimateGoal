@@ -16,7 +16,7 @@ dependencies {
      */
     dependencies {
         implementation 'com.arcrobotics.ftclib:vision:1.1.0'
-        implementation 'com.github.codeNinjaDev:FTCLib:dev-SNAPSHOT'
+        implementation 'com.github.FTCLib.FTCLib:ftclib:dev-SNAPSHOT'
 
     }
     implementation project(':FtcRobotController')
