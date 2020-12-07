@@ -14,9 +14,10 @@ public class ShooterAngler extends SubsystemBase {
     private MotorEx anglerMotor;
     private Motor.Encoder anglerEncoder;
     private PIDController pidController;
+    private boolean debug;
     private double angleTarget;
 
-    public ShooterAngler(MotorEx anglerMotor, Telemetry tl) {
+    public ShooterAngler(MotorEx anglerMotor, Telemetry tl, boolean debug) {
 
         this.anglerMotor = anglerMotor;
         this.anglerEncoder = anglerMotor.encoder;
@@ -27,8 +28,12 @@ public class ShooterAngler extends SubsystemBase {
 
         this.angleTarget = 0;
         this.pidController.setSetPoint(0);
-
+        this.debug = debug;
         telemetry = tl;
+    }
+
+    public ShooterAngler(MotorEx anglerMotor, Telemetry tl) {
+        this(anglerMotor, tl, false);
     }
     public void setAngler(double speed) {
         anglerMotor.set(speed);
@@ -39,17 +44,16 @@ public class ShooterAngler extends SubsystemBase {
 
     @Override
     public void periodic() {
-        handlePID();
+        if (debug) {
+            handlePID();
+        }
         telemetry.addData("Current Shooter Angle", getShooterAngle());
         telemetry.addData("Angler Power", anglerMotor.get());
     }
 
     private void handlePID() {
 
-        double output = pidController.calculate(getShooterAngle(), angleTarget);
-        if (pidController.atSetPoint()) {
-            setAngler(0);
-        }
+        double output = pidController.calculate(getShooterAngle(), angleTarget) + Constants.GRAV_FF * Math.cos(Math.toRadians(angleTarget));
     }
 
 
@@ -59,6 +63,6 @@ public class ShooterAngler extends SubsystemBase {
 
     public double getShooterAngle() {
         double revolutions = anglerEncoder.getPosition() / (double) Constants.ANGLER_TPR;
-        return revolutions * 360 + Constants.SHOOTER_OFFSET_ANGLE;
+        return Constants.SHOOTER_OFFSET_ANGLE - revolutions * 360;
     }
 }

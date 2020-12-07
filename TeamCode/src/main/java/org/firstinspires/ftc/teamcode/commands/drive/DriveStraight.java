@@ -24,6 +24,11 @@ public class DriveStraight extends CommandBase {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        drivetrain.stop();
+    }
+
+    @Override
     public boolean isFinished() {
         return Math.abs(getAverageDistance()) >= Math.abs(distance);
     }

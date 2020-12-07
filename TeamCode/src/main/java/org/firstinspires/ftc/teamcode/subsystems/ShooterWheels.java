@@ -23,9 +23,13 @@ public class ShooterWheels extends SubsystemBase {
     private double shooterTarget;
 
     public ShooterWheels(MotorEx frontMotor, MotorEx backMotor, Telemetry tl) {
+        frontMotor.setInverted(true);
+        backMotor.setInverted(true);
         shooterMotors = new MotorGroup(frontMotor, backMotor);
+
         shooterEncoder = backMotor.encoder;
         shooterWheelsPID = new PIDFController(Constants.SHOOTER_P, 0, 0, Constants.SHOOTER_F);
+
 
         shooterTarget = 0;
         telemetry = tl;

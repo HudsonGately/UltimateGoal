@@ -11,9 +11,8 @@ public class FeedRingsCommand extends SequentialCommandGroup {
     public FeedRingsCommand(ShooterFeeder feeder, int numRings) {
         for (int i = 0; i < numRings; i++) {
             addCommands(new FeedCommand(feeder, Constants.SERVO_POSITION_SHOOT),
-                    new WaitCommand(250),
+                    new WaitCommand(50),
                     new FeedCommand(feeder, Constants.SERVO_POSITION_HOME));
         }
-        addCommands(new WaitCommand(500));
     }
 }

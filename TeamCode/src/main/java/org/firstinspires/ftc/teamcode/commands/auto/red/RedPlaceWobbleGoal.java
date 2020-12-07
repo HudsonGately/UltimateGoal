@@ -15,9 +15,15 @@ import java.util.function.Supplier;
 public class RedPlaceWobbleGoal extends SequentialCommandGroup {
     public RedPlaceWobbleGoal(Drivetrain drivetrain, Supplier<Object> currentRing) {
         Map<Object, Command> mapSelector = new HashMap<Object, Command>();
-        mapSelector.put(UGRectDetector.Stack.ZERO, new InstantCommand());
-        mapSelector.put(UGRectDetector.Stack.ONE, new InstantCommand());
-        mapSelector.put(UGRectDetector.Stack.FOUR, new InstantCommand());
+        mapSelector.put(UGRectDetector.Stack.ZERO, new SequentialCommandGroup(
+
+        ));
+        mapSelector.put(UGRectDetector.Stack.ONE, new SequentialCommandGroup(
+
+        ));
+        mapSelector.put(UGRectDetector.Stack.FOUR, new SequentialCommandGroup(
+
+        ));
         addCommands(
                 new SelectCommand(
                         mapSelector,

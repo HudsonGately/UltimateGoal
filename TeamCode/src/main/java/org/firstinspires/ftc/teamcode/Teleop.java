@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -63,7 +63,7 @@ public class Teleop extends CommandOpMode {
         ✅ D-Pad Up - Wobble Goal Arm Up
     */
     // Buttons
-    private Button intakeButton, outtakeButton, shootButton, slowModeTrigger, liftArmButton, lowerArmButton, toggleClawButton, tripleShotButton, singleShotButton, angleToggleButton;
+    private Button shootButton, slowModeTrigger, liftArmButton, lowerArmButton, toggleClawButton, shootRingsButton, angleToggleButton;
 
     @Override
     public void initialize() {
@@ -101,10 +101,9 @@ public class Teleop extends CommandOpMode {
         driverGamepad = new GamepadEx(gamepad1);
 
         slowModeTrigger = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)).whileHeld(new SlowDriveCommand(drivetrain, driverGamepad));
-        singleShotButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whenPressed(new FeedRingsCommand(feeder, 1));
+        shootRingsButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whenPressed(new FeedRingsCommand(feeder, 1)).whenHeld(new FeedRingsCommand(feeder, 3));
 
-        intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(intake::intake).whenReleased(intake::stop);
-        tripleShotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whileHeld(new FeedRingsCommand(feeder, 3));
+        // intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(intake::intake).whenReleased(intake::stop);
 
         shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).toggleWhenPressed(new StartEndCommand(
                 () -> {
@@ -116,8 +115,8 @@ public class Teleop extends CommandOpMode {
         ));
 
         angleToggleButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).toggleWhenPressed(new StartEndCommand(
-                () -> shooterAngler.setShooterAngle(30),
-                () -> shooterAngler.setShooterAngle(0),
+                () -> shooterAngler.setShooterAngle(20),
+                () -> shooterAngler.setShooterAngle(Constants.SHOOTER_OFFSET_ANGLE),
                 shooterAngler
         ));
         toggleClawButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).toggleWhenPressed(new StartEndCommand(
@@ -125,11 +124,11 @@ public class Teleop extends CommandOpMode {
                 wobbleGoalArm::closeClaw,
                 wobbleGoalArm
         ));
-        outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).whileHeld(intake::outtake).whenReleased(intake::stop);
+        // outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).whileHeld(intake::outtake).whenReleased(intake::stop);
+        schedule(new PerpetualCommand(new InstantCommand(telemetry::update)));
 
         liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whileHeld(wobbleGoalArm::liftArm).whenReleased(wobbleGoalArm::stopArm);
         lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whileHeld(wobbleGoalArm::lowerArm).whenReleased(wobbleGoalArm::stopArm);
-
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
         register(drivetrain, shooterWheels, shooterAngler, feeder, wobbleGoalArm);
     }

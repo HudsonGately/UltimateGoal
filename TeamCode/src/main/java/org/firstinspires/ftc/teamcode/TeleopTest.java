@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.SelectCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.FunctionalCommand;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -14,14 +14,10 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.arcrobotics.ftclib.vision.UGRectDetector;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.StartEndCommand;
-import org.firstinspires.ftc.teamcode.commands.auto.red.RedPlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.DriveStraight;
 import org.firstinspires.ftc.teamcode.commands.drive.SlowDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -29,14 +25,12 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterAngler;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
-import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Instant;
 
-@Autonomous(name = "Test AUto")
-public class Auto extends CommandOpMode {
+@TeleOp(name = "TeleOp-test")
+public class TeleopTest extends CommandOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
@@ -47,6 +41,8 @@ public class Auto extends CommandOpMode {
     // Gyro
     private GyroEx gyro;
 
+    // Gamepad
+    private GamepadEx driverGamepad;
 
     // Subsystems
     private Drivetrain drivetrain;
@@ -55,10 +51,7 @@ public class Auto extends CommandOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
-
-    private Vision vision;
-    // Commands
-
+    private Button slowModeTrigger, shootRingsButton, shootButton, anglerUpButton, anglerDownButton,toggleClawButton, liftArmButton, lowerArmButton;
     @Override
     public void initialize() {
 
@@ -85,25 +78,43 @@ public class Auto extends CommandOpMode {
 
         // Subsystems
         drivetrain = new Drivetrain(leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor, gyro, telemetry);
-        intake = new Intake(intakeMotor, telemetry);
+        // intake = new Intake(intakeMotor, telemetry);
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
-        shooterAngler = new ShooterAngler(anglerMotor, telemetry);
+        shooterAngler = new ShooterAngler(anglerMotor, telemetry, true);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry);
-        vision = new Vision(hardwareMap, "webcam1", telemetry);
 
+        driverGamepad = new GamepadEx(gamepad1);
 
-        Map<Object, Command> mapSelector = new HashMap<Object, Command>();
-        mapSelector.put(UGRectDetector.Stack.ZERO, new SequentialCommandGroup(
-            new DriveStraight(drivetrain, 12)
+        slowModeTrigger = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)).whileHeld(new SlowDriveCommand(drivetrain, driverGamepad));
+        shootRingsButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whenPressed(new FeedRingsCommand(feeder, 1)).whenHeld(new FeedRingsCommand(feeder, 3));
+
+        // intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(intake::intake).whenReleased(intake::stop);
+
+        shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).toggleWhenPressed(new StartEndCommand(
+                () -> {
+                    shooterWheels.setShooterRPM(6000);
+                },
+                () -> {
+                    shooterWheels.setShooterRPM(0);
+                }, shooterWheels
         ));
-        mapSelector.put(UGRectDetector.Stack.ONE, new SequentialCommandGroup(
 
+        anglerUpButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whileHeld(() -> shooterAngler.setAngler(0.3)).whenReleased(() -> shooterAngler.setAngler(0));
+        anglerDownButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(() -> shooterAngler.setAngler(-0.3)).whenReleased(() -> shooterAngler.setAngler(0));
+        toggleClawButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).toggleWhenPressed(new StartEndCommand(
+                wobbleGoalArm::openClaw,
+                wobbleGoalArm::closeClaw,
+                wobbleGoalArm
         ));
-        mapSelector.put(UGRectDetector.Stack.FOUR, new SequentialCommandGroup(
+        // outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).whileHeld(intake::outtake).whenReleased(intake::stop);
 
-        ));
-        schedule(new SelectCommand(mapSelector, vision::getCurrentStack));
-        register(drivetrain, shooterWheels, shooterAngler, feeder, wobbleGoalArm, vision);
+        liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whileHeld(wobbleGoalArm::liftArm).whenReleased(wobbleGoalArm::stopArm);
+        lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whileHeld(wobbleGoalArm::lowerArm).whenReleased(wobbleGoalArm::stopArm);
+
+        // Gamepad
+        schedule(new PerpetualCommand(new InstantCommand(telemetry::update)));
+        drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
+        register(drivetrain, shooterWheels, shooterAngler, feeder, wobbleGoalArm);
     }
 }
