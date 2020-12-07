@@ -23,7 +23,7 @@ public class Drivetrain extends SubsystemBase {
     private static final Logger LOGGER = Logger.getLogger( Drivetrain.class.getName() );
     public Drivetrain(MotorEx backLeft, MotorEx backRight, MotorEx frontLeft, MotorEx frontRight, GyroEx gyro, Motor.Encoder leftEncoder, Motor.Encoder rightEncoder, Telemetry tl) {
         this.gyro = gyro;
-        drive = new DifferentialDrive(new MotorGroup(backLeft, frontLeft), new MotorGroup(backRight, frontRight));
+        drive = new DifferentialDrive(false, new MotorGroup(backLeft, frontLeft), new MotorGroup(backRight, frontRight));
         this.left = leftEncoder;
         this.right = rightEncoder;
         this.telemetry = tl;
