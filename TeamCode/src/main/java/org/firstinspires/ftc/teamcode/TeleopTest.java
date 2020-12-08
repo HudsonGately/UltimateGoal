@@ -15,6 +15,8 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.StartEndCommand;
@@ -35,7 +37,8 @@ public class TeleopTest extends CommandOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
-    private MotorEx shooterMotorFront, shooterMotorBack, anglerMotor;
+    private MotorEx anglerMotor;
+    private DcMotorEx shooterMotorFront, shooterMotorBack;
     private CRServo arm;
     private ServoEx feedServo, clawServo;
 
@@ -52,7 +55,7 @@ public class TeleopTest extends CommandOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
-    private Button slowModeTrigger, shootRingsButton, shootButton, anglerUpButton, anglerDownButton,toggleClawButton, liftArmButton, lowerArmButton;
+    private Button slowModeTrigger, tripleShotButton, shootRingsButton, shootButton, anglerUpButton, anglerDownButton,toggleClawButton, liftArmButton, lowerArmButton;
     @Override
     public void initialize() {
 
@@ -67,8 +70,8 @@ public class TeleopTest extends CommandOpMode {
         intakeMotor = new MotorEx(hardwareMap, "intake");
 
         // Shooter hardware initializations
-        shooterMotorBack = new MotorEx(hardwareMap, "shooter_back");
-        shooterMotorFront = new MotorEx(hardwareMap, "shooter_front");
+        shooterMotorBack = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_back");
+        shooterMotorFront = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_front");
         anglerMotor = new MotorEx(hardwareMap, "angler");
         feedServo = new SimpleServo(hardwareMap, "feed_servo");
 
@@ -88,13 +91,14 @@ public class TeleopTest extends CommandOpMode {
         driverGamepad = new GamepadEx(gamepad1);
 
         slowModeTrigger = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)).whileHeld(new SlowDriveCommand(drivetrain, driverGamepad));
-        shootRingsButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whenPressed(new FeedRingsCommand(feeder, 1)).whenHeld(new FeedRingsCommand(feeder, 3));
+        shootRingsButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whenPressed(new FeedRingsCommand(feeder, 1));
+        tripleShotButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whenPressed(new FeedRingsCommand(feeder, 3));
 
         // intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(intake::intake).whenReleased(intake::stop);
 
         shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).toggleWhenPressed(new StartEndCommand(
                 () -> {
-                    shooterWheels.setShooterRPM(6000);
+                    shooterWheels.setShooterRPM(4500);
                 },
                 () -> {
                     shooterWheels.setShooterRPM(0);
@@ -115,6 +119,10 @@ public class TeleopTest extends CommandOpMode {
 
         // Gamepad
         schedule(new RunCommand(telemetry::update));
+        /* schedule(new RunCommand(() -> {
+            feeder.setFeedServo(driverGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
+        }, feeder));
+        */
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
     }
 }

@@ -25,6 +25,7 @@ public class ShooterAngler extends SubsystemBase {
     public ShooterAngler(MotorEx anglerMotor, Telemetry tl, boolean debug) {
 
         this.anglerMotor = anglerMotor;
+        this.anglerMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         this.anglerEncoder = anglerMotor.encoder;
         this.anglerEncoder.reset();
 

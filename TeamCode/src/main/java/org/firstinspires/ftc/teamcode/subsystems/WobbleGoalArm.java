@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Util;
@@ -28,7 +29,6 @@ public class WobbleGoalArm extends SubsystemBase {
         Util.logger(this, telemetry, Level.INFO, "Current Arm Speed", arm.get());
         Util.logger(this, telemetry, Level.INFO, "Wobble Claw Pos", claw.getPosition());
     }
-
     public void setArmSpeed(double speed) {
         arm.set(speed);
     }
