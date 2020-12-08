@@ -8,6 +8,8 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
 
+import java.util.logging.Logger;
+
 public class ShooterAngler extends SubsystemBase {
     Telemetry telemetry;
 
@@ -17,6 +19,7 @@ public class ShooterAngler extends SubsystemBase {
     private boolean debug;
     private double angleTarget;
 
+    private static final Logger LOGGER = Logger.getLogger( ShooterAngler.class.getName() );
     public ShooterAngler(MotorEx anglerMotor, Telemetry tl, boolean debug) {
 
         this.anglerMotor = anglerMotor;
@@ -47,8 +50,10 @@ public class ShooterAngler extends SubsystemBase {
         if (debug) {
             handlePID();
         }
+
         telemetry.addData("Current Shooter Angle", getShooterAngle());
         telemetry.addData("Angler Power", anglerMotor.get());
+        LOGGER.info("Current shooter angle: "  + getShooterAngle());
     }
 
     private void handlePID() {

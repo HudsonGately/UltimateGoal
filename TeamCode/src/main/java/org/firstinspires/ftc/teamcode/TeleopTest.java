@@ -16,6 +16,7 @@ import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.StartEndCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SlowDriveCommand;
@@ -113,8 +114,7 @@ public class TeleopTest extends CommandOpMode {
         lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whileHeld(wobbleGoalArm::lowerArm).whenReleased(wobbleGoalArm::stopArm);
 
         // Gamepad
-        schedule(new PerpetualCommand(new InstantCommand(telemetry::update)));
+        schedule(new RunCommand(telemetry::update));
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
-        register(drivetrain, shooterWheels, shooterAngler, feeder, wobbleGoalArm);
     }
 }

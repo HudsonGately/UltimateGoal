@@ -19,6 +19,7 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         telemetry.addData("Intake Speed", intake.get());
+        telemetry.update();
     }
 
     private void set(double speed) {
