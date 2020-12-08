@@ -5,6 +5,9 @@ import com.arcrobotics.ftclib.vision.UGRectDetector;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Util;
+
+import java.util.logging.Level;
 
 public class Vision extends SubsystemBase {
     private Telemetry telemetry;
@@ -25,7 +28,8 @@ public class Vision extends SubsystemBase {
     @Override
     public void periodic() {
         currentStack = ringDetector.getStack();
-        telemetry.addData("Current Stack:", currentStack);
+
+        Util.logger(this, telemetry, Level.INFO, "Current Stack", currentStack);
     }
 
     public UGRectDetector.Stack getCurrentStack() {

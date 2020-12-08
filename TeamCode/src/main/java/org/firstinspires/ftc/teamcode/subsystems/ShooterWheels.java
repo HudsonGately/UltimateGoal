@@ -9,6 +9,9 @@ import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.Util;
+
+import java.util.logging.Level;
 
 /**
  * TODO Think about separating shooter from angler
@@ -38,8 +41,9 @@ public class ShooterWheels extends SubsystemBase {
     @Override
     public void periodic() {
         handleShooterPID();
-        telemetry.addData("Shooter RPM", getShooterRPM());
-        telemetry.addData("Shooter Power", shooterMotors.get());
+        Util.logger(this, telemetry, Level.INFO, "Shooter RPM", getShooterRPM());
+        Util.logger(this, telemetry, Level.INFO, "Shooter Setpoint", shooterWheelsPID.getSetPoint());
+        Util.logger(this, telemetry, Level.INFO, "Shooter Power", shooterMotors.get());
     }
 
     private void handleShooterPID() {

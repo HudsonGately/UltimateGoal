@@ -6,6 +6,9 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.Util;
+
+import java.util.logging.Level;
 
 public class Intake extends SubsystemBase {
     Telemetry telemetry;
@@ -18,8 +21,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        telemetry.addData("Intake Speed", intake.get());
-        telemetry.update();
+        Util.logger(this, telemetry, Level.INFO, "Current Intake Speed", intake.get());
     }
 
     private void set(double speed) {

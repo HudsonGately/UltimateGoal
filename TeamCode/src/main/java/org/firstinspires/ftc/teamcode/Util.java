@@ -1,6 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Util {
+
+    public static void logger(Object currentClass, Telemetry tl, Level level, String caption, Object data) {
+        Logger.getLogger(currentClass.getClass().getName()).log(level, caption + data);
+        tl.addData(caption, data);
+    }
+
+
     /**
      * Returns modulus of error where error is the difference between the reference
      * and a measurement.

@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.Util;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,14 +21,12 @@ public class Drivetrain extends SubsystemBase {
     private DifferentialDrive drive;
     private GyroEx gyro;
     private Motor.Encoder left, right;
-    private static final Logger LOGGER = Logger.getLogger( Drivetrain.class.getName() );
     public Drivetrain(MotorEx backLeft, MotorEx backRight, MotorEx frontLeft, MotorEx frontRight, GyroEx gyro, Motor.Encoder leftEncoder, Motor.Encoder rightEncoder, Telemetry tl) {
         this.gyro = gyro;
         drive = new DifferentialDrive(false, new MotorGroup(backLeft, frontLeft), new MotorGroup(backRight, frontRight));
         this.left = leftEncoder;
         this.right = rightEncoder;
         this.telemetry = tl;
-        LOGGER.setLevel(Level.ALL);
     }
 
     public Drivetrain(MotorEx backLeft, MotorEx backRight, MotorEx frontLeft, MotorEx frontRight, GyroEx gyro, Telemetry tl) {
@@ -36,10 +35,9 @@ public class Drivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        LOGGER.log(Level.INFO, "Current Left Distance: {-999}", getLeftDistance());
-        LOGGER.log(Level.INFO, "Current Right Distance: {-999}", getRightDistance());
-        LOGGER.log(Level.INFO, "Current Gyro Angle: {0}", getAngle());
-        // Might need to get rid of this for performance issues
+        Util.logger(this, telemetry, Level.INFO, "Left Distance", getLeftDistance());
+        Util.logger(this, telemetry, Level.INFO, "Right Distance", getRightDistance());
+        Util.logger(this, telemetry, Level.INFO, "Gyro Angle", getAngle());
     }
 
     public void tankDrive(double left, double right) {
