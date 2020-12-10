@@ -13,9 +13,9 @@ public class FeedRingsCommand extends SequentialCommandGroup {
         for (int i = 0; i < numRings; i++) {
             addCommands(
                 new InstantCommand(feeder::feedShooter),
-                new WaitCommand(100),
+                new WaitCommand(50),
                 new InstantCommand(feeder::retractFeed),
-                new WaitCommand(100)
+                new WaitCommand(50)
             );
         }
     }
