@@ -73,11 +73,11 @@ public class TeleopTest extends CommandOpMode {
         shooterMotorBack = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_back");
         shooterMotorFront = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_front");
         anglerMotor = new MotorEx(hardwareMap, "angler");
-        feedServo = new SimpleServo(hardwareMap, "feed_servo");
+        feedServo = new SimpleServo(hardwareMap, "feed_servo", 0, 230);
 
         // Wobble Harware initializations
         arm = new CRServo(hardwareMap, "arm");
-        clawServo = new SimpleServo(hardwareMap, "claw_servo");
+        clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
 
 
         // Subsystems
@@ -96,22 +96,16 @@ public class TeleopTest extends CommandOpMode {
 
         // intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(intake::intake).whenReleased(intake::stop);
 
-        shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).toggleWhenPressed(new StartEndCommand(
-                () -> {
-                    shooterWheels.setShooterRPM(4500);
-                },
-                () -> {
-                    shooterWheels.setShooterRPM(0);
-                }, shooterWheels
-        ));
+        shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).toggleWhenPressed(
+                new InstantCommand(() -> shooterWheels.setShooterRPM(4500), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
 
         anglerUpButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whileHeld(() -> shooterAngler.setAngler(0.3)).whenReleased(() -> shooterAngler.setAngler(0));
         anglerDownButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(() -> shooterAngler.setAngler(-0.3)).whenReleased(() -> shooterAngler.setAngler(0));
-        toggleClawButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).toggleWhenPressed(new StartEndCommand(
-                wobbleGoalArm::openClaw,
-                wobbleGoalArm::closeClaw,
-                wobbleGoalArm
-        ));
+        toggleClawButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).toggleWhenPressed(
+                new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
+                new InstantCommand(wobbleGoalArm::closeClaw, wobbleGoalArm)
+        );
         // outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).whileHeld(intake::outtake).whenReleased(intake::stop);
 
         liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whileHeld(wobbleGoalArm::liftArm).whenReleased(wobbleGoalArm::stopArm);
