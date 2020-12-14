@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.FunctionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -18,6 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.StartEndCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
@@ -56,6 +58,9 @@ public class TeleopTest extends CommandOpMode {
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
     private Button slowModeTrigger, tripleShotButton, shootRingsButton, shootButton, anglerUpButton, anglerDownButton,toggleClawButton, liftArmButton, lowerArmButton;
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    Telemetry dashboardTelemetry = dashboard.getTelemetry();
+
     @Override
     public void initialize() {
 
@@ -97,7 +102,7 @@ public class TeleopTest extends CommandOpMode {
         // intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(intake::intake).whenReleased(intake::stop);
 
         shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).toggleWhenPressed(
-                new InstantCommand(() -> shooterWheels.setShooterRPM(4500), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(Constants.TARGET_SPEED), shooterWheels),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
 
         anglerUpButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whileHeld(() -> shooterAngler.setAngler(0.3)).whenReleased(() -> shooterAngler.setAngler(0));
@@ -110,7 +115,8 @@ public class TeleopTest extends CommandOpMode {
 
         liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whileHeld(wobbleGoalArm::liftArm).whenReleased(wobbleGoalArm::stopArm);
         lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whileHeld(wobbleGoalArm::lowerArm).whenReleased(wobbleGoalArm::stopArm);
-
+        dashboardTelemetry.addData("Test Dashboard", true);
+        dashboardTelemetry.update();
         // Gamepad
         schedule(new RunCommand(telemetry::update));
         /* schedule(new RunCommand(() -> {
