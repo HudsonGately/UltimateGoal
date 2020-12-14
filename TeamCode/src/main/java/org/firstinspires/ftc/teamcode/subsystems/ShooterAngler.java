@@ -1,18 +1,24 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Util;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+@Config
 public class ShooterAngler extends SubsystemBase {
+
+    public static double SHOOTER_OFFSET_ANGLE = 30.4;
+    public static double ANGLER_TPR = 5264;
+    public static double ANGLER_P = 0;
+    public static double ANGLER_D = 0;
+
     Telemetry telemetry;
 
     private MotorEx anglerMotor;
@@ -29,7 +35,7 @@ public class ShooterAngler extends SubsystemBase {
         this.anglerEncoder = anglerMotor.encoder;
         this.anglerEncoder.reset();
 
-        this.pidController = new PIDController(Constants.ANGLER_P, 0, Constants.ANGLER_D);
+        this.pidController = new PIDController(ANGLER_P, 0, ANGLER_D);
         this.pidController.setTolerance(2);
 
         this.angleTarget = 0;
@@ -60,7 +66,7 @@ public class ShooterAngler extends SubsystemBase {
 
     private void handlePID() {
 
-        double output = pidController.calculate(getShooterAngle(), angleTarget) + Constants.GRAV_FF * Math.cos(Math.toRadians(angleTarget));
+        double output = pidController.calculate(getShooterAngle(), angleTarget);
     }
 
 
@@ -69,7 +75,7 @@ public class ShooterAngler extends SubsystemBase {
     }
 
     public double getShooterAngle() {
-        double revolutions = anglerEncoder.getPosition() / (double) Constants.ANGLER_TPR;
-        return Constants.SHOOTER_OFFSET_ANGLE - revolutions * 360;
+        double revolutions = anglerEncoder.getPosition() / (double) ANGLER_TPR;
+        return SHOOTER_OFFSET_ANGLE - revolutions * 360;
     }
 }

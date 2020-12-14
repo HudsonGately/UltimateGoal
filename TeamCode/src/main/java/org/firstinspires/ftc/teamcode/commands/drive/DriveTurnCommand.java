@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commands.drive;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
@@ -36,7 +35,7 @@ public class DriveTurnCommand extends CommandBase {
     @Override
     public void execute() {
         error = Util.getModulusError(angle, drive.getAngle(), -180, 180);
-        double output = error * Constants.DRIVE_GYRO_P;
+        double output = error * Drivetrain.DRIVE_GYRO_P;
 
         if (Math.abs(output) > speed) {
             output = Math.signum(output) * speed;

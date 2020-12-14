@@ -1,16 +1,20 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Util;
 
 import java.util.logging.Level;
-
+@Config
 public class Intake extends SubsystemBase {
+
+    public static double INTAKE_SPEED = 0.8;
+    public static double OUTAKE_SPEED = -0.5;
+
     Telemetry telemetry;
     private MotorEx intake;
 
@@ -29,11 +33,11 @@ public class Intake extends SubsystemBase {
     }
 
     public void intake() {
-        set(Constants.INTAKE_SPEED);
+        set(INTAKE_SPEED);
     }
 
     public void outtake() {
-        set(Constants.OUTAKE_SPEED);
+        set(OUTAKE_SPEED);
     }
 
     public void stop() {

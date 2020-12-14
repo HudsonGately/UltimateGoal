@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.controller.PIDFController;
@@ -10,7 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Util;
 
 import java.util.logging.Level;
@@ -18,10 +18,19 @@ import java.util.logging.Level;
 /**
  * TODO Think about separating shooter from angler
  */
-
+@Config
 public class ShooterWheels extends SubsystemBase {
     private Telemetry telemetry;
 
+    public static double MAX_SHOOTER_RPM = 4500;
+    public static int SHOOTER_WHEEL_DIAMETER = 4;
+    public static double SHOOTER_TPR = 28;
+
+    public static double SHOOTER_P = 0.0002;
+    public static double SHOOTER_F = 1.0 / MAX_SHOOTER_RPM;
+
+
+    public static double TARGET_SPEED = 4500;
     private PIDFController shooterWheelsPID;
     private double shooterTarget;
     DcMotorEx frontMotor, backMotor;
@@ -33,7 +42,7 @@ public class ShooterWheels extends SubsystemBase {
         backMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         this.frontMotor = frontMotor;
         this.backMotor = backMotor;
-        shooterWheelsPID = new PIDFController(Constants.SHOOTER_P, 0, 0, Constants.SHOOTER_F);
+        shooterWheelsPID = new PIDFController(SHOOTER_P, 0, 0, SHOOTER_F);
 
 
         shooterTarget = 0;
@@ -72,7 +81,7 @@ public class ShooterWheels extends SubsystemBase {
     }
 
     public double getShooterRPM() {
-        return 60 * ((double) frontMotor.getVelocity() / (double) Constants.SHOOTER_TPR);
+        return 60 * ((double) frontMotor.getVelocity() / (double) SHOOTER_TPR);
     }
 
 

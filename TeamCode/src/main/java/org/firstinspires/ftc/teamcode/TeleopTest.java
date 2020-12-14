@@ -45,7 +45,7 @@ public class TeleopTest extends CommandOpMode {
     private ServoEx feedServo, clawServo;
 
     // Gyro
-    private GyroEx gyro;
+    private RevIMU gyro;
 
     // Gamepad
     private GamepadEx driverGamepad;
@@ -70,7 +70,6 @@ public class TeleopTest extends CommandOpMode {
         rightBackDriveMotor = new MotorEx(hardwareMap, "rear_drive_right");
         rightFrontDriveMotor = new MotorEx(hardwareMap, "front_drive_right");
         gyro = new RevIMU(hardwareMap);
-
         // Intake hardware Initializations
         intakeMotor = new MotorEx(hardwareMap, "intake");
 
@@ -102,7 +101,7 @@ public class TeleopTest extends CommandOpMode {
         // intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(intake::intake).whenReleased(intake::stop);
 
         shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).toggleWhenPressed(
-                new InstantCommand(() -> shooterWheels.setShooterRPM(Constants.TARGET_SPEED), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(ShooterWheels.TARGET_SPEED), shooterWheels),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
 
         anglerUpButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whileHeld(() -> shooterAngler.setAngler(0.3)).whenReleased(() -> shooterAngler.setAngler(0));
