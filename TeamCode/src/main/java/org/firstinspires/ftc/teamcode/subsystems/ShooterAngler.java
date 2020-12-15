@@ -78,4 +78,8 @@ public class ShooterAngler extends SubsystemBase {
         double revolutions = anglerEncoder.getPosition() / (double) ANGLER_TPR;
         return SHOOTER_OFFSET_ANGLE - revolutions * 360;
     }
+
+    public boolean atSetpoint() {
+        return pidController.atSetPoint();
+    }
 }

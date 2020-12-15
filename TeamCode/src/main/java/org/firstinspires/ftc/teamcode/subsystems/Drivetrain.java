@@ -1,88 +1,107 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.drivebase.DifferentialDrive;
-import com.arcrobotics.ftclib.hardware.GyroEx;
-import com.arcrobotics.ftclib.hardware.RevIMU;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Util;
+import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
+import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-@Config
+
 public class Drivetrain extends SubsystemBase {
 
-    public static double DRIVE_TPR = 383.6;
-    public static double DRIVE_WHEEL_DIAMETER = 2.3846;
-    public static int DRIVE_STRAIGHT_P = 0;
-    public static int DRIVE_STRAIGHT_D = 0;
-    public static int DRIVE_GYRO_P = 0;
-    public static int DRIVE_GYRO_D = 0;
-
-    Telemetry telemetry;
-
-    private DifferentialDrive drive;
-    private RevIMU gyro;
-    private Motor.Encoder left, right;
-    public Drivetrain(MotorEx backLeft, MotorEx backRight, MotorEx frontLeft, MotorEx frontRight, RevIMU gyro, Motor.Encoder leftEncoder, Motor.Encoder rightEncoder, Telemetry tl) {
-        this.gyro = gyro;
-        this.gyro.init();
-        this.gyro.invertGyro();
-
-        drive = new DifferentialDrive(false, new MotorGroup(backLeft, frontLeft), new MotorGroup(backRight, frontRight));
-        this.left = leftEncoder;
-        this.right = rightEncoder;
+    private final SampleTankDrive drive;
+    private Telemetry telemetry;
+    public Drivetrain(SampleTankDrive drive, Telemetry tl) {
+        this.drive = drive;
         this.telemetry = tl;
+        init();
     }
 
-    public Drivetrain(MotorEx backLeft, MotorEx backRight, MotorEx frontLeft, MotorEx frontRight, RevIMU gyro, Telemetry tl) {
-        this(backLeft, backRight, frontLeft, frontRight, gyro, backLeft.encoder, backRight.encoder, tl);
+    public void init() {
+        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.setMotorPowers(0, 0);
+        drive.setPoseEstimate(new Pose2d());
+    }
+
+    public void setMode(DcMotor.RunMode mode) {
+        drive.setMode(mode);
+    }
+
+    public void setPIDFCoefficients(DcMotor.RunMode mode, PIDFCoefficients coefficients) {
+        drive.setPIDFCoefficients(mode, coefficients);
+    }
+
+    public void setPoseEstimate(Pose2d pose) {
+        drive.setPoseEstimate(pose);
     }
 
     @Override
     public void periodic() {
-        Util.logger(this, telemetry, Level.INFO, "Left Distance", getLeftDistance());
-        Util.logger(this, telemetry, Level.INFO, "Right Distance", getRightDistance());
-        Util.logger(this, telemetry, Level.INFO, "Gyro Angle", getAngle());
+        drive.update();
+        Util.logger(this, telemetry, Level.INFO, "Pose", getPoseEstimate());
     }
 
-    public void tankDrive(double left, double right) {
-        drive.tankDrive(left, right);
+    public void tankDrive(double leftY, double rightY) {
+        Pose2d poseEstimate = getPoseEstimate();
+
+        drive.setWeightedDrivePower(
+                new Pose2d(
+                        leftY,
+                        0,
+                        rightY
+                )
+        );
     }
 
-    public void arcadeDrive(double forward, double rotate) {
-        drive.arcadeDrive(forward, rotate);
+    public void setDrivePower(Pose2d drivePower) {
+        drive.setDrivePower(drivePower);
+    }
+
+    public Pose2d getPoseEstimate() {
+        return drive.getPoseEstimate();
+    }
+
+    public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
+        return drive.trajectoryBuilder(startPose);
+    }
+
+    public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed) {
+        return drive.trajectoryBuilder(startPose, reversed);
+    }
+
+    public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading) {
+        return drive.trajectoryBuilder(startPose, startHeading);
+    }
+
+    public void followTrajectory(Trajectory trajectory) {
+        drive.followTrajectoryAsync(trajectory);
+    }
+
+    public boolean isBusy() {
+        return drive.isBusy();
+    }
+
+    public void turn(double radians) {
+        drive.turnAsync(radians);
+    }
+
+    public List<Double> getWheelVelocities() {
+        return drive.getWheelVelocities();
     }
 
     public void stop() {
-        drive.stop();
+        tankDrive(0, 0);
     }
 
-    public double getLeftDistance() {
-        double currentRevolution = left.getPosition() / (double) DRIVE_TPR;
-        return currentRevolution * DRIVE_WHEEL_DIAMETER;
+    public Pose2d getPoseVelocity() {
+        return drive.getPoseVelocity();
     }
 
-    public double getRightDistance() {
-        double currentRevolution = right.getPosition() / (double) DRIVE_TPR;
-        return currentRevolution * DRIVE_WHEEL_DIAMETER;
-    }
-
-    public double getAngle() {
-        return gyro.getHeading();
-    }
-
-    public void resetEncoders() {
-        left.reset();
-        right.reset();
-    }
-
-    public void resetAngle() {
-        gyro.reset();
-    }
 }

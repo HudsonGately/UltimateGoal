@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.FunctionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.PerpetualCommand;
+import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.hardware.GyroEx;
-import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
@@ -21,9 +21,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.RunCommand;
-import org.firstinspires.ftc.teamcode.commands.StartEndCommand;
+import org.firstinspires.ftc.teamcode.commands.auto.red.RedAuto;
 import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SlowDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -31,12 +32,11 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterAngler;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
+import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-import java.time.Instant;
-
 @TeleOp(name = "TeleOp-test")
-public class TeleopTest extends CommandOpMode {
+public class AutoTest extends CommandOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
@@ -55,7 +55,7 @@ public class TeleopTest extends CommandOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
-    private Button slowModeTrigger, tripleShotButton, shootRingsButton, shootButton, anglerUpButton, anglerDownButton,toggleClawButton, liftArmButton, lowerArmButton;
+    private Vision vision;
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
@@ -84,31 +84,13 @@ public class TeleopTest extends CommandOpMode {
         shooterAngler = new ShooterAngler(anglerMotor, telemetry, true);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry);
+        vision = new Vision(hardwareMap, "webcam", telemetry);
+
 
         driverGamepad = new GamepadEx(gamepad1);
 
-        slowModeTrigger = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)).whileHeld(new SlowDriveCommand(drivetrain, driverGamepad));
-        shootRingsButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whenPressed(new FeedRingsCommand(feeder, 1));
-        tripleShotButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whenPressed(new FeedRingsCommand(feeder, 3));
-
-        // intakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(intake::intake).whenReleased(intake::stop);
-
-        shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).toggleWhenPressed(
-                new InstantCommand(() -> shooterWheels.setShooterRPM(ShooterWheels.TARGET_SPEED), shooterWheels),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
-
-        anglerUpButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whileHeld(() -> shooterAngler.setAngler(0.3)).whenReleased(() -> shooterAngler.setAngler(0));
-        anglerDownButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).whileHeld(() -> shooterAngler.setAngler(-0.3)).whenReleased(() -> shooterAngler.setAngler(0));
-        toggleClawButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).toggleWhenPressed(
-                new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
-                new InstantCommand(wobbleGoalArm::closeClaw, wobbleGoalArm)
-        );
-        // outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).whileHeld(intake::outtake).whenReleased(intake::stop);
-
-        liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whileHeld(wobbleGoalArm::liftArm).whenReleased(wobbleGoalArm::stopArm);
-        lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whileHeld(wobbleGoalArm::lowerArm).whenReleased(wobbleGoalArm::stopArm);
         // Gamepad
         schedule(new RunCommand(telemetry::update));
-        drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
+        schedule(new RedAuto(drivetrain, shooterWheels, shooterAngler, feeder, vision::getCurrentStack));
     }
 }
