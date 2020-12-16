@@ -25,6 +25,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -121,10 +122,12 @@ public class SampleTankDrive extends TankDrive {
         // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
 
         // add/remove motors depending on your robot (e.g., 6WD)
-        DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "front_left");
-        DcMotorEx leftRear = hardwareMap.get(DcMotorEx.class, "rear_left");
-        DcMotorEx rightRear = hardwareMap.get(DcMotorEx.class, "rear_right");
-        DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "front_right");
+        DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "front_drive_left");
+        DcMotorEx leftRear = hardwareMap.get(DcMotorEx.class, "rear_drive_left");
+        DcMotorEx rightRear = hardwareMap.get(DcMotorEx.class, "rear_drive_right");
+        DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "front_drive_right");
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
         leftMotors = Arrays.asList(leftFront, leftRear);

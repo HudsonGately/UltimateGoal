@@ -51,13 +51,7 @@ public class Drivetrain extends SubsystemBase {
     public void tankDrive(double leftY, double rightY) {
         Pose2d poseEstimate = getPoseEstimate();
 
-        drive.setWeightedDrivePower(
-                new Pose2d(
-                        leftY,
-                        0,
-                        rightY
-                )
-        );
+       drive.setMotorPowers(leftY, -rightY);
     }
 
     public void setDrivePower(Pose2d drivePower) {

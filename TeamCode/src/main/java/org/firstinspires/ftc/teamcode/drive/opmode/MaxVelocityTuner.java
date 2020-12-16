@@ -49,7 +49,6 @@ public class MaxVelocityTuner extends LinearOpMode {
 
         telemetry.clearAll();
         telemetry.update();
-
         drive.setDrivePower(new Pose2d(1, 0, 0));
         timer = new ElapsedTime();
 
@@ -65,8 +64,8 @@ public class MaxVelocityTuner extends LinearOpMode {
 
         double effectiveKf = DriveConstants.getMotorVelocityF(veloInchesToTicks(maxVelocity));
 
-        telemetry.addData("Max Velocity", maxVelocity);
-        telemetry.addData("Voltage Compensated kF", effectiveKf * batteryVoltageSensor.getVoltage() / 12);
+        telemetry.addData("Max Velocity", maxVelocity); // 62.1080828
+        telemetry.addData("Voltage Compensated kF", effectiveKf * batteryVoltageSensor.getVoltage() / 12); // 12.627
         telemetry.update();
 
         while (!isStopRequested() && opModeIsActive()) idle();
