@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,15 +16,15 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
  */
 @Config
 @Autonomous(group = "drive")
-public class TurnTest extends CommandOpMode {
+public class TurnTest2 extends LinearOpMode {
 
-    public static double ANGLE = 90; // deg
+    public static double ANGLE = 180; // deg
 
     private Drivetrain drive;
-    private TurnCommand turnCommand;
+    //private TurnCommand turnCommand;
 
     @Override
-    public void initialize() {
+    public void runOpMode() throws InterruptedException {
         drive = new Drivetrain(new SampleTankDrive(hardwareMap), telemetry);
         /*turnCommand = new TurnCommand(drive, Math.toRadians(ANGLE));
         schedule(turnCommand.whenFinished(() -> {

@@ -44,8 +44,12 @@ public class Drivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        drive.update();
+        //drive.update();
         Util.logger(this, telemetry, Level.INFO, "Pose", getPoseEstimate());
+    }
+
+    public void update() {
+        drive.update();
     }
 
     public void tankDrive(double leftY, double rightY) {
@@ -78,12 +82,20 @@ public class Drivetrain extends SubsystemBase {
         drive.followTrajectoryAsync(trajectory);
     }
 
+    public void followTrajectoryBlock(Trajectory trajectory) {
+        drive.followTrajectory(trajectory);
+    }
+
     public boolean isBusy() {
         return drive.isBusy();
     }
 
     public void turn(double radians) {
         drive.turnAsync(radians);
+    }
+
+    public void turnBlock(double radians) {
+        drive.turn(radians);
     }
 
     public List<Double> getWheelVelocities() {

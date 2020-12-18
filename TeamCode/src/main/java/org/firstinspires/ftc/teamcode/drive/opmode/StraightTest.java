@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -26,6 +27,26 @@ public class StraightTest extends CommandOpMode {
     @Override
     public void initialize() {
         drive = new Drivetrain(new SampleTankDrive(hardwareMap), telemetry);
+
+        Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
+                .forward(DISTANCE)
+                .build();
+
+        waitForStart();
+
+        if (isStopRequested()) return;
+
+        drive.followTrajectoryBlock(trajectory);
+
+        Pose2d poseEstimate = drive.getPoseEstimate();
+        telemetry.addData("finalX", poseEstimate.getX());
+        telemetry.addData("finalY", poseEstimate.getY());
+        telemetry.addData("finalHeading", poseEstimate.getHeading());
+        telemetry.update();
+
+        while (!isStopRequested() && opModeIsActive()) ;
+
+        /*
         straightFollower = new TrajectoryFollowerCommand(drive,
                 drive.trajectoryBuilder(new Pose2d())
                     .forward(DISTANCE)
@@ -38,6 +59,8 @@ public class StraightTest extends CommandOpMode {
             telemetry.addData("finalHeading", poseEstimate.getHeading());
             telemetry.update();
         }));
+        */
+
     }
 
 }
