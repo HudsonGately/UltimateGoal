@@ -13,8 +13,8 @@ import java.util.logging.Level;
 @Config
 public class ShooterFeeder extends SubsystemBase {
 
-    public static double SERVO_POSITION_SHOOT = 0.2;
-    public static double SERVO_POSITION_HOME = 0.31;
+    public static double SERVO_POSITION_SHOOT = 0.75;
+    public static double SERVO_POSITION_HOME = 0.86;
 
     private Telemetry telemetry;
     private ServoEx feedServo;

@@ -12,7 +12,7 @@ import java.util.logging.Level;
 @Config
 public class Intake extends SubsystemBase {
 
-    public static double INTAKE_SPEED = 0.8;
+    public static double INTAKE_SPEED = 1;
     public static double OUTAKE_SPEED = -0.5;
 
     Telemetry telemetry;

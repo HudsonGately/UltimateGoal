@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class ServoTest extends OpMode {
 //hardware initialization stuff
         Servo servo;
-        double pos = 0.3;
+        double pos = 0.7;
 
         /**
          * User defined init method
@@ -17,7 +18,7 @@ public class ServoTest extends OpMode {
          */
         @Override
         public void init() {
-                servo= hardwareMap.get(Servo.class, "feed_servo");
+                servo= hardwareMap.get(Servo.class, "claw_servo");
         }
 
         /**
@@ -33,8 +34,10 @@ public class ServoTest extends OpMode {
                 else if(gamepad1.b){
                         pos += 0.001;
                 }
-                servo.setPosition(pos);
+                pos = Math.min(Math.max(pos, 0), 1);
+                servo.setPosition(Math.min(Math.max(pos, 0), 1));
                 telemetry.addData("servo pos",servo.getPosition());
+                telemetry.addData("desired pos", pos);
                 telemetry.update();
 
         }

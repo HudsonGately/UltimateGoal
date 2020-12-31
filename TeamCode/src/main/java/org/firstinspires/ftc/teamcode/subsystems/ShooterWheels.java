@@ -22,7 +22,7 @@ import java.util.logging.Level;
 public class ShooterWheels extends SubsystemBase {
     private Telemetry telemetry;
 
-    public static double MAX_SHOOTER_RPM = 4500;
+    public static double MAX_SHOOTER_RPM = 3886;
     public static int SHOOTER_WHEEL_DIAMETER = 4;
     public static double SHOOTER_TPR = 28;
 
@@ -30,7 +30,7 @@ public class ShooterWheels extends SubsystemBase {
     public static double SHOOTER_F = 1.0 / MAX_SHOOTER_RPM;
 
 
-    public static double TARGET_SPEED = 4500;
+    public static double TARGET_SPEED = 3500;
     private PIDFController shooterWheelsPID;
     private double shooterTarget;
     DcMotorEx frontMotor, backMotor;
@@ -81,7 +81,7 @@ public class ShooterWheels extends SubsystemBase {
     }
 
     public double getShooterRPM() {
-        return 60 * ((double) frontMotor.getVelocity() / (double) SHOOTER_TPR);
+        return (60 * ((double) frontMotor.getVelocity() / (double) SHOOTER_TPR)) / 1.125;
     }
 
 
