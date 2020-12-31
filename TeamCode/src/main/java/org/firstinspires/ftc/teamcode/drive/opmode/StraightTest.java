@@ -4,8 +4,10 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -31,7 +33,6 @@ public class StraightTest extends CommandOpMode {
         Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
                 .forward(DISTANCE)
                 .build();
-
         waitForStart();
 
         if (isStopRequested()) return;
@@ -45,13 +46,8 @@ public class StraightTest extends CommandOpMode {
         telemetry.update();
 
         while (!isStopRequested() && opModeIsActive()) ;
-
         /*
-        straightFollower = new TrajectoryFollowerCommand(drive,
-                drive.trajectoryBuilder(new Pose2d())
-                    .forward(DISTANCE)
-                    .build()
-        );
+        straightFollower = new TrajectoryFollowerCommand(drive, trajectory);
         schedule(straightFollower.whenFinished(() -> {
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("finalX", poseEstimate.getX());
@@ -59,7 +55,9 @@ public class StraightTest extends CommandOpMode {
             telemetry.addData("finalHeading", poseEstimate.getHeading());
             telemetry.update();
         }));
-        */
+
+        schedule(new RunCommand(() -> telemetry.update()));
+        */ // INIT RUNS before play
 
     }
 

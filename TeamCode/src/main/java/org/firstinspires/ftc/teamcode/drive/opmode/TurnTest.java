@@ -28,7 +28,7 @@ public class TurnTest extends CommandOpMode {
     @Override
     public void initialize() {
         drive = new Drivetrain(new SampleTankDrive(hardwareMap), telemetry);
-        /*turnCommand = new TurnCommand(drive, Math.toRadians(ANGLE));
+        turnCommand = new TurnCommand(drive, 90);
         schedule(turnCommand.whenFinished(() -> {
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("finalX", poseEstimate.getX());
@@ -36,12 +36,14 @@ public class TurnTest extends CommandOpMode {
             telemetry.addData("finalHeading", poseEstimate.getHeading());
             telemetry.update();
         }));
-        */
+        /*
         waitForStart();
 
         if (isStopRequested()) return;
 
         drive.turnBlock(Math.toRadians(ANGLE));
+        */
+
     }
 
 }

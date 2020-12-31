@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -53,13 +54,13 @@ public class BackAndForth extends CommandOpMode {
                     .build()
         );
         SequentialCommandGroup backAndForthCommand = new SequentialCommandGroup(forwardFollower, backwardFollower);
-        schedule(new PerpetualCommand(new InstantCommand(
+        schedule(new RunCommand(
                 () -> {
                     if (backAndForthCommand.isFinished() || !backAndForthCommand.isScheduled()) {
                         backAndForthCommand.schedule();
                     }
                 }
-        )));
+        ));
     }
 
 }

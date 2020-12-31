@@ -21,7 +21,6 @@ public class Drivetrain extends SubsystemBase {
     public Drivetrain(SampleTankDrive drive, Telemetry tl) {
         this.drive = drive;
         this.telemetry = tl;
-        init();
     }
 
     public void init() {
@@ -42,24 +41,19 @@ public class Drivetrain extends SubsystemBase {
         drive.setPoseEstimate(pose);
     }
 
-    @Override
-    public void periodic() {
-        //drive.update();
-        Util.logger(this, telemetry, Level.INFO, "Pose", getPoseEstimate());
-    }
-
     public void update() {
         drive.update();
     }
 
     public void tankDrive(double leftY, double rightY) {
-        Pose2d poseEstimate = getPoseEstimate();
-
        drive.setMotorPowers(leftY, -rightY);
     }
 
     public void setDrivePower(Pose2d drivePower) {
         drive.setDrivePower(drivePower);
+    }
+    public void setWeightedDrivePower(Pose2d drivePower) {
+        drive.setWeightedDrivePower(drivePower);
     }
 
     public Pose2d getPoseEstimate() {

@@ -35,9 +35,18 @@ public class LocalizationTest extends CommandOpMode {
     @Override
     public void initialize() {
         drive = new Drivetrain(new SampleTankDrive(hardwareMap), telemetry);
+        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        gamepad = new GamepadEx(gamepad1);
 
         schedule(new RunCommand(
                 () -> {
+                    drive.setWeightedDrivePower(
+                            new Pose2d(
+                                    gamepad.getLeftY(),
+                                    0,
+                                    -gamepad.getRightX()
+                            )
+                    );
                     drive.update();
                     Pose2d poseEstimate = drive.getPoseEstimate();
                     telemetry.addData("x", poseEstimate.getX());
@@ -45,12 +54,8 @@ public class LocalizationTest extends CommandOpMode {
                     telemetry.addData("heading", poseEstimate.getHeading());
                     telemetry.update();
                     
-                }, drive   // ignore requirements
+                }, drive // ignore requirements
         ));
-        gamepad = new GamepadEx(gamepad1);
-        driveCommand = new DefaultDriveCommand(drive, gamepad);
-
-        schedule(driveCommand);
     }
 
 }

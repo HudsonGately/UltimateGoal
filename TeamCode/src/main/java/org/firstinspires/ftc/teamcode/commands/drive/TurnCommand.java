@@ -18,7 +18,7 @@ public class TurnCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        drive.turn(angle);
+        drive.turn(Math.toRadians(angle));
     }
 
     @Override
@@ -26,6 +26,11 @@ public class TurnCommand extends CommandBase {
         if (interrupted) {
             drive.stop();
         }
+    }
+
+    @Override
+    public void execute() {
+        drive.update();
     }
 
     @Override
