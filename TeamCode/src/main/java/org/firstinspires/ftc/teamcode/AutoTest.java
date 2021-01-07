@@ -1,36 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SelectCommand;
-import com.arcrobotics.ftclib.command.button.Button;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.auto.red.RedAuto;
-import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.SlowDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
-import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterAngler;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.Vision;

@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.subsystems.ShooterAngler;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 

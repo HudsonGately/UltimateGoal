@@ -2,15 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.FunctionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.hardware.GyroEx;
-import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
@@ -21,19 +17,15 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.RunCommand;
-import org.firstinspires.ftc.teamcode.commands.StartEndCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SlowDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterAngler;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
-
-import java.time.Instant;
 
 @TeleOp(name = "TeleOp-test")
 public class TeleopTest extends CommandOpMode {
@@ -51,7 +43,6 @@ public class TeleopTest extends CommandOpMode {
     // Subsystems
     private Drivetrain drivetrain;
     private ShooterWheels shooterWheels;
-    private ShooterAngler shooterAngler;
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
@@ -86,6 +77,7 @@ public class TeleopTest extends CommandOpMode {
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry);
 
+        gamepad1.setJoystickDeadzone(0.0f);
         driverGamepad = new GamepadEx(gamepad1);
 
         slowModeTrigger = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)).whileHeld(new SlowDriveCommand(drivetrain, driverGamepad));

@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.RunCommand;
@@ -54,13 +55,13 @@ public class BackAndForth extends CommandOpMode {
                     .build()
         );
         SequentialCommandGroup backAndForthCommand = new SequentialCommandGroup(forwardFollower, backwardFollower);
-        schedule(new RunCommand(
+        schedule(new WaitUntilCommand(this::isStarted).andThen(new RunCommand(
                 () -> {
                     if (backAndForthCommand.isFinished() || !backAndForthCommand.isScheduled()) {
                         backAndForthCommand.schedule();
                     }
                 }
-        ));
+        )));
     }
 
 }

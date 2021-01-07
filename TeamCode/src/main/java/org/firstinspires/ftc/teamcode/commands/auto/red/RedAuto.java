@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.commands.auto.red;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
@@ -14,7 +13,6 @@ import com.arcrobotics.ftclib.vision.UGRectDetector;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterAngler;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 

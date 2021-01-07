@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -29,13 +30,13 @@ public class TurnTest extends CommandOpMode {
     public void initialize() {
         drive = new Drivetrain(new SampleTankDrive(hardwareMap), telemetry);
         turnCommand = new TurnCommand(drive, 90);
-        schedule(turnCommand.whenFinished(() -> {
+        schedule(new WaitUntilCommand(this::isStarted).andThen(turnCommand.whenFinished(() -> {
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("finalX", poseEstimate.getX());
             telemetry.addData("finalY", poseEstimate.getY());
             telemetry.addData("finalHeading", poseEstimate.getHeading());
             telemetry.update();
-        }));
+        })));
         /*
         waitForStart();
 

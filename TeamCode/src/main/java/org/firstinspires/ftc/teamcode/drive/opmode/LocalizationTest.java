@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -38,7 +39,7 @@ public class LocalizationTest extends CommandOpMode {
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         gamepad = new GamepadEx(gamepad1);
 
-        schedule(new RunCommand(
+        schedule(new WaitUntilCommand(this::isStarted).andThen(new RunCommand(
                 () -> {
                     drive.setWeightedDrivePower(
                             new Pose2d(
@@ -55,7 +56,7 @@ public class LocalizationTest extends CommandOpMode {
                     telemetry.update();
                     
                 }, drive // ignore requirements
-        ));
+        )));
     }
 
 }
