@@ -1,7 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -10,10 +15,14 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.auto.red.RedAuto;
+import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
+import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -32,13 +41,13 @@ public class AutoTest extends CommandOpMode {
     private CRServo arm;
     private ServoEx feedServo, clawServo;
 
+    private ServoEx releaseShooter;
     // Gamepad
     private GamepadEx driverGamepad;
 
     // Subsystems
     private Drivetrain drivetrain;
     private ShooterWheels shooterWheels;
-    private ShooterAngler shooterAngler;
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
@@ -63,21 +72,38 @@ public class AutoTest extends CommandOpMode {
         arm = new CRServo(hardwareMap, "arm");
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
 
+        // releaseShooter = new SimpleServo(hardwareMap, "release_servo", 0, 180);
 
         // Subsystems
         drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap),telemetry);
         // intake = new Intake(intakeMotor, telemetry);
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
-        shooterAngler = new ShooterAngler(anglerMotor, telemetry, true);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry);
-        vision = new Vision(hardwareMap, "webcam", telemetry);
+        // vision = new Vision(hardwareMap, "webcam", telemetry);
 
 
-        driverGamepad = new GamepadEx(gamepad1);
+        Trajectory trajectory = drivetrain.trajectoryBuilder(new Pose2d())
+                .back(48)
+                .build();
 
         // Gamepad
         schedule(new RunCommand(telemetry::update));
-        schedule(new RedAuto(drivetrain, shooterWheels, shooterAngler, feeder, vision::getCurrentStack));
+        schedule(new WaitUntilCommand(this::isStarted).andThen(
+                new SequentialCommandGroup(
+                    new TrajectoryFollowerCommand(drivetrain, trajectory),
+                    new TurnCommand(drivetrain, -5.5),
+                    new ShootRingsCommand(shooterWheels, feeder, 2650, 1),
+                    new TurnCommand(drivetrain, -3.5),
+                    new ShootRingsCommand(shooterWheels, feeder, 2650, 0),
+                    new TurnCommand(drivetrain, -3),
+                    new ShootRingsCommand(shooterWheels, feeder, 2650, 1),
+                    new TurnCommand(drivetrain, 10),
+                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d())
+                            .back(24)
+                            .build())
+                )
+        ));
     }
 }

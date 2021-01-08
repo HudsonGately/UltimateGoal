@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 public class RedAuto extends SequentialCommandGroup {
 
     Trajectory autoTarget;
-    public RedAuto(Drivetrain drivetrain, ShooterWheels shooter, ShooterAngler angler, ShooterFeeder feeder, Supplier<Object> currentRing) {
+    public RedAuto(Drivetrain drivetrain, ShooterWheels shooter, ShooterFeeder feeder, Supplier<Object> currentRing) {
         Map<Object, Command> mapSelector = new HashMap<Object, Command>();
         Pose2d startPose = new Pose2d(-62, 50, 0);
         drivetrain.setPoseEstimate(startPose);
@@ -49,8 +49,6 @@ public class RedAuto extends SequentialCommandGroup {
                 // Put down wobble goal, code later
                 // TODO WobbleGoalCommand
                 new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(autoTarget.end(), true).splineTo(new Vector2d(-5.0, 50.0), Math.toRadians(156.31)).build()),
-                new InstantCommand(() -> angler.setShooterAngle(30), angler),
-                new WaitUntilCommand(() -> angler.atSetpoint()),
                 new ShootRingsCommand(shooter, feeder, 4500, 3)
         );
     }

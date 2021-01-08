@@ -29,6 +29,9 @@ public class Drivetrain extends SubsystemBase {
         drive.setPoseEstimate(new Pose2d());
     }
 
+    public void periodic() {
+        update();
+    }
     public void setMode(DcMotor.RunMode mode) {
         drive.setMode(mode);
     }
@@ -104,4 +107,7 @@ public class Drivetrain extends SubsystemBase {
         return drive.getPoseVelocity();
     }
 
+    public void resetEncoder() {
+        drive.resetEncoder();
+    }
 }

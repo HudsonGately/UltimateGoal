@@ -368,6 +368,17 @@ public class SampleTankDrive extends TankDrive {
         }
     }
 
+    public void resetEncoder() {
+        for (DcMotorEx leftMotor : leftMotors) {
+            leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        for (DcMotorEx rightMotor : rightMotors) {
+            rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
     @Override
     public double getRawExternalHeading() {
         return imu.getAngularOrientation().firstAngle;

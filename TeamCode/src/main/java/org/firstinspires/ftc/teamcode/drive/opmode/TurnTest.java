@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 @Autonomous(group = "drive")
 public class TurnTest extends CommandOpMode {
 
-    public static double ANGLE = 90; // deg
+    public static double ANGLE = 180; // deg
 
     private Drivetrain drive;
     private TurnCommand turnCommand;
@@ -29,7 +29,7 @@ public class TurnTest extends CommandOpMode {
     @Override
     public void initialize() {
         drive = new Drivetrain(new SampleTankDrive(hardwareMap), telemetry);
-        turnCommand = new TurnCommand(drive, 90);
+        turnCommand = new TurnCommand(drive, 180);
         schedule(new WaitUntilCommand(this::isStarted).andThen(turnCommand.whenFinished(() -> {
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("finalX", poseEstimate.getX());

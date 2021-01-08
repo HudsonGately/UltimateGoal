@@ -7,23 +7,18 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 
 public class FeedRingsCommand extends SequentialCommandGroup {
-    public FeedRingsCommand(ShooterFeeder feeder, int numRings) {
-        for (int i = 0; i < numRings - 1; i++) {
+    public FeedRingsCommand(ShooterFeeder feeder, int numRings, int timeout) {
+        for (int i = 0; i < numRings; i++) {
             addCommands(
-                new WaitCommand(50),
+                new WaitCommand(timeout),
                 new InstantCommand(feeder::feedShooter),
-                new WaitCommand(50),
+                new WaitCommand(timeout),
                 new InstantCommand(feeder::retractFeed)
 
             );
         }
-
-        addCommands(
-            new WaitCommand(100),
-            new InstantCommand(feeder::feedShooter),
-            new WaitCommand(100),
-            new InstantCommand(feeder::retractFeed)
-        );
-
+    }
+    public FeedRingsCommand(ShooterFeeder feeder, int numRings) {
+        this(feeder, numRings, 100);
     }
 }
