@@ -30,7 +30,7 @@ public class ShooterWheels extends SubsystemBase {
     public static double SHOOTER_F = 1.0 / MAX_SHOOTER_RPM;
 
 
-    public static double TARGET_SPEED = 3200;
+    public static double TARGET_SPEED = 3000;
     private PIDFController shooterWheelsPID;
     private double shooterTarget;
     DcMotorEx frontMotor, backMotor;

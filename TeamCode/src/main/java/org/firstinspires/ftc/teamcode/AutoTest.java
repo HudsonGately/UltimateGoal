@@ -31,6 +31,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
+import java.time.Instant;
+
 @Autonomous(name = "Auto-test")
 public class AutoTest extends CommandOpMode {
     // Motors
@@ -72,7 +74,7 @@ public class AutoTest extends CommandOpMode {
         arm = new CRServo(hardwareMap, "arm");
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
 
-        // releaseShooter = new SimpleServo(hardwareMap, "release_servo", 0, 180);
+        releaseShooter = new SimpleServo(hardwareMap, "release_servo", 0, 180);
 
         // Subsystems
         drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap),telemetry);
@@ -90,6 +92,7 @@ public class AutoTest extends CommandOpMode {
         // Gamepad
         schedule(new RunCommand(telemetry::update));
         schedule(new WaitUntilCommand(this::isStarted).andThen(
+                new InstantCommand(() -> releaseShooter.setPosition(0.2)),
                 new SequentialCommandGroup(
                     new TrajectoryFollowerCommand(drivetrain, trajectory),
                     new TurnCommand(drivetrain, -5.5),

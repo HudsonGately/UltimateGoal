@@ -88,7 +88,7 @@ public class TeleopTest extends CommandOpMode {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
 
         powershotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).toggleWhenPressed(
-                new InstantCommand(() -> shooterWheels.setShooterRPM(ShooterWheels.TARGET_SPEED - 200), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(ShooterWheels.TARGET_SPEED - 1000), shooterWheels),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
         intakeButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whileHeld(intake::intake).whenReleased(intake::stop);
         outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whileHeld(intake::outtake).whenReleased(intake::stop);
