@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.commands.GoToLineShootPowershotBlue;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
@@ -107,24 +108,16 @@ public class BlueAutoTest extends CommandOpMode {
         schedule(new WaitUntilCommand(this::isStarted).andThen(
                 new InstantCommand(() -> releaseShooter.setPosition(0.2)),
                 new SequentialCommandGroup(
-                        new TrajectoryFollowerCommand(drivetrain, trajectory),
-                        new TurnCommand(drivetrain, -5.5),
-                        new ShootRingsCommand(shooterWheels, feeder, 2600, 1),
-                        new TurnCommand(drivetrain, -3.5),
-                        new ShootRingsCommand(shooterWheels, feeder, 2650, 0),
-                        new TurnCommand(drivetrain, -3),
-                        new ShootRingsCommand(shooterWheels, feeder, 2650, 1),
-                        new TurnCommand(drivetrain, 10),
-                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                        
                         new SelectCommand(new HashMap<Object, Command>() {{
                             put(UGRectDetector.Stack.FOUR, new SequentialCommandGroup(
+                                    new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
                                     new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
                                     new PlaceWobbleGoal(wobbleGoalArm),
                                     new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
                                     new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(48).build())
                             ));
                             put(UGRectDetector.Stack.ONE, new SequentialCommandGroup(
+                                    new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
                                     new TurnCommand(drivetrain, -5.5),
                                     new ShootRingsCommand(shooterWheels, feeder, 2600, 1),
                                     new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(24).build()),
@@ -133,6 +126,7 @@ public class BlueAutoTest extends CommandOpMode {
                                     new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(24).build())
                             ));
                             put(UGRectDetector.Stack.ZERO, new SequentialCommandGroup(
+                                    new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
                                     new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(8).build()),
                                     new PlaceWobbleGoal(wobbleGoalArm)
                             ));
