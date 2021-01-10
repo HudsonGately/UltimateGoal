@@ -13,7 +13,7 @@ import java.util.logging.Level;
 public class Intake extends SubsystemBase {
 
     public static double INTAKE_SPEED = 1;
-    public static double OUTAKE_SPEED = -0.5;
+    public static double OUTAKE_SPEED = -1;
 
     Telemetry telemetry;
     private MotorEx intake;

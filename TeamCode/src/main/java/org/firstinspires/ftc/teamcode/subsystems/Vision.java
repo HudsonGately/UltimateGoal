@@ -1,28 +1,28 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.vision.UGRectDetector;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.UGDetector2;
 import org.firstinspires.ftc.teamcode.Util;
 
 import java.util.logging.Level;
 
 public class Vision extends SubsystemBase {
     private Telemetry telemetry;
-    private UGRectDetector ringDetector;
-    private UGRectDetector.Stack currentStack;
+    private UGDetector2 ringDetector;
+    private UGDetector2.Stack currentStack;
 
     public Vision(HardwareMap hw, String webcamName, Telemetry tl) {
-        ringDetector = new UGRectDetector(hw, webcamName);
+        ringDetector = new UGDetector2(hw, webcamName, tl);
         ringDetector.init();
 
-        ringDetector.setBottomRectangle(.1, 0.1);
-        ringDetector.setTopRectangle(.1, 0.1);
-        ringDetector.setRectangleSize(100, 100);
         telemetry = tl;
         currentStack = ringDetector.getStack();
+        ringDetector.setBottomRectangle(.8, .5);
+        ringDetector.setTopRectangle(.2, .5);
+
     }
 
     @Override
@@ -30,9 +30,12 @@ public class Vision extends SubsystemBase {
         currentStack = ringDetector.getStack();
 
         Util.logger(this, telemetry, Level.INFO, "Current Stack", currentStack);
+        Util.logger(this, telemetry, Level.INFO, "Bottom", ringDetector.getBottomAverage());
+        Util.logger(this, telemetry, Level.INFO, "Top", ringDetector.getTopAverage());
+
     }
 
-    public UGRectDetector.Stack getCurrentStack() {
+    public UGDetector2.Stack getCurrentStack() {
         return currentStack;
     }
 }
