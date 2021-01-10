@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -37,8 +36,8 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 import java.util.HashMap;
 
-@Autonomous(name = "Vision-test")
-public class VisionTest extends CommandOpMode {
+@Autonomous(name = "Blue-Auto-test")
+public class BlueAutoTest extends CommandOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
@@ -88,8 +87,15 @@ public class VisionTest extends CommandOpMode {
         wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry);
         vision = new Vision(hardwareMap, "webcam", telemetry);
 
+
+        Trajectory trajectory = drivetrain.trajectoryBuilder(new Pose2d())
+                .back(48)
+                .build();
+
+        vision.getCurrentStack();
         // Gamepad
         schedule(new RunCommand(() -> {
+            telemetry.addData("Stack", vision.getCurrentStack());
             telemetry.update();
         }));
 
@@ -97,5 +103,43 @@ public class VisionTest extends CommandOpMode {
             telemetry.addData("Current Stack", vision.getCurrentStack());
             telemetry.update();
         }
+
+        schedule(new WaitUntilCommand(this::isStarted).andThen(
+                new InstantCommand(() -> releaseShooter.setPosition(0.2)),
+                new SequentialCommandGroup(
+                        new TrajectoryFollowerCommand(drivetrain, trajectory),
+                        new TurnCommand(drivetrain, -5.5),
+                        new ShootRingsCommand(shooterWheels, feeder, 2600, 1),
+                        new TurnCommand(drivetrain, -3.5),
+                        new ShootRingsCommand(shooterWheels, feeder, 2650, 0),
+                        new TurnCommand(drivetrain, -3),
+                        new ShootRingsCommand(shooterWheels, feeder, 2650, 1),
+                        new TurnCommand(drivetrain, 10),
+                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                        
+                        new SelectCommand(new HashMap<Object, Command>() {{
+                            put(UGRectDetector.Stack.FOUR, new SequentialCommandGroup(
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
+                                    new PlaceWobbleGoal(wobbleGoalArm),
+                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(48).build())
+                            ));
+                            put(UGRectDetector.Stack.ONE, new SequentialCommandGroup(
+                                    new TurnCommand(drivetrain, -5.5),
+                                    new ShootRingsCommand(shooterWheels, feeder, 2600, 1),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(24).build()),
+                                    new PlaceWobbleGoal(wobbleGoalArm),
+                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(24).build())
+                            ));
+                            put(UGRectDetector.Stack.ZERO, new SequentialCommandGroup(
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(8).build()),
+                                    new PlaceWobbleGoal(wobbleGoalArm)
+                            ));
+                        }}, vision::getCurrentStack),
+                        new WaitCommand(1000)
+                )
+        ));
+        
     }
 }
