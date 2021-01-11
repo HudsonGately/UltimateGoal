@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.vision.UGRectRingPipeline;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -9,9 +10,11 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
-
+@Config
 public class UGDetector2 {
 
+    public static double MIN = 105;
+    public static double MAX = 105;
     private OpenCvCamera camera;
     private boolean isUsingWebcam;
     private String webcamName;
@@ -69,9 +72,9 @@ public class UGDetector2 {
     }
 
     public Stack getStack() {
-        if (Math.abs(ftclibPipeline.getTopAverage() - ftclibPipeline.getBottomAverage()) < ftclibPipeline.getThreshold() && (ftclibPipeline.getTopAverage() <= 105 && ftclibPipeline.getBottomAverage() <= 115)) {
+        if (Math.abs(ftclibPipeline.getTopAverage() - ftclibPipeline.getBottomAverage()) < ftclibPipeline.getThreshold() && (ftclibPipeline.getTopAverage() <= MIN && ftclibPipeline.getBottomAverage() <= MAX)) {
             return Stack.FOUR;
-        } else if (Math.abs(ftclibPipeline.getTopAverage() - ftclibPipeline.getBottomAverage()) < ftclibPipeline.getThreshold() && (ftclibPipeline.getTopAverage() >= 105 && ftclibPipeline.getBottomAverage() >= 115)) {
+        } else if (Math.abs(ftclibPipeline.getTopAverage() - ftclibPipeline.getBottomAverage()) < ftclibPipeline.getThreshold() && (ftclibPipeline.getTopAverage() >= MIN && ftclibPipeline.getBottomAverage() >= MAX)) {
             return Stack.ZERO;
         } else {
             return Stack.ONE;

@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
  * NOTE: this has been refactored to use FTCLib's command-based
  */
 @Config
+@Disabled
 @Autonomous(group = "drive")
 public class TurnTest extends CommandOpMode {
 
