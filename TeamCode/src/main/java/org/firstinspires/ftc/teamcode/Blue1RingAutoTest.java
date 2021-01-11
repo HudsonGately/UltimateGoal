@@ -57,7 +57,6 @@ public class Blue1RingAutoTest extends CommandOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
-    private Vision vision;
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
@@ -86,24 +85,17 @@ public class Blue1RingAutoTest extends CommandOpMode {
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry);
-        vision = new Vision(hardwareMap, "webcam", telemetry);
 
 
         Trajectory trajectory = drivetrain.trajectoryBuilder(new Pose2d())
                 .back(48)
                 .build();
 
-        vision.getCurrentStack();
         // Gamepad
         schedule(new RunCommand(() -> {
-            telemetry.addData("Stack", vision.getCurrentStack());
             telemetry.update();
         }));
 
-        while (!isStarted() && !isStopRequested()) {
-            telemetry.addData("Current Stack", vision.getCurrentStack());
-            telemetry.update();
-        }
 
         schedule(new WaitUntilCommand(this::isStarted).andThen(
                 new InstantCommand(() -> releaseShooter.setPosition(0.2)),
