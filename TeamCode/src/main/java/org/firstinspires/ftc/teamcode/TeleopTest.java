@@ -48,6 +48,7 @@ public class TeleopTest extends CommandOpMode {
 
     private Button intakeButton, outtakeButton;
     private Button slowModeTrigger, tripleFeedButton, singleFeedButton, shootButton, powershotButton, toggleClawButton, liftArmButton, lowerArmButton;
+    private Button increaseSpeedButton, decreaseSpeedButton;
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
@@ -100,6 +101,9 @@ public class TeleopTest extends CommandOpMode {
 
         liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whileHeld(wobbleGoalArm::liftArm).whenReleased(wobbleGoalArm::stopArm);
         lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whileHeld(wobbleGoalArm::lowerArm).whenReleased(wobbleGoalArm::stopArm);
+
+        increaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> shooterWheels.adjustShooterRPM(50));
+        decreaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> shooterWheels.adjustShooterRPM(-50));
         // Gamepad
         schedule(new RunCommand(telemetry::update));
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));

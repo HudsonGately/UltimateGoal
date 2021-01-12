@@ -76,6 +76,10 @@ public class ShooterWheels extends SubsystemBase {
     public void setShooterRPM(double wheelRPM) {
         shooterTarget = wheelRPM;
     }
+    public void adjustShooterRPM(double adjustment) {
+        if (shooterTarget != 0)
+            shooterTarget += adjustment;
+    }
 
     public void stopShooter() {
        setShooterPower(0);
