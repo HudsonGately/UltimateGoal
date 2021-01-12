@@ -32,7 +32,7 @@ public class ShooterWheels extends SubsystemBase {
 
     public static double TARGET_SPEED = 3000;
     private PIDFController shooterWheelsPID;
-    private double shooterTarget;
+    private double shooterTarget, offset;
     DcMotorEx frontMotor, backMotor;
 
     public ShooterWheels(DcMotorEx frontMotor, DcMotorEx backMotor, Telemetry tl) {
@@ -48,6 +48,7 @@ public class ShooterWheels extends SubsystemBase {
 
         shooterTarget = 0;
         telemetry = tl;
+        offset = 0;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class ShooterWheels extends SubsystemBase {
             return;
         }
 
-        double output = shooterWheelsPID.calculate(getShooterRPM(), shooterTarget);
+        double output = shooterWheelsPID.calculate(getShooterRPM(), shooterTarget + offset);
         setShooterPower(output);
 
     }
@@ -77,8 +78,7 @@ public class ShooterWheels extends SubsystemBase {
         shooterTarget = wheelRPM;
     }
     public void adjustShooterRPM(double adjustment) {
-        if (shooterTarget != 0)
-            shooterTarget += adjustment;
+        offset += adjustment;
     }
 
     public void stopShooter() {
