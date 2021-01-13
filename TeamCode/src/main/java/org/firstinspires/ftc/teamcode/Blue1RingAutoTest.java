@@ -101,7 +101,7 @@ public class Blue1RingAutoTest extends CommandOpMode {
                 new InstantCommand(() -> releaseShooter.setPosition(0.2)),
                 new SequentialCommandGroup(
                         new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
-                        new TurnCommand(drivetrain, -12.5),
+                        new TurnCommand(drivetrain, -25),
                         new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
                         new PlaceWobbleGoal(wobbleGoalArm),
                         new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
