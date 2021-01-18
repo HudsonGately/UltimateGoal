@@ -13,10 +13,11 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
-import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.arcrobotics.ftclib.vision.UGContourRingPipeline;
 import com.arcrobotics.ftclib.vision.UGRectDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -40,7 +41,6 @@ import java.util.HashMap;
 @Autonomous(name = "Blue-Auto-test")
 public class BlueAutoTest extends CommandOpMode {
     // Motors
-    private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
     private MotorEx anglerMotor;
     private DcMotorEx shooterMotorFront, shooterMotorBack;
@@ -75,7 +75,7 @@ public class BlueAutoTest extends CommandOpMode {
         feedServo = new SimpleServo(hardwareMap, "feed_servo", 0, 230);
 
         // Wobble Harware initializations
-        arm = new CRServo(hardwareMap, "arm");
+        arm = hardwareMap.get(com.qualcomm.robotcore.hardware.CRServo.class, "arm");
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
 
         releaseShooter = new SimpleServo(hardwareMap, "release_servo", 0, 180);
@@ -93,7 +93,6 @@ public class BlueAutoTest extends CommandOpMode {
                 .back(48)
                 .build();
 
-        vision.getCurrentStack();
         // Gamepad
         schedule(new RunCommand(() -> {
             telemetry.addData("Stack", vision.getCurrentStack());
@@ -109,29 +108,33 @@ public class BlueAutoTest extends CommandOpMode {
                 new InstantCommand(() -> releaseShooter.setPosition(0.2)),
                 new SequentialCommandGroup(
                         new SelectCommand(new HashMap<Object, Command>() {{
-                            put(UGRectDetector.Stack.FOUR, new SequentialCommandGroup(
+                            put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
+                                    new TurnCommand(drivetrain, -1),
+                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(70).build()),
                                     new PlaceWobbleGoal(wobbleGoalArm),
                                     new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
                                     new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(48).build())
                             ));
-                            put(UGRectDetector.Stack.ONE, new SequentialCommandGroup(
+                            put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
-                                    new TurnCommand(drivetrain, -5.5),
-                                    new ShootRingsCommand(shooterWheels, feeder, 2600, 1),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(24).build()),
+                                    new TurnCommand(drivetrain, -30),
+                                    new WaitCommand(500),
+                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
                                     new PlaceWobbleGoal(wobbleGoalArm),
                                     new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
                                     new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(24).build())
                             ));
-                            put(UGRectDetector.Stack.ZERO, new SequentialCommandGroup(
+                            put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(8).build()),
+                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(32).build()),
                                     new PlaceWobbleGoal(wobbleGoalArm)
                             ));
                         }}, vision::getCurrentStack),
-                        new WaitCommand(1000)
+                        new InstantCommand(this::stop)                        
                 )
         ));
         

@@ -85,7 +85,6 @@ public class VisionTest extends CommandOpMode {
         // intake = new Intake(intakeMotor, telemetry);
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
-        wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry);
         vision = new Vision(hardwareMap, "webcam", telemetry);
 
         // Gamepad
@@ -93,8 +92,12 @@ public class VisionTest extends CommandOpMode {
             telemetry.update();
         }));
 
+        int count = 0;
         while(!isStarted() && !isStopRequested()) {
+            count++;
             telemetry.addData("Current Stack", vision.getCurrentStack());
+
+            telemetry.addData("Current Count", count/10);
             telemetry.update();
         }
     }

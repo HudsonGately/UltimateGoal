@@ -11,9 +11,9 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
-import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -68,7 +68,7 @@ public class WobbleGoalTest extends CommandOpMode {
         feedServo = new SimpleServo(hardwareMap, "feed_servo", 0, 230);
 
         // Wobble Harware initializations
-        arm = new CRServo(hardwareMap, "arm");
+        arm = hardwareMap.get(CRServo.class, "arm");
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
 
         // releaseShooter = new SimpleServo(hardwareMap, "release_servo", 0, 180);

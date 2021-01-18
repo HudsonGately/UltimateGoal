@@ -11,9 +11,9 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
-import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -31,6 +31,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
+
+import java.time.Instant;
 
 @Autonomous(name = "4 Ring Blue")
 public class Blue4RingAutoTest extends CommandOpMode {
@@ -69,7 +71,7 @@ public class Blue4RingAutoTest extends CommandOpMode {
         feedServo = new SimpleServo(hardwareMap, "feed_servo", 0, 230);
 
         // Wobble Harware initializations
-        arm = new CRServo(hardwareMap, "arm");
+        arm = hardwareMap.get(com.qualcomm.robotcore.hardware.CRServo.class, "arm");
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
 
         releaseShooter = new SimpleServo(hardwareMap, "release_servo", 0, 180);
@@ -97,10 +99,11 @@ public class Blue4RingAutoTest extends CommandOpMode {
                 new SequentialCommandGroup(
                         new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
                         new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(90).build()),
+                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(70).build()),
                         new PlaceWobbleGoal(wobbleGoalArm),
                         new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(48).build())
+                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(48).build()),
+                        new InstantCommand(this::stop)
                 )
         ));
 

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
-import com.arcrobotics.ftclib.hardware.motors.CRServo;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -26,11 +26,11 @@ public class WobbleGoalArm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Util.logger(this, telemetry, Level.INFO, "Current Arm Speed", arm.get());
+        Util.logger(this, telemetry, Level.INFO, "Current Arm Speed", arm.getPower());
         Util.logger(this, telemetry, Level.INFO, "Wobble Claw Pos", claw.getPosition());
     }
     public void setArmSpeed(double speed) {
-        arm.set(speed);
+        arm.setPower(speed);
     }
     public void liftArm() { setArmSpeed(1); }
     public void lowerArm() { setArmSpeed(-1); }
@@ -39,7 +39,7 @@ public class WobbleGoalArm extends SubsystemBase {
         claw.setPosition(position);
     }
     public void openClaw() { setClawPosition(0.74); }
-    public void closeClaw() { setClawPosition(0.49); }
+    public void closeClaw() { setClawPosition(0.52); }
     
     public void toggleClaw() {
        clawOpened = !clawOpened; 
@@ -54,7 +54,7 @@ public class WobbleGoalArm extends SubsystemBase {
         return clawOpened;
     }
     public void stopArm() {
-        arm.set(0);
+        arm.setPower(0);
     }
 
 }

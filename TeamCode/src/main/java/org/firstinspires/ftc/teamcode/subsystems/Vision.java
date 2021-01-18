@@ -20,8 +20,8 @@ public class Vision extends SubsystemBase {
 
         telemetry = tl;
         currentStack = ringDetector.getStack();
-        ringDetector.setBottomRectangle(.8, .5);
-        ringDetector.setTopRectangle(.2, .5);
+        ringDetector.setBottomRectangle(.25, .8);
+        ringDetector.setTopRectangle(.1, .8);
 
     }
 
@@ -36,6 +36,6 @@ public class Vision extends SubsystemBase {
     }
 
     public UGDetector2.Stack getCurrentStack() {
-        return currentStack;
+        return ringDetector.getStack();
     }
 }

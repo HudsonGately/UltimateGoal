@@ -11,9 +11,9 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
-import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -66,8 +66,8 @@ public class Blue0RingAutoTest extends CommandOpMode {
         anglerMotor = new MotorEx(hardwareMap, "angler");
         feedServo = new SimpleServo(hardwareMap, "feed_servo", 0, 230);
 
+        arm = hardwareMap.get(com.qualcomm.robotcore.hardware.CRServo.class, "arm");
         // Wobble Harware initializations
-        arm = new CRServo(hardwareMap, "arm");
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
 
         releaseShooter = new SimpleServo(hardwareMap, "release_servo", 0, 180);
@@ -96,9 +96,7 @@ public class Blue0RingAutoTest extends CommandOpMode {
                         new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
                         new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
                         new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(32).build()),
-                        new PlaceWobbleGoal(wobbleGoalArm),
-                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(12).build())
+                        new PlaceWobbleGoal(wobbleGoalArm)
                 )
         ));
 

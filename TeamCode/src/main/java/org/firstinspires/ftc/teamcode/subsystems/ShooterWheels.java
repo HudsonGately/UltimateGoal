@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -22,11 +23,13 @@ import java.util.logging.Level;
 public class ShooterWheels extends SubsystemBase {
     private Telemetry telemetry;
 
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    Telemetry dashboardTelemetry = dashboard.getTelemetry();
     public static double MAX_SHOOTER_RPM = 3886;
     public static int SHOOTER_WHEEL_DIAMETER = 4;
     public static double SHOOTER_TPR = 28;
 
-    public static double SHOOTER_P = 0.002;
+    public static double SHOOTER_P = 0.0025;
     public static double SHOOTER_F = 1.0 / MAX_SHOOTER_RPM;
 
 
@@ -36,8 +39,6 @@ public class ShooterWheels extends SubsystemBase {
     DcMotorEx frontMotor, backMotor;
 
     public ShooterWheels(DcMotorEx frontMotor, DcMotorEx backMotor, Telemetry tl) {
-
-
         frontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         this.frontMotor = frontMotor;
@@ -54,6 +55,9 @@ public class ShooterWheels extends SubsystemBase {
     @Override
     public void periodic() {
         handleShooterPID();
+        dashboardTelemetry.addData("Feedback", getShooterRPM());
+        dashboardTelemetry.addData("Setpoint", shooterWheelsPID.getSetPoint());
+
         Util.logger(this, telemetry, Level.INFO, "Shooter RPM", getShooterRPM());
         Util.logger(this, telemetry, Level.INFO, "Shooter Setpoint", shooterWheelsPID.getSetPoint());
         Util.logger(this, telemetry, Level.INFO, "Shooter Power", frontMotor.getPower());

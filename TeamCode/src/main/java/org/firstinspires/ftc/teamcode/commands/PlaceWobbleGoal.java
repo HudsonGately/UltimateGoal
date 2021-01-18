@@ -13,12 +13,13 @@ public class PlaceWobbleGoal extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> wobbleGoal.setArmSpeed(-1), wobbleGoal),
                 new WaitCommand(2400),
-                new InstantCommand(() -> wobbleGoal.setArmSpeed(0), wobbleGoal),
+                new InstantCommand(wobbleGoal::stopArm, wobbleGoal),
+                new WaitCommand(500),
                 new InstantCommand(() -> wobbleGoal.openClaw()),
                 new WaitCommand(500),
                 new InstantCommand(() -> wobbleGoal.setArmSpeed(1), wobbleGoal),
-                new WaitCommand(2400),
-                new InstantCommand(() -> wobbleGoal.setArmSpeed(0), wobbleGoal),
+                new WaitCommand(1000),
+                new InstantCommand(() -> wobbleGoal.setArmSpeed(0.0), wobbleGoal),
                 new InstantCommand(() -> wobbleGoal.closeClaw())
         );
     }
