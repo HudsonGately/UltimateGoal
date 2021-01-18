@@ -29,7 +29,7 @@ public class ShooterWheels extends SubsystemBase {
     public static int SHOOTER_WHEEL_DIAMETER = 4;
     public static double SHOOTER_TPR = 28;
 
-    public static double SHOOTER_P = 0.0025;
+    public static double SHOOTER_P = 0.002;
     public static double SHOOTER_F = 1.0 / MAX_SHOOTER_RPM;
 
 
