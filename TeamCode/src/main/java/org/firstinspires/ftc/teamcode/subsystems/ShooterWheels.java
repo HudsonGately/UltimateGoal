@@ -58,7 +58,8 @@ public class ShooterWheels extends SubsystemBase {
         dashboardTelemetry.addData("Feedback", getShooterRPM());
         dashboardTelemetry.addData("Setpoint", shooterWheelsPID.getSetPoint());
 
-        Util.logger(this, telemetry, Level.INFO, "Shooter RPM", getShooterRPM());
+        Util.logger(this, telemetry, Level.INFO, "Shooter (Front) RPM", getShooterRPM());
+        Util.logger(this, telemetry, Level.INFO, "Shooter (Back) RPM", getBackShooterRPM());
         Util.logger(this, telemetry, Level.INFO, "Shooter Setpoint", shooterWheelsPID.getSetPoint());
         Util.logger(this, telemetry, Level.INFO, "Shooter Power", frontMotor.getPower());
     }
@@ -91,6 +92,10 @@ public class ShooterWheels extends SubsystemBase {
 
     public double getShooterRPM() {
         return (60 * ((double) frontMotor.getVelocity() / (double) SHOOTER_TPR)) / 1.125;
+    }
+
+    public double getBackShooterRPM() {
+        return (60 * ((double) backMotor.getVelocity() / (double) SHOOTER_TPR)) / 1.125;
     }
 
     public boolean atSetpoint() {
