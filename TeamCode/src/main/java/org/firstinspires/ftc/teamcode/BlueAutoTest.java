@@ -110,7 +110,6 @@ public class BlueAutoTest extends CommandOpMode {
                         new SelectCommand(new HashMap<Object, Command>() {{
                             put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
-                                    new TurnCommand(drivetrain, -1),
                                     new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
                                     new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(70).build()),
                                     new PlaceWobbleGoal(wobbleGoalArm),

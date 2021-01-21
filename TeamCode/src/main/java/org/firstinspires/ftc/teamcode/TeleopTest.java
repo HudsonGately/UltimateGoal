@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -89,7 +90,7 @@ public class TeleopTest extends CommandOpMode {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
 
         powershotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).toggleWhenPressed(
-                new InstantCommand(() -> shooterWheels.setShooterRPM(2700), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(2620), shooterWheels),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
         intakeButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whileHeld(intake::intake).whenReleased(intake::stop);
         outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whileHeld(intake::outtake).whenReleased(intake::stop);
@@ -106,6 +107,7 @@ public class TeleopTest extends CommandOpMode {
         decreaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> shooterWheels.adjustShooterRPM(-50));
         // Gamepad
         schedule(new RunCommand(telemetry::update));
+        schedule(new WaitUntilCommand(this::isStarted).andThen(new InstantCommand(feeder::retractFeed)));
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
     }
 }
