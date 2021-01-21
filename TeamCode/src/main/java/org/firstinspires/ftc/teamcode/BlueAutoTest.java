@@ -36,6 +36,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
+import java.time.Instant;
 import java.util.HashMap;
 
 @Autonomous(name = "Blue-Auto-test")
@@ -107,6 +108,7 @@ public class BlueAutoTest extends CommandOpMode {
         schedule(new WaitUntilCommand(this::isStarted).andThen(
                 new InstantCommand(() -> releaseShooter.setPosition(0.2)),
                 new SequentialCommandGroup(
+                        new InstantCommand(feeder::retractFeed),
                         new SelectCommand(new HashMap<Object, Command>() {{
                             put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),

@@ -22,9 +22,9 @@ public class GoToLineShootPowershotBlue extends SequentialCommandGroup {
                 new TurnCommand(drivetrain, -5.05),
                 new ShootRingsCommand(shooterWheels, feeder, 2620, 1),
                 new TurnCommand(drivetrain, -3.15),
-                new ShootRingsCommand(shooterWheels, feeder, 2620, 0),
+                new ShootRingsCommand(shooterWheels, feeder, 2620, 1),
                 new TurnCommand(drivetrain, -3.2),
-                new ShootRingsCommand(shooterWheels, feeder, 2620, 0),
+                new ShootRingsCommand(shooterWheels, feeder, 2620, 1),
                 new TurnCommand(drivetrain, 10),
                 new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d()))
                 );

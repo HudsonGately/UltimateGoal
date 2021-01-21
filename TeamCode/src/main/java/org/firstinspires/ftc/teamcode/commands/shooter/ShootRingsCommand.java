@@ -13,7 +13,7 @@ public class ShootRingsCommand extends SequentialCommandGroup {
         addCommands(
                     new InstantCommand(() -> shooter.setShooterRPM(rpm)),
                     new WaitUntilCommand(shooter::atSetpoint),
-                    new FeedRingsCommand(feeder, numRings + 1, 150),
+                    new FeedRingsCommand(feeder, numRings, 150),
                     new WaitCommand(500),
                     new InstantCommand(() -> shooter.setShooterRPM(0))
         );
