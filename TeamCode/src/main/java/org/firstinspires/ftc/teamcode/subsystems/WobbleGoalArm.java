@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -12,16 +13,18 @@ import java.util.logging.Level;
 
 public class WobbleGoalArm extends SubsystemBase {
     private Telemetry telemetry;
+    private TelemetryPacket packet;
     private CRServo arm;
     private ServoEx claw;
     private boolean clawOpened;
 
-    public WobbleGoalArm(CRServo arm, ServoEx claw, Telemetry tl) {
+    public WobbleGoalArm(CRServo arm, ServoEx claw, Telemetry tl, TelemetryPacket packet) {
         this.arm = arm;
         this.claw = claw;
         this.clawOpened = true;
 
         this.telemetry = tl;
+        this.packet = packet;
     }
 
     @Override

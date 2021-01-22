@@ -84,12 +84,16 @@ public class SampleTankDrive extends TankDrive {
     private BNO055IMU imu;
 
     private VoltageSensor batteryVoltageSensor;
-
+    TelemetryPacket packet;
     public SampleTankDrive(HardwareMap hardwareMap) {
+        this(hardwareMap, new TelemetryPacket());
+    }
+    public SampleTankDrive(HardwareMap hardwareMap, TelemetryPacket packet) {
         super(kV, kA, kStatic, TRACK_WIDTH);
 
         dashboard = FtcDashboard.getInstance();
         dashboard.setTelemetryTransmissionInterval(25);
+        this.packet = packet;
 
         clock = NanoClock.system();
 
@@ -216,7 +220,6 @@ public class SampleTankDrive extends TankDrive {
 
         poseHistory.add(currentPose);
 
-        TelemetryPacket packet = new TelemetryPacket();
         Canvas fieldOverlay = packet.fieldOverlay();
 
         packet.put("mode", mode);

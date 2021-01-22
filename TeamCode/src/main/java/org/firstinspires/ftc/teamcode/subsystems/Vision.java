@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -11,14 +12,16 @@ import java.util.logging.Level;
 
 public class Vision extends SubsystemBase {
     private Telemetry telemetry;
+    private TelemetryPacket packet;
     private UGDetector2 ringDetector;
     private UGDetector2.Stack currentStack;
 
-    public Vision(HardwareMap hw, String webcamName, Telemetry tl) {
+    public Vision(HardwareMap hw, String webcamName, Telemetry tl, TelemetryPacket packet) {
         ringDetector = new UGDetector2(hw, webcamName, tl);
         ringDetector.init();
 
         telemetry = tl;
+        this.packet = packet;
         currentStack = ringDetector.getStack();
         ringDetector.setBottomRectangle(.25, .8);
         ringDetector.setTopRectangle(.1, .8);

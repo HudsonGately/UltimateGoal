@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -22,14 +23,15 @@ import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SlowDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
+import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-@TeleOp(name = "TeleOp-test")
-public class TeleopTest extends CommandOpMode {
+@TeleOp(name = "TeleOp")
+public class TeleopTest extends MatchOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
@@ -50,12 +52,9 @@ public class TeleopTest extends CommandOpMode {
     private Button intakeButton, outtakeButton;
     private Button slowModeTrigger, tripleFeedButton, singleFeedButton, shootButton, powershotButton, toggleClawButton, liftArmButton, lowerArmButton;
     private Button increaseSpeedButton, decreaseSpeedButton;
-    FtcDashboard dashboard = FtcDashboard.getInstance();
-    Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
     @Override
-    public void initialize() {
-
+    public void robotInit() {
         // Drivetrain Hardware Initializations
         // Intake hardware Initializations
         intakeMotor = new MotorEx(hardwareMap, "intake");
@@ -71,18 +70,22 @@ public class TeleopTest extends CommandOpMode {
 
 
         // Subsystems
-        drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap),telemetry);
+        drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap, packet),telemetry, packet);
         drivetrain.init();
-        intake = new Intake(intakeMotor, telemetry);
-        shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
-        feeder = new ShooterFeeder(feedServo, telemetry);
-        wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry);
+        intake = new Intake(intakeMotor, telemetry, packet);
+        shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry, packet);
+        feeder = new ShooterFeeder(feedServo, telemetry, packet);
+        wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry, packet);
 
         gamepad1.setJoystickDeadzone(0.0f);
         driverGamepad = new GamepadEx(gamepad1);
+    }
+
+    @Override
+    public void configureButtons() {
 
         slowModeTrigger = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)).whileHeld(new SlowDriveCommand(drivetrain, driverGamepad));
-        
+
         singleFeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).whenPressed(new FeedRingsCommand(feeder, 1));
         tripleFeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whenPressed(new FeedRingsCommand(feeder, 3));
         shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).toggleWhenPressed(
@@ -105,11 +108,15 @@ public class TeleopTest extends CommandOpMode {
 
         increaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> shooterWheels.adjustShooterRPM(50));
         decreaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> shooterWheels.adjustShooterRPM(-50));
-        // Gamepad
-        schedule(new RunCommand(telemetry::update));
-        schedule(new WaitUntilCommand(this::isStarted).andThen(new InstantCommand(feeder::retractFeed)));
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
     }
+
+
+    @Override
+    public void matchStart() {
+        schedule(new InstantCommand(feeder::retractFeed));
+    }
+
 }
 
 // Left Trigger - Intake. Condition: WhenHeld

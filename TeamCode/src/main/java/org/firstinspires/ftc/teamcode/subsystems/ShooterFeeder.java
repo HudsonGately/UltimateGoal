@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Util;
 
@@ -17,11 +16,13 @@ public class ShooterFeeder extends SubsystemBase {
     public static double SERVO_POSITION_HOME = 0.86;
 
     private Telemetry telemetry;
+    private TelemetryPacket packet;
     private ServoEx feedServo;
 
-    public ShooterFeeder(ServoEx feedServo, Telemetry tl) {
+    public ShooterFeeder(ServoEx feedServo, Telemetry tl, TelemetryPacket packet) {
         this.feedServo = feedServo;
         this.telemetry = tl;
+        this.packet = packet;
     }
 
     @Override

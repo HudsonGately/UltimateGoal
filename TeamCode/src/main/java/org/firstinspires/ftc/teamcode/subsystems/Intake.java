@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -16,11 +17,13 @@ public class Intake extends SubsystemBase {
     public static double OUTAKE_SPEED = -1;
 
     Telemetry telemetry;
+    TelemetryPacket packet;
     private MotorEx intake;
 
-    public Intake(MotorEx intake, Telemetry tl) {
+    public Intake(MotorEx intake, Telemetry tl, TelemetryPacket packet) {
         this.intake = intake;
         this.telemetry = tl;
+        this.packet = packet;
     }
 
     @Override

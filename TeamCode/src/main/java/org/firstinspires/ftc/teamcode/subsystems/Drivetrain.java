@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
@@ -18,9 +19,11 @@ public class Drivetrain extends SubsystemBase {
 
     private final SampleTankDrive drive;
     private Telemetry telemetry;
-    public Drivetrain(SampleTankDrive drive, Telemetry tl) {
+    private TelemetryPacket packet;
+    public Drivetrain(SampleTankDrive drive, Telemetry tl, TelemetryPacket packet) {
         this.drive = drive;
         this.telemetry = tl;
+        this.packet = packet;
     }
 
     public void init() {

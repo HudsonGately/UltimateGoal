@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.Command;
@@ -29,6 +30,7 @@ import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
+import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
@@ -38,9 +40,10 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.logging.Level;
 
-@Autonomous(name = "Blue-Auto-test")
-public class BlueAutoTest extends CommandOpMode {
+@Autonomous(name = "Blue Powershot")
+public class BlueAutoTest extends MatchOpMode {
     // Motors
     private MotorEx intakeMotor;
     private MotorEx anglerMotor;
@@ -60,10 +63,10 @@ public class BlueAutoTest extends CommandOpMode {
     private WobbleGoalArm wobbleGoalArm;
     private Vision vision;
     FtcDashboard dashboard = FtcDashboard.getInstance();
-    Telemetry dashboardTelemetry = dashboard.getTelemetry();
+    TelemetryPacket packet = new TelemetryPacket();
 
     @Override
-    public void initialize() {
+    public void robotInit() {
 
         // Drivetrain Hardware Initializations
         // Intake hardware Initializations
@@ -82,32 +85,27 @@ public class BlueAutoTest extends CommandOpMode {
         releaseShooter = new SimpleServo(hardwareMap, "release_servo", 0, 180);
 
         // Subsystems
-        drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap),telemetry);
+        drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap, packet), telemetry, packet);
         // intake = new Intake(intakeMotor, telemetry);
-        shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
-        feeder = new ShooterFeeder(feedServo, telemetry);
-        wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry);
-        vision = new Vision(hardwareMap, "webcam", telemetry);
+        shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry, packet);
+        feeder = new ShooterFeeder(feedServo, telemetry, packet);
+        wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry, packet);
+        vision = new Vision(hardwareMap, "webcam", telemetry, packet);
+    }
 
+    @Override
+    public void robotPeriodic() {
+       Util.logger(this, telemetry, Level.INFO, "Current Stack", vision.getCurrentStack());
+    }
 
+    @Override
+    public void matchStart() {
         Trajectory trajectory = drivetrain.trajectoryBuilder(new Pose2d())
                 .back(48)
                 .build();
-
-        // Gamepad
-        schedule(new RunCommand(() -> {
-            telemetry.addData("Stack", vision.getCurrentStack());
-            telemetry.update();
-        }));
-
-        while(!isStarted() && !isStopRequested()) {
-            telemetry.addData("Current Stack", vision.getCurrentStack());
-            telemetry.update();
-        }
-
-        schedule(new WaitUntilCommand(this::isStarted).andThen(
-                new InstantCommand(() -> releaseShooter.setPosition(0.2)),
+        schedule(
                 new SequentialCommandGroup(
+                        new InstantCommand(() -> releaseShooter.setPosition(0.2)),
                         new InstantCommand(feeder::retractFeed),
                         new SelectCommand(new HashMap<Object, Command>() {{
                             put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
@@ -135,9 +133,8 @@ public class BlueAutoTest extends CommandOpMode {
                                     new PlaceWobbleGoal(wobbleGoalArm)
                             ));
                         }}, vision::getCurrentStack),
-                        new InstantCommand(this::stop)                        
+                        new InstantCommand(this::stop)
                 )
-        ));
-        
+        );
     }
 }
