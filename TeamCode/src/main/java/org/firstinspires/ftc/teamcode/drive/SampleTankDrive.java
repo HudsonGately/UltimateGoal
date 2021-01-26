@@ -297,7 +297,10 @@ public class SampleTankDrive extends TankDrive {
 
                 break;
             }
+
         }
+        fieldOverlay.setStroke("#3F51B5");
+        DashboardUtil.drawRobot(fieldOverlay, currentPose);
 
         if (!match) dashboard.sendTelemetryPacket(packet);
     }
