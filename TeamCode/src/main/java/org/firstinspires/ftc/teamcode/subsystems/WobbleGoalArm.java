@@ -79,6 +79,9 @@ public class WobbleGoalArm extends SubsystemBase {
     public boolean atTargetAngle() {
         return arm.atTargetPosition();
     }
+    public void setPValue(double p) {
+        arm.setPositionCoefficient(p);
+    }
 
     public void setClawPosition(double position) {
         claw.setPosition(position);
