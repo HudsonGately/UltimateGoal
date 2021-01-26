@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
@@ -11,15 +12,15 @@ public class PlaceWobbleGoal extends SequentialCommandGroup {
 
     public PlaceWobbleGoal(WobbleGoalArm wobbleGoal) {
         addCommands(
-                new InstantCommand(() -> wobbleGoal.setArmSpeed(-1), wobbleGoal),
-                new WaitCommand(2400),
+                new InstantCommand(wobbleGoal::placeWobbleGoal, wobbleGoal),
+                new WaitUntilCommand(wobbleGoal::atTargetAngle),
                 new InstantCommand(wobbleGoal::stopArm, wobbleGoal),
                 new WaitCommand(500),
                 new InstantCommand(() -> wobbleGoal.openClaw()),
                 new WaitCommand(500),
-                new InstantCommand(() -> wobbleGoal.setArmSpeed(1), wobbleGoal),
-                new WaitCommand(2000),
-                new InstantCommand(() -> wobbleGoal.setArmSpeed(0.0), wobbleGoal),
+                new InstantCommand(wobbleGoal::liftWobbleGoal, wobbleGoal),
+                new WaitUntilCommand(wobbleGoal::atTargetAngle),
+                new InstantCommand(wobbleGoal::stopArm, wobbleGoal),
                 new InstantCommand(() -> wobbleGoal.closeClaw())
         );
     }
