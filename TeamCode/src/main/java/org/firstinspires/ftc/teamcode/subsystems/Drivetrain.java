@@ -110,7 +110,4 @@ public class Drivetrain extends SubsystemBase {
         return drive.getPoseVelocity();
     }
 
-    public void resetEncoder() {
-        drive.resetEncoder();
-    }
 }
