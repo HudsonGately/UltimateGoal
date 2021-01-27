@@ -19,6 +19,6 @@ public class FeedRingsCommand extends SequentialCommandGroup {
         }
     }
     public FeedRingsCommand(ShooterFeeder feeder, int numRings) {
-        this(feeder, numRings, 100);
+        this(feeder, numRings, 50);
     }
 }
