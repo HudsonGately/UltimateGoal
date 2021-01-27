@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -126,6 +127,12 @@ public class HighGoalAuto extends MatchOpMode {
                                     new PlaceWobbleGoal(wobbleGoalArm)
                             ));
                         }}, vision::getCurrentStack),
+                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                        new InstantCommand(() -> intake.intake()),
+                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d())
+                                .splineTo(new Vector2d(54, 24), 0)
+                                .build()),
+
                         new InstantCommand(this::stop)
                 )
         );

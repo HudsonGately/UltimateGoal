@@ -13,7 +13,7 @@ import java.util.logging.Level;
 public class ShooterFeeder extends SubsystemBase {
 
     public static double SERVO_POSITION_SHOOT = 0.75;
-    public static double SERVO_POSITION_HOME = 0.86;
+    public static double SERVO_POSITION_HOME = 0.88;
 
     private Telemetry telemetry;
     private TelemetryPacket packet;
