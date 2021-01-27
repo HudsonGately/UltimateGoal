@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.commands.GoToLineShootHighGoal;
 import org.firstinspires.ftc.teamcode.commands.GoToLineShootPowershotBlue;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
@@ -98,10 +99,32 @@ public class HighGoalAuto extends MatchOpMode {
                 new SequentialCommandGroup(
                         new InstantCommand(() -> releaseShooter.setPosition(0.2)),
                         new InstantCommand(feeder::retractFeed),
-                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
-                        new ShootRingsCommand(shooterWheels, feeder, 3000, 3),
-                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(8).build()),
+                        new SelectCommand(new HashMap<Object, Command>() {{
+                            put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
+                                    new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder),
+                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(70).build()),
+                                    new PlaceWobbleGoal(wobbleGoalArm),
+                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(48).build())
+                            ));
+                            put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
+                                    new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder),
+                                    new TurnCommand(drivetrain, -30),
+                                    new WaitCommand(500),
+                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
+                                    new PlaceWobbleGoal(wobbleGoalArm),
+                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(24).build())
+                            ));
+                            put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
+                                    new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder),
+                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(32).build()),
+                                    new PlaceWobbleGoal(wobbleGoalArm)
+                            ));
+                        }}, vision::getCurrentStack),
                         new InstantCommand(this::stop)
                 )
         );
