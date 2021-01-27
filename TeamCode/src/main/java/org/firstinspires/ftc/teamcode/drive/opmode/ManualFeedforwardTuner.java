@@ -147,7 +147,7 @@ public class ManualFeedforwardTuner extends CommandOpMode {
                     telemetry.addData("error", motionState.getV() - currentVelo);
                     break;
                 case DRIVER_MODE:
-                    drive.tankDrive(-gamepad1.left_stick_y, gamepad1.left_stick_x);
+                    drive.tankDrive(-gamepad1.left_stick_y, gamepad1.right_stick_y);
                     break;
             }
         }).alongWith(new RunCommand(telemetry::update)));

@@ -98,6 +98,7 @@ public class HighGoalAuto extends MatchOpMode {
         schedule(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> releaseShooter.setPosition(0.2)),
+                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
                         new InstantCommand(feeder::retractFeed),
                         new SelectCommand(new HashMap<Object, Command>() {{
                             put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(

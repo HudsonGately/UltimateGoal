@@ -11,21 +11,15 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 
-public class GoToLineShootPowershotBlue extends SequentialCommandGroup {
+public class GoToLineShootHighGoal extends SequentialCommandGroup {
     private Drivetrain drivetrain;
     private ShooterWheels shooterWheels;
     private ShooterFeeder feeder;
 
-    public GoToLineShootPowershotBlue(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder) {
+    public GoToLineShootHighGoal(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder) {
         addCommands(
                 new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
-                new TurnCommand(drivetrain, -5.05),
-                new ShootRingsCommand(shooterWheels, feeder, 2620, 1),
-                new TurnCommand(drivetrain, -3.15),
-                new ShootRingsCommand(shooterWheels, feeder, 2620, 1),
-                new TurnCommand(drivetrain, -3.2),
-                new ShootRingsCommand(shooterWheels, feeder, 2620, 1),
-                new TurnCommand(drivetrain, 10),
+                new ShootRingsCommand(shooterWheels, feeder, 2950, 3),
                 new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d()))
                 );
     }
