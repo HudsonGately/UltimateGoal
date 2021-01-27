@@ -60,13 +60,13 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleTankDrive extends TankDrive {
-    public static PIDCoefficients AXIAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients AXIAL_PID = new PIDCoefficients(8, 0, 0);
+    public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0.025, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(15, 0, 0.1);
 
     TelemetryPacket packet;
     public static double VX_WEIGHT = 1;
-    public static double OMEGA_WEIGHT = 1;
+    public static double OMEGA_WEIGHT = 2;
 
     public enum Mode {
         IDLE,
@@ -299,8 +299,7 @@ public class SampleTankDrive extends TankDrive {
             }
 
         }
-        fieldOverlay.setStroke("#3F51B5");
-        DashboardUtil.drawRobot(fieldOverlay, currentPose);
+
 
         if (!match) dashboard.sendTelemetryPacket(packet);
     }

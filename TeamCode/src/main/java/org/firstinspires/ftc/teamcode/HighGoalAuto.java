@@ -97,11 +97,12 @@ public class HighGoalAuto extends MatchOpMode {
         schedule(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> releaseShooter.setPosition(0.2)),
+                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
                         new InstantCommand(feeder::retractFeed),
                         new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
-                        new ShootRingsCommand(shooterWheels, feeder, 3000, 3),
+                        new ShootRingsCommand(shooterWheels, feeder, 2950, 3),
                         new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(8).build()),
+                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(20).build()),
                         new InstantCommand(this::stop)
                 )
         );
