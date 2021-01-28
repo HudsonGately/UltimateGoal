@@ -5,6 +5,10 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TankVelocityConstraint;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
@@ -25,6 +29,7 @@ import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -34,8 +39,13 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
+
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
 
 @Autonomous(name = "HighGoalBlue")
 public class HighGoalAuto extends MatchOpMode {
@@ -131,12 +141,18 @@ public class HighGoalAuto extends MatchOpMode {
                         new InstantCommand(() -> intake.intake()),
                         new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d())
                                 .splineTo(new Vector2d(24, 8), Math.toRadians(45))
-                                .splineTo(new Vector2d(54, 24), 0)
+                                .splineTo(new Vector2d(54, 24), 0, new MinVelocityConstraint(
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new TankVelocityConstraint(15, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                                new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
                                 .build()),
                         new WaitCommand(2000),
+                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
                         new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d(), true)
-                                .splineTo(new Vector2d(-54, -24), Math.PI)
-                                .build()),
+                                .splineTo(new Vector2d(-30, -24), Math.PI).build()),
 
                         new InstantCommand(this::stop)
                 )
