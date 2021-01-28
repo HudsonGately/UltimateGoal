@@ -130,7 +130,12 @@ public class HighGoalAuto extends MatchOpMode {
                         new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
                         new InstantCommand(() -> intake.intake()),
                         new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d())
+                                .splineTo(new Vector2d(24, 8), Math.toRadians(45))
                                 .splineTo(new Vector2d(54, 24), 0)
+                                .build()),
+                        new WaitCommand(2000),
+                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d(), true)
+                                .splineTo(new Vector2d(-54, -24), Math.PI)
                                 .build()),
 
                         new InstantCommand(this::stop)
