@@ -1,34 +1,24 @@
 package org.firstinspires.ftc.teamcode.commands.drive;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
-
-public class TrajectoryFollowerCommand extends CommandBase {
+public class TurnToCommand extends CommandBase {
 
     private final Drivetrain drive;
-    private final Trajectory trajectory;
+    private final double angle;
 
-    public TrajectoryFollowerCommand(Drivetrain drive, Trajectory trajectory) {
+    public TurnToCommand(Drivetrain drive, double angle) {
         this.drive = drive;
-        this.trajectory = trajectory;
+        this.angle = angle;
 
         addRequirements(drive);
     }
 
-
     @Override
     public void initialize() {
-
-        drive.followTrajectory(trajectory);
-    }
-
-    @Override
-    public void execute() {
-        drive.update();
+        drive.turnTo(Math.toRadians(angle));
     }
 
     @Override
@@ -39,8 +29,13 @@ public class TrajectoryFollowerCommand extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        drive.update();
+    }
+
+    @Override
     public boolean isFinished() {
-        return !drive.isBusy();
+        return Thread.currentThread().isInterrupted() || !drive.isBusy();
     }
 
 }

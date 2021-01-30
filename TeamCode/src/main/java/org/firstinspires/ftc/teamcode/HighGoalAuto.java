@@ -103,57 +103,30 @@ public class HighGoalAuto extends MatchOpMode {
 
     @Override
     public void matchStart() {
-        Trajectory trajectory = drivetrain.trajectoryBuilder(new Pose2d())
-                .back(48)
-                .build();
         schedule(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> releaseShooter.setPosition(0.2)),
-                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
+                        new InstantCommand(() -> drivetrain.setPoseEstimate(Trajectories.startPose)),
                         new InstantCommand(feeder::retractFeed),
                         new SelectCommand(new HashMap<Object, Command>() {{
                             put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
                                     new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder),
-                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(70).build()),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToFourSquare),
                                     new PlaceWobbleGoal(wobbleGoalArm),
-                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(48).build())
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.fourSquareToLine)
                             ));
                             put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
                                     new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder),
-                                    new TurnCommand(drivetrain, -30),
-                                    new WaitCommand(500),
-                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToOneSquare),
                                     new PlaceWobbleGoal(wobbleGoalArm),
-                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(24).build())
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.oneSquareToLine)
                             ));
                             put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
                                     new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder),
-                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(32).build()),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.oneSquareToLine),
                                     new PlaceWobbleGoal(wobbleGoalArm)
                             ));
                         }}, vision::getCurrentStack),
-                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                        new InstantCommand(() -> intake.intake()),
-                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d())
-                                .splineTo(new Vector2d(24, 8), Math.toRadians(45))
-                                .splineTo(new Vector2d(54, 24), 0, new MinVelocityConstraint(
-                                Arrays.asList(
-                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                        new TankVelocityConstraint(15, DriveConstants.TRACK_WIDTH)
-                                )
-                        ),
-                                new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                                .build()),
-                        new WaitCommand(2000),
-                        new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                        new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d(), true)
-                                .splineTo(new Vector2d(-30, -24), Math.PI).build()),
-
                         new InstantCommand(this::stop)
                 )
         );

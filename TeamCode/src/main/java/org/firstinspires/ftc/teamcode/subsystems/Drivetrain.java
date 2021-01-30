@@ -93,6 +93,9 @@ public class Drivetrain extends SubsystemBase {
     public void turn(double radians) {
         drive.turnAsync(radians);
     }
+    public void turnTo(double radians) {
+        drive.turnToAsync(radians);
+    }
 
     public void turnBlock(double radians) {
         drive.turn(radians);

@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
@@ -18,15 +20,9 @@ public class GoToLineShootPowershotBlue extends SequentialCommandGroup {
 
     public GoToLineShootPowershotBlue(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder) {
         addCommands(
-                new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
-                new TurnCommand(drivetrain, -5.05),
-                new ShootRingsCommand(shooterWheels, feeder, 2620, 1),
-                new TurnCommand(drivetrain, -3.15),
-                new ShootRingsCommand(shooterWheels, feeder, 2620, 1),
-                new TurnCommand(drivetrain, -3.2),
-                new ShootRingsCommand(shooterWheels, feeder, 2620, 1),
-                new TurnCommand(drivetrain, 10),
-                new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d()))
+                new TrajectoryFollowerCommand(drivetrain, Trajectories.driveToShoot),
+                new ParallelDeadlineGroup(new ShootRingsCommand(shooterWheels, feeder, 2620, 3, 150), new TurnCommand(drivetrain, -20)),
+                new TurnCommand(drivetrain, 20)
                 );
     }
 }

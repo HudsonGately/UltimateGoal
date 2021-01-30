@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
+import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
@@ -18,9 +19,8 @@ public class GoToLineShootHighGoal extends SequentialCommandGroup {
 
     public GoToLineShootHighGoal(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder) {
         addCommands(
-                new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
-                new ShootRingsCommand(shooterWheels, feeder, 2950, 3),
-                new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d()))
+                new TrajectoryFollowerCommand(drivetrain, Trajectories.driveToShoot),
+                new ShootRingsCommand(shooterWheels, feeder, 2950, 3)
                 );
     }
 }

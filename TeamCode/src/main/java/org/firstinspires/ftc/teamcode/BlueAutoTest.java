@@ -23,6 +23,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.commands.GoToLineShootHighGoal;
 import org.firstinspires.ftc.teamcode.commands.GoToLineShootPowershotBlue;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.RunCommand;
@@ -100,37 +101,33 @@ public class BlueAutoTest extends MatchOpMode {
 
     @Override
     public void matchStart() {
-        Trajectory trajectory = drivetrain.trajectoryBuilder(new Pose2d())
-                .back(48)
-                .build();
+        drivetrain.setPoseEstimate(Trajectories.startPose);
         schedule(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> releaseShooter.setPosition(0.2)),
                         new InstantCommand(feeder::retractFeed),
+                        new InstantCommand(() -> drivetrain.setPoseEstimate(Trajectories.startPose)),
                         new SelectCommand(new HashMap<Object, Command>() {{
                             put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
-                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(70).build()),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToFourSquare),
                                     new PlaceWobbleGoal(wobbleGoalArm),
-                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(48).build())
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.fourSquareToLine)
                             ));
                             put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
-                                    new TurnCommand(drivetrain, -30),
-                                    new WaitCommand(500),
-                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(48).build()),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToOneSquare),
                                     new PlaceWobbleGoal(wobbleGoalArm),
-                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).forward(24).build())
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.oneSquareToLine)
                             ));
                             put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
-                                    new InstantCommand(() -> drivetrain.setPoseEstimate(new Pose2d())),
-                                    new TrajectoryFollowerCommand(drivetrain, drivetrain.trajectoryBuilder(new Pose2d()).back(32).build()),
-                                    new PlaceWobbleGoal(wobbleGoalArm)
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.oneSquareToLine),
+                                    new PlaceWobbleGoal(wobbleGoalArm),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.lineToSecondWobbleGoal),
+                                    new WaitCommand(1000),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.secondWobbleGoalToLine)
+
                             ));
                         }}, vision::getCurrentStack),
                         new InstantCommand(this::stop)

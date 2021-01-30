@@ -198,6 +198,18 @@ public class SampleTankDrive extends TankDrive {
         mode = Mode.TURN;
     }
 
+    public void turnToAsync(double angle) {
+        double heading = getPoseEstimate().getHeading();
+        turnProfile = MotionProfileGenerator.generateSimpleMotionProfile(
+                new MotionState(heading, 0, 0, 0),
+                new MotionState(angle, 0, 0, 0),
+                MAX_ANG_VEL,
+                MAX_ANG_ACCEL
+        );
+        turnStart = clock.seconds();
+        mode = Mode.TURN;
+    }
+
     public void turn(double angle) {
         turnAsync(angle);
         waitForIdle();
