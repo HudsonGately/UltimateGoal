@@ -32,15 +32,15 @@ public class Trajectories {
     public static Trajectory shootToZeroSquare = new TrajectoryBuilder(driveToShoot.end(), velConstraint, accelConstraint).back(30).build();
     public static Trajectory shootToFourSquare = new TrajectoryBuilder(driveToShoot.end(), velConstraint, accelConstraint).back(70).build();
     public static Trajectory shootToOneSquare = new TrajectoryBuilder(driveToShoot.end(), true, velConstraint, accelConstraint)
-            .splineTo(new Vector2d(120, 36), Math.toRadians(180)).build();
+            .splineTo(new Vector2d(-76, 32), Math.toRadians(180)).back(24).build();
 
     public static Trajectory fourSquareToLine = new TrajectoryBuilder(shootToFourSquare.end(), velConstraint, accelConstraint).forward(48).build();
     public static Trajectory oneSquareToLine = new TrajectoryBuilder(shootToOneSquare.end(), velConstraint, accelConstraint)
-            .splineTo(new Vector2d(64, 0), Math.toRadians(0)).build();
+            .splineTo(new Vector2d(-66, 0), Math.toRadians(0)).build();
 
-    public static Trajectory lineToSecondWobbleGoal = new TrajectoryBuilder(oneSquareToLine.end(), true, velConstraint, accelConstraint)
-            .splineTo(new Vector2d(12, 24), Math.toRadians(180)).build();
+    public static Trajectory lineToSecondWobbleGoal = new TrajectoryBuilder(oneSquareToLine.end(), velConstraint, accelConstraint)
+            .splineTo(new Vector2d(-20, 44), Math.toRadians(0)).build();
     public static Trajectory secondWobbleGoalToLine = new TrajectoryBuilder(lineToSecondWobbleGoal.end(), velConstraint, accelConstraint)
-            .splineTo(new Vector2d(64, 0), Math.toRadians(0)).build();
+            .splineTo(new Vector2d(-64, 0), Math.toRadians(0)).build();
 
 }

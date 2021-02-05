@@ -122,11 +122,11 @@ public class BlueAutoTest extends MatchOpMode {
                             ));
                             put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
-                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.oneSquareToLine),
-                                    new PlaceWobbleGoal(wobbleGoalArm),
-                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.lineToSecondWobbleGoal),
-                                    new WaitCommand(1000),
-                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.secondWobbleGoalToLine)
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToZeroSquare),
+                                    new PlaceWobbleGoal(wobbleGoalArm)
+                                    //new TrajectoryFollowerCommand(drivetrain, Trajectories.lineToSecondWobbleGoal)
+                                    /*new WaitCommand(1000),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.secondWobbleGoalToLine)*/
 
                             ));
                         }}, vision::getCurrentStack),

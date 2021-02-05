@@ -10,13 +10,13 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 
 public class ShootRingsCommand extends SequentialCommandGroup {
     public ShootRingsCommand(ShooterWheels shooter, ShooterFeeder feeder, double rpm, int numRings) {
-        this(shooter, feeder, rpm, 3, 500);
+        this(shooter, feeder, rpm, numRings, 500);
     }
-    public ShootRingsCommand(ShooterWheels shooter, ShooterFeeder feeder, double rpm, int numRings, long timeout) {
+    public ShootRingsCommand(ShooterWheels shooter, ShooterFeeder feeder, double rpm, int numRings, int timeout) {
         addCommands(
                 new InstantCommand(() -> shooter.setShooterRPM(rpm)),
                 new WaitUntilCommand(shooter::atSetpoint),
-                new FeedRingsCommand(feeder, numRings, 50),
+                new FeedRingsCommand(feeder, numRings, timeout),
                 new WaitCommand(timeout),
                 new InstantCommand(() -> shooter.setShooterRPM(0))
         );

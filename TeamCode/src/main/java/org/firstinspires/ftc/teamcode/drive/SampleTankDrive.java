@@ -60,9 +60,9 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleTankDrive extends TankDrive {
-    public static PIDCoefficients AXIAL_PID = new PIDCoefficients(10, 0, 0.3);
-    public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0.075, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(3, 0, 0);
+    public static PIDCoefficients AXIAL_PID = new PIDCoefficients(3, 0, 0);
+    public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0.01, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(12, 0, 0);
 
     TelemetryPacket packet;
     public static double VX_WEIGHT = 1;
@@ -369,6 +369,7 @@ public class SampleTankDrive extends TankDrive {
 
         setDrivePower(vel);
     }
+    
 
     @NonNull
     @Override
