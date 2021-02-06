@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -9,8 +10,12 @@ import org.firstinspires.ftc.teamcode.UGDetector2;
 import org.firstinspires.ftc.teamcode.Util;
 
 import java.util.logging.Level;
-
+@Config
 public class Vision extends SubsystemBase {
+
+    public static double TOP_PERCENT = 0.139;
+    public static double BOTTOM_PERCENT = 0.295;
+
     private Telemetry telemetry;
     private TelemetryPacket packet;
     private UGDetector2 ringDetector;
@@ -23,8 +28,8 @@ public class Vision extends SubsystemBase {
         telemetry = tl;
         this.packet = packet;
         currentStack = ringDetector.getStack();
-        ringDetector.setBottomRectangle(.25, .8);
-        ringDetector.setTopRectangle(.1, .8);
+        ringDetector.setBottomRectangle(BOTTOM_PERCENT, .8);
+        ringDetector.setTopRectangle(TOP_PERCENT, .8);
 
     }
 

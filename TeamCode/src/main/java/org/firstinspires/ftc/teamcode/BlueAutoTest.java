@@ -87,7 +87,7 @@ public class BlueAutoTest extends MatchOpMode {
 
         // Subsystems
         drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap, packet), telemetry, packet);
-        // intake = new Intake(intakeMotor, telemetry);
+        intake = new Intake(intakeMotor, telemetry, packet);
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry, packet);
         feeder = new ShooterFeeder(feedServo, telemetry, packet);
         wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry, packet);
@@ -112,7 +112,14 @@ public class BlueAutoTest extends MatchOpMode {
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToFourSquare),
                                     new PlaceWobbleGoal(wobbleGoalArm),
-                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.fourSquareToLine)
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.fourSquareToLine),
+                                    new WaitCommand(500),
+                                    new InstantCommand(intake::intake),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.lineToIntake),
+                                    new WaitCommand(500),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.intakeToShoot),
+                                    new TurnCommand(drivetrain, -15),
+                                    new ShootRingsCommand(shooterWheels, feeder, 3000, 3, 500)
                             ));
                             put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
@@ -123,7 +130,9 @@ public class BlueAutoTest extends MatchOpMode {
                             put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToZeroSquare),
-                                    new PlaceWobbleGoal(wobbleGoalArm)
+                                    new PlaceWobbleGoal(wobbleGoalArm),
+                                    new WaitCommand(500)
+
                                     //new TrajectoryFollowerCommand(drivetrain, Trajectories.lineToSecondWobbleGoal)
                                     /*new WaitCommand(1000),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.secondWobbleGoalToLine)*/

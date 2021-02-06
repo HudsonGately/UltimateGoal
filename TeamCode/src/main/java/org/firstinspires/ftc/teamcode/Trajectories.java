@@ -23,6 +23,10 @@ public class Trajectories {
             new AngularVelocityConstraint(MAX_ANG_VEL),
                 new TankVelocityConstraint(MAX_VEL, TRACK_WIDTH)
         ));
+    public static MinVelocityConstraint slowConstraint = new MinVelocityConstraint(Arrays.asList(
+            new AngularVelocityConstraint(MAX_ANG_VEL),
+            new TankVelocityConstraint(30, TRACK_WIDTH)
+    ));
     public static ProfileAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(MAX_ACCEL);
     public static Pose2d startPose = new Pose2d();
 
@@ -37,6 +41,8 @@ public class Trajectories {
     public static Trajectory fourSquareToLine = new TrajectoryBuilder(shootToFourSquare.end(), velConstraint, accelConstraint).forward(48).build();
     public static Trajectory oneSquareToLine = new TrajectoryBuilder(shootToOneSquare.end(), velConstraint, accelConstraint)
             .splineTo(new Vector2d(-66, 0), Math.toRadians(0)).build();
+    public static Trajectory lineToIntake = new TrajectoryBuilder(fourSquareToLine.end(), slowConstraint, accelConstraint).splineTo(new Vector2d(-20, 20), Math.toRadians(0), slowConstraint, accelConstraint).build();
+    public static Trajectory intakeToShoot = new TrajectoryBuilder(lineToIntake.end(), true, slowConstraint, accelConstraint).splineTo(new Vector2d(-48, 0), Math.toRadians(180), slowConstraint, accelConstraint).build();
 
     public static Trajectory lineToSecondWobbleGoal = new TrajectoryBuilder(oneSquareToLine.end(), velConstraint, accelConstraint)
             .splineTo(new Vector2d(-20, 44), Math.toRadians(0)).build();
