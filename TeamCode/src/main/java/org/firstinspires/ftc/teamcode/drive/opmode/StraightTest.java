@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
@@ -32,6 +33,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
  *
  * NOTE: this has been refactored to use FTCLib's command-based
  */
+@Disabled
 @Config
 @Autonomous(group = "drive")
 public class StraightTest extends CommandOpMode {

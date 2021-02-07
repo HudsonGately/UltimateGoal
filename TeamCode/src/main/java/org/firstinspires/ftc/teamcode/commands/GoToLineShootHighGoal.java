@@ -20,7 +20,7 @@ public class GoToLineShootHighGoal extends SequentialCommandGroup {
     public GoToLineShootHighGoal(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder) {
         addCommands(
                 new TrajectoryFollowerCommand(drivetrain, Trajectories.driveToShoot),
-                new ShootRingsCommand(shooterWheels, feeder, 2950, 3)
+                new ShootRingsCommand(shooterWheels, feeder, 2950, 3, 75)
                 );
     }
 }
