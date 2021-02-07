@@ -14,7 +14,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 public class UGDetector2 {
 
     public static double MIN = 105;
-    public static double MAX = 105;
+    public static double MAX = 112;
     private OpenCvCamera camera;
     private boolean isUsingWebcam;
     private String webcamName;
@@ -72,7 +72,7 @@ public class UGDetector2 {
     }
 
     public Stack getStack() {
-        if (Math.abs(ftclibPipeline.getTopAverage() - ftclibPipeline.getBottomAverage()) < ftclibPipeline.getThreshold() && (ftclibPipeline.getTopAverage() <= MIN && ftclibPipeline.getBottomAverage() <= MAX)) {
+        if (Math.abs(ftclibPipeline.getTopAverage() - ftclibPipeline.getBottomAverage()) < ftclibPipeline.getThreshold() && (ftclibPipeline.getTopAverage() <= MAX && ftclibPipeline.getBottomAverage() <= MAX)) {
             return Stack.FOUR;
         } else if (Math.abs(ftclibPipeline.getTopAverage() - ftclibPipeline.getBottomAverage()) < ftclibPipeline.getThreshold() && (ftclibPipeline.getTopAverage() >= MIN && ftclibPipeline.getBottomAverage() >= MAX)) {
             return Stack.ZERO;

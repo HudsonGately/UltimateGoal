@@ -85,6 +85,9 @@ public class Drivetrain extends SubsystemBase {
     public Pose2d getPoseEstimate() {
         return drive.getPoseEstimate();
     }
+    public double getHeading() {
+        return Math.toDegrees(drive.getExternalHeading());
+    }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
         return drive.trajectoryBuilder(startPose);

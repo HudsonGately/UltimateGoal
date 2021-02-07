@@ -13,7 +13,7 @@ import java.util.logging.Level;
 @Config
 public class Vision extends SubsystemBase {
 
-    public static double TOP_PERCENT = 0.139;
+    public static double TOP_PERCENT = 0.142;
     public static double BOTTOM_PERCENT = 0.295;
 
     private Telemetry telemetry;
@@ -41,6 +41,14 @@ public class Vision extends SubsystemBase {
         Util.logger(this, telemetry, Level.INFO, "Bottom", ringDetector.getBottomAverage());
         Util.logger(this, telemetry, Level.INFO, "Top", ringDetector.getTopAverage());
 
+    }
+
+    public double getTopAverage() {
+        return ringDetector.getTopAverage();
+    }
+
+    public double getBottomAverage() {
+        return ringDetector.getTopAverage();
     }
 
     public UGDetector2.Stack getCurrentStack() {

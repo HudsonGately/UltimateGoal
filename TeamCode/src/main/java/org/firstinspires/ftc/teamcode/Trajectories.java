@@ -34,7 +34,7 @@ public class Trajectories {
     public static Trajectory driveToShoot = new TrajectoryBuilder(startPose, velConstraint, accelConstraint).back(48).build();
 
     public static Trajectory shootToZeroSquare = new TrajectoryBuilder(driveToShoot.end(), velConstraint, accelConstraint).back(30).build();
-    public static Trajectory shootToFourSquare = new TrajectoryBuilder(driveToShoot.end(), velConstraint, accelConstraint).back(78).build();
+    public static Trajectory shootToFourSquare = new TrajectoryBuilder(driveToShoot.end(), velConstraint, accelConstraint).back(72).build();
     public static Trajectory shootToOneSquare = new TrajectoryBuilder(driveToShoot.end(), true, velConstraint, accelConstraint)
             .splineTo(new Vector2d(-76, 32), Math.toRadians(180)).back(24).build();
 
@@ -43,9 +43,13 @@ public class Trajectories {
     public static Trajectory fourSquareToLine = new TrajectoryBuilder(shootToFourSquare.end(), velConstraint, accelConstraint).forward(48).build();
     public static Trajectory oneSquareToLine = new TrajectoryBuilder(shootToOneSquare.end(), velConstraint, accelConstraint)
             .splineTo(new Vector2d(-66, 0), Math.toRadians(0)).build();
-    public static Trajectory lineToIntake = new TrajectoryBuilder(fourSquareToLine.end(), slowConstraint, accelConstraint).splineTo(new Vector2d(-20, 20), Math.toRadians(0), slowConstraint, accelConstraint).build();
-    public static Trajectory intakeToShoot = new TrajectoryBuilder(lineToIntake.end(), true, slowConstraint, accelConstraint).splineTo(new Vector2d(-48, 0), Math.toRadians(180), velConstraint, accelConstraint).build();
-    public static Trajectory shootToLine = new TrajectoryBuilder(intakeToShoot.end(), velConstraint, accelConstraint).back(30).build();
+    public static Trajectory lineToIntake = new TrajectoryBuilder(fourSquareToLine.end(), slowConstraint, accelConstraint).splineTo(new Vector2d(-30, 20), Math.toRadians(0), slowConstraint, accelConstraint).build();
+
+    public static Trajectory fourSquareToIntake = new TrajectoryBuilder(shootToFourSquare.end(), velConstraint, accelConstraint).splineTo(new Vector2d(-34, 30), Math.toRadians(0), slowConstraint, accelConstraint).build();
+    public static Trajectory oneSquareToIntake = new TrajectoryBuilder(shootToOneSquare.end(), velConstraint, accelConstraint).splineTo(new Vector2d(-30, 16), Math.toRadians(0), velConstraint, accelConstraint).build();
+
+    public static Trajectory intakeToShoot = new TrajectoryBuilder(lineToIntake.end(), true, velConstraint, accelConstraint).splineTo(new Vector2d(-48, -1), Math.toRadians(180), velConstraint, accelConstraint).build();
+    public static Trajectory shootToLine = new TrajectoryBuilder(intakeToShoot.end(), velConstraint, accelConstraint).back(26).build();
 
     public static Trajectory lineToSecondWobbleGoal = new TrajectoryBuilder(oneSquareToLine.end(), velConstraint, accelConstraint)
             .splineTo(new Vector2d(-20, 44), Math.toRadians(0)).build();

@@ -30,6 +30,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
+import java.util.logging.Level;
+
 @TeleOp(name = "TeleOp")
 public class TeleopTest extends MatchOpMode {
     // Motors
@@ -117,6 +119,10 @@ public class TeleopTest extends MatchOpMode {
         schedule(new InstantCommand(feeder::retractFeed));
     }
 
+    @Override
+    public void robotPeriodic() {
+        Util.logger(this, telemetry, Level.INFO, "Current Angle", drivetrain.getHeading());
+    }
 }
 
 // Left Trigger - Intake. Condition: WhenHeld

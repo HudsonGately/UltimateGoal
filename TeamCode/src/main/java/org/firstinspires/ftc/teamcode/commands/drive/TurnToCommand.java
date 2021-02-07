@@ -2,23 +2,35 @@ package org.firstinspires.ftc.teamcode.commands.drive;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+
+import java.util.logging.Level;
 
 public class TurnToCommand extends CommandBase {
 
     private final Drivetrain drive;
     private final double angle;
-
-    public TurnToCommand(Drivetrain drive, double angle) {
+    double desired, firstAngle;
+    Telemetry tl;
+    public TurnToCommand(Drivetrain drive, double angle, Telemetry tl) {
         this.drive = drive;
         this.angle = angle;
-
+        this.tl = tl;
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
-        drive.turnTo(Math.toRadians(angle));
+        double firstAngle = drive.getHeading();
+        if (firstAngle > 180) firstAngle = firstAngle - 360;
+        desired = angle - firstAngle;
+        Util.logger(this, tl, Level.INFO, "First Angle", firstAngle);
+        Util.logger(this, tl, Level.INFO, "turned to Angle", angle);
+        Util.logger(this, tl, Level.INFO, "commanded angle", desired);
+
+        drive.turn(Math.toRadians(desired));
     }
 
     @Override

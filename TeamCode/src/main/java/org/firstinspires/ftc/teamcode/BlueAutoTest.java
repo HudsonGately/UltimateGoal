@@ -29,6 +29,7 @@ import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
@@ -100,6 +101,13 @@ public class BlueAutoTest extends MatchOpMode {
     }
 
     @Override
+    public void disabledPeriodic() {
+
+        Util.logger(this, telemetry, Level.INFO, "Bottom", vision.getBottomAverage());
+        Util.logger(this, telemetry, Level.INFO, "Top", vision.getTopAverage());
+    }
+
+    @Override
     public void matchStart() {
         drivetrain.setPoseEstimate(Trajectories.startPose);
         schedule(
@@ -112,26 +120,22 @@ public class BlueAutoTest extends MatchOpMode {
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToFourSquare),
                                     new PlaceWobbleGoal(wobbleGoalArm),
-                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.fourSquareToLine),
                                     new InstantCommand(intake::intake, intake),
-                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.lineToIntake),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.fourSquareToIntake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.intakeToShoot),
-                                    new InstantCommand(intake::stop, intake),
-                                    new TurnCommand(drivetrain, -18),
-                                    new ShootRingsCommand(shooterWheels, feeder, 3000, 3, 100),
+                                    new TurnToCommand(drivetrain, -2, telemetry),
+                                    new ShootRingsCommand(shooterWheels, feeder, 2850, 3, 100),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToLine)
                                     ));
                             put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToOneSquare),
                                     new PlaceWobbleGoal(wobbleGoalArm),
-                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.oneSquareToLine),
                                     new InstantCommand(intake::intake, intake),
-                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.lineToIntake),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.oneSquareToIntake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.intakeToShoot),
-                                    new InstantCommand(intake::stop, intake),
-                                    new TurnCommand(drivetrain, -15),
-                                    new ShootRingsCommand(shooterWheels, feeder, 3000, 3, 100),
+                                    new TurnToCommand(drivetrain, -1, telemetry),
+                                    new ShootRingsCommand(shooterWheels, feeder, 2850, 3, 100),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToLine)
                             ));
                             put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(

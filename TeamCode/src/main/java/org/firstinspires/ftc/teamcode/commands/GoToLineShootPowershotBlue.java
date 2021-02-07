@@ -29,9 +29,9 @@ public class GoToLineShootPowershotBlue extends SequentialCommandGroup {
 
     public static int DELAY_FEED = 75;
     public static int DELAY_SHOT =80;
-    public static double TURN_ANGLE = -13.5; //13.13 V
+    public static double TURN_ANGLE = -18; //13.13 V
     public static double TURN_OFFSET = 5;
-    public static double SPEED = 2675;
+    public static double SPEED = 2680;
 
     public GoToLineShootPowershotBlue(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder) {
         addCommands(
