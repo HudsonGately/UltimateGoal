@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
@@ -33,7 +34,7 @@ public class GoToLineShootPowershotBlue extends SequentialCommandGroup {
     public static double TURN_OFFSET = 5;
     public static double SPEED = 2680;
 
-    public GoToLineShootPowershotBlue(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder) {
+    public GoToLineShootPowershotBlue(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Telemetry telemetry) {
         addCommands(
                 new TrajectoryFollowerCommand(drivetrain, Trajectories.driveToShoot),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(SPEED)),
@@ -43,8 +44,7 @@ public class GoToLineShootPowershotBlue extends SequentialCommandGroup {
                 new ShootRingsCommand(shooterWheels, feeder, SPEED, 1),
                 new TurnCommand(drivetrain, TURN_OFFSET),
                 new ShootRingsCommand(shooterWheels, feeder, SPEED, 1),
-                new TurnCommand(drivetrain, -1 * (TURN_ANGLE + 2 *TURN_OFFSET))
-
+                new TurnToCommand(drivetrain, 0, telemetry)
                 );
 
     }

@@ -28,6 +28,9 @@ import org.firstinspires.ftc.teamcode.UGDetector2;
 import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.commands.GoToLineShootHighGoal;
 import org.firstinspires.ftc.teamcode.commands.GoToLineShootPowershotBlue;
+import org.firstinspires.ftc.teamcode.commands.MoveWobbleGoalDown;
+import org.firstinspires.ftc.teamcode.commands.MoveWobbleGoalUp;
+import org.firstinspires.ftc.teamcode.commands.PickupWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
@@ -114,32 +117,50 @@ public class HighGoalAuto extends MatchOpMode {
                         new InstantCommand(feeder::retractFeed),
                         new SelectCommand(new HashMap<Object, Command>() {{
                             put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
-                                    new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder),
-                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToFourSquare),
+                                    new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder, telemetry),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.shootHighToFourSquare),
+                                    new TurnToCommand(drivetrain, 0, telemetry),
                                     new PlaceWobbleGoal(wobbleGoalArm),
                                     new InstantCommand(intake::intake, intake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.fourSquareToIntake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.intakeToShoot),
-                                    new TurnToCommand(drivetrain, -2, telemetry),
-                                    new ShootRingsCommand(shooterWheels, feeder, 2850, 3, 100),
+                                    new TurnToCommand(drivetrain, 2, telemetry),
+                                    new ShootRingsCommand(shooterWheels, feeder, 2900, 3, 75),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToLine)
                             ));
                             put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
-                                    new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder),
+                                    new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder, telemetry),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToOneSquare),
+                                    new TurnToCommand(drivetrain, 0, telemetry),
                                     new PlaceWobbleGoal(wobbleGoalArm),
                                     new InstantCommand(intake::intake, intake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.oneSquareToIntake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.intakeToShoot),
-                                    new TurnToCommand(drivetrain, -1, telemetry),
-                                    new ShootRingsCommand(shooterWheels, feeder, 2850, 3, 100),
+                                    new TurnToCommand(drivetrain, 3, telemetry),
+                                    new ShootRingsCommand(shooterWheels, feeder, 2900, 3, 75),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToLine)
                             ));
                             put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
-                                    new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder),
+                                    new GoToLineShootHighGoal(drivetrain, shooterWheels, feeder, telemetry),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToZeroSquare),
-                                    new PlaceWobbleGoal(wobbleGoalArm)
-                            ));
+                                    new TurnToCommand(drivetrain, 0, telemetry),
+                                    new PlaceWobbleGoal(wobbleGoalArm),
+                                    new InstantCommand(wobbleGoalArm::openClaw),
+                                    new WaitCommand(100),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.zeroSquareTo2ndWobble),
+                                    new TurnToCommand(drivetrain, 0, telemetry),
+                                    new MoveWobbleGoalDown(wobbleGoalArm),
+                                    new InstantCommand(wobbleGoalArm::openClaw),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.inchTo2ndWobble),
+                                    new InstantCommand(wobbleGoalArm::closeClaw),
+                                    new MoveWobbleGoalUp(wobbleGoalArm),
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.secondWobbleGoalToLine),
+                                    new TurnToCommand(drivetrain, 0, telemetry),
+                                    new PlaceWobbleGoal(wobbleGoalArm),
+                                    new TurnToCommand(drivetrain, -20, telemetry),
+                                    new TurnToCommand(drivetrain, 20, telemetry)
+
+                                    ));
                         }}, vision::getCurrentStack),
                         new InstantCommand(this::stop)
                 )

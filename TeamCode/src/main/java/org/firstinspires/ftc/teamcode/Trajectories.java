@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.profile.VelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
@@ -34,9 +33,11 @@ public class Trajectories {
     public static Trajectory driveToShoot = new TrajectoryBuilder(startPose, velConstraint, accelConstraint).back(48).build();
 
     public static Trajectory shootToZeroSquare = new TrajectoryBuilder(driveToShoot.end(), velConstraint, accelConstraint).back(30).build();
-    public static Trajectory shootToFourSquare = new TrajectoryBuilder(driveToShoot.end(), velConstraint, accelConstraint).back(72).build();
+    public static Trajectory shootToFourSquare = new TrajectoryBuilder(driveToShoot.end(), true, velConstraint, accelConstraint).splineTo(new Vector2d(-120, 0), Math.PI).build();
+    public static Trajectory shootHighToFourSquare = new TrajectoryBuilder(driveToShoot.end(), true, velConstraint, accelConstraint).splineTo(new Vector2d(-120, 6.5), Math.PI).build();
+
     public static Trajectory shootToOneSquare = new TrajectoryBuilder(driveToShoot.end(), true, velConstraint, accelConstraint)
-            .splineTo(new Vector2d(-76, 32), Math.toRadians(180)).back(24).build();
+            .splineTo(new Vector2d(-76, 28), Math.toRadians(180)).back(24).build();
 
 
 
@@ -45,15 +46,18 @@ public class Trajectories {
             .splineTo(new Vector2d(-66, 0), Math.toRadians(0)).build();
     public static Trajectory lineToIntake = new TrajectoryBuilder(fourSquareToLine.end(), slowConstraint, accelConstraint).splineTo(new Vector2d(-30, 20), Math.toRadians(0), slowConstraint, accelConstraint).build();
 
-    public static Trajectory fourSquareToIntake = new TrajectoryBuilder(shootToFourSquare.end(), velConstraint, accelConstraint).splineTo(new Vector2d(-34, 30), Math.toRadians(0), slowConstraint, accelConstraint).build();
-    public static Trajectory oneSquareToIntake = new TrajectoryBuilder(shootToOneSquare.end(), velConstraint, accelConstraint).splineTo(new Vector2d(-30, 16), Math.toRadians(0), velConstraint, accelConstraint).build();
+    public static Trajectory fourSquareToIntake = new TrajectoryBuilder(shootToFourSquare.end(), velConstraint, accelConstraint).splineTo(new Vector2d(-30, 24), Math.toRadians(0), slowConstraint, accelConstraint).build();
+    public static Trajectory oneSquareToIntake = new TrajectoryBuilder(shootToOneSquare.end(), velConstraint, accelConstraint).splineTo(new Vector2d(-30, 12), Math.toRadians(0), velConstraint, accelConstraint).build();
 
     public static Trajectory intakeToShoot = new TrajectoryBuilder(lineToIntake.end(), true, velConstraint, accelConstraint).splineTo(new Vector2d(-48, -1), Math.toRadians(180), velConstraint, accelConstraint).build();
     public static Trajectory shootToLine = new TrajectoryBuilder(intakeToShoot.end(), velConstraint, accelConstraint).back(26).build();
 
-    public static Trajectory lineToSecondWobbleGoal = new TrajectoryBuilder(oneSquareToLine.end(), velConstraint, accelConstraint)
-            .splineTo(new Vector2d(-20, 44), Math.toRadians(0)).build();
-    public static Trajectory secondWobbleGoalToLine = new TrajectoryBuilder(lineToSecondWobbleGoal.end(), velConstraint, accelConstraint)
-            .splineTo(new Vector2d(-64, 0), Math.toRadians(0)).build();
+    public static Trajectory zeroSquareTo2ndWobble = new TrajectoryBuilder(shootToZeroSquare.end(), velConstraint, accelConstraint)
+            .splineTo(new Vector2d(-21.5, 30), Math.toRadians(0)).build();
+    public static Trajectory inchTo2ndWobble = new TrajectoryBuilder(zeroSquareTo2ndWobble.end(), velConstraint, accelConstraint)
+            .forward(3).build();
+    public static Trajectory secondWobbleGoalToLine = new TrajectoryBuilder(inchTo2ndWobble.end(), true, velConstraint, accelConstraint)
+            .splineTo(new Vector2d(-80, 6), Math.toRadians(180)).build();
+
 
 }

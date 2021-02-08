@@ -74,7 +74,7 @@ public class UGDetector2 {
     public Stack getStack() {
         if (Math.abs(ftclibPipeline.getTopAverage() - ftclibPipeline.getBottomAverage()) < ftclibPipeline.getThreshold() && (ftclibPipeline.getTopAverage() <= MAX && ftclibPipeline.getBottomAverage() <= MAX)) {
             return Stack.FOUR;
-        } else if (Math.abs(ftclibPipeline.getTopAverage() - ftclibPipeline.getBottomAverage()) < ftclibPipeline.getThreshold() && (ftclibPipeline.getTopAverage() >= MIN && ftclibPipeline.getBottomAverage() >= MAX)) {
+        } else if (Math.abs(ftclibPipeline.getTopAverage() - ftclibPipeline.getBottomAverage()) < ftclibPipeline.getThreshold() && (ftclibPipeline.getTopAverage() >= MAX && ftclibPipeline.getBottomAverage() >= MAX)) {
             return Stack.ZERO;
         } else {
             return Stack.ONE;

@@ -120,29 +120,31 @@ public class BluePowerShotAuto extends MatchOpMode {
                         new InstantCommand(() -> drivetrain.setPoseEstimate(Trajectories.startPose)),
                         new SelectCommand(new HashMap<Object, Command>() {{
                             put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
-                                    new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
+                                    new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder, telemetry),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToFourSquare),
+                                    new TurnToCommand(drivetrain, 0, telemetry),
                                     new PlaceWobbleGoal(wobbleGoalArm),
                                     new InstantCommand(intake::intake, intake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.fourSquareToIntake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.intakeToShoot),
-                                    new TurnToCommand(drivetrain, -2, telemetry),
-                                    new ShootRingsCommand(shooterWheels, feeder, 2850, 3, 75),
+                                    new TurnToCommand(drivetrain, 3, telemetry),
+                                    new ShootRingsCommand(shooterWheels, feeder, 2875, 3, 75),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToLine)
                                     ));
                             put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
-                                    new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
+                                    new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder, telemetry),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToOneSquare),
+                                    new TurnToCommand(drivetrain, 0, telemetry),
                                     new PlaceWobbleGoal(wobbleGoalArm),
                                     new InstantCommand(intake::intake, intake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.oneSquareToIntake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.intakeToShoot),
-                                    new TurnToCommand(drivetrain, -1, telemetry),
-                                    new ShootRingsCommand(shooterWheels, feeder, 2850, 3, 75),
+                                    new TurnToCommand(drivetrain, 3, telemetry),
+                                    new ShootRingsCommand(shooterWheels, feeder, 2875, 3, 75),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToLine)
                             ));
                             put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
-                                    new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder),
+                                    new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder, telemetry),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToZeroSquare),
                                     new PlaceWobbleGoal(wobbleGoalArm)
                             ));
