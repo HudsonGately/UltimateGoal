@@ -108,14 +108,14 @@ public class BluePowerShotAuto extends MatchOpMode {
 
     @Override
     public void robotPeriodic() {
-       Util.logger(this, telemetry, Level.INFO, "Current Stack", vision.getCurrentStack());
+       Util.logger(this, telemetry, Level.INFO, "Current Stack", vision.getCurrentStack(), packet);
     }
 
     @Override
     public void disabledPeriodic() {
 
-        Util.logger(this, telemetry, Level.INFO, "Bottom", vision.getBottomAverage());
-        Util.logger(this, telemetry, Level.INFO, "Top", vision.getTopAverage());
+        Util.logger(this, telemetry, Level.INFO, "Bottom", vision.getBottomAverage(), packet);
+        Util.logger(this, telemetry, Level.INFO, "Top", vision.getTopAverage(), packet);
     }
 
     @Override

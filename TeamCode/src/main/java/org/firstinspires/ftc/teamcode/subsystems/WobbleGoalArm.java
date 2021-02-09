@@ -29,8 +29,6 @@ public class WobbleGoalArm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Util.logger(this, telemetry, Level.INFO, "Current Arm Speed", arm.getPower());
-        Util.logger(this, telemetry, Level.INFO, "Wobble Claw Pos", claw.getPosition());
     }
     public void setArmSpeed(double speed) {
         arm.setPower(speed);

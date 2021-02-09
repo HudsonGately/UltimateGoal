@@ -57,10 +57,10 @@ public class ShooterWheels extends SubsystemBase {
     public void periodic() {
         handleShooterPID();
 
-        Util.logger(this, telemetry, Level.INFO, "Shooter (Front) RPM", getShooterRPM());
-        Util.logger(this, telemetry, Level.INFO, "Shooter (Back) RPM", getBackShooterRPM());
-        Util.logger(this, telemetry, Level.INFO, "Shooter Setpoint", shooterWheelsPID.getSetPoint());
-        Util.logger(this, telemetry, Level.INFO, "Shooter Power", frontMotor.getPower());
+        Util.logger(this, telemetry, Level.INFO, "Shooter (Front) RPM", getShooterRPM(), packet);
+        Util.logger(this, telemetry, Level.INFO, "Shooter (Back) RPM", getBackShooterRPM(), packet);
+        Util.logger(this, telemetry, Level.INFO, "Shooter Setpoint", shooterWheelsPID.getSetPoint(), packet);
+        Util.logger(this, telemetry, Level.INFO, "Shooter Power", frontMotor.getPower(), packet);
     }
 
     private void handleShooterPID() {

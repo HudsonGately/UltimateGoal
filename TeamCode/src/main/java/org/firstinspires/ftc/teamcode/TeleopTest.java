@@ -121,7 +121,6 @@ public class TeleopTest extends MatchOpMode {
 
     @Override
     public void robotPeriodic() {
-        Util.logger(this, telemetry, Level.INFO, "Current Angle", drivetrain.getHeading());
     }
 }
 

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.kinematics.Kinematics;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
@@ -14,9 +15,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
 import java.util.Objects;
+import java.util.logging.Level;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_VEL;
@@ -49,7 +52,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
-
+    TelemetryPacket packet = new TelemetryPacket();
     private SampleTankDrive drive;
 
     enum Mode {
@@ -59,6 +62,10 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
     private Mode mode;
 
+    private void telemetryUpdate() {
+        telemetry.update();
+        dashboard.sendTelemetryPacket(packet);
+    }
     private static MotionProfile generateProfile(boolean movingForward) {
         MotionState start = new MotionState(movingForward ? 0 : DISTANCE, 0, 0, 0);
         MotionState goal = new MotionState(movingForward ? DISTANCE : 0, 0, 0, 0);
@@ -72,9 +79,8 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     "when using the built-in drive motor velocity PID.");
         }
 
-        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        drive = new SampleTankDrive(hardwareMap);
+        drive = new SampleTankDrive(hardwareMap, packet);
 
         mode = Mode.TUNING_MODE;
 
@@ -94,6 +100,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
 
         while (!isStopRequested()) {
+            Util.logger(this, telemetry, Level.INFO, "mode", mode, packet);
             telemetry.addData("mode", mode);
 
             switch (mode) {
@@ -122,9 +129,9 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     double currentVelo = poseVelo.getX();
 
                     // update telemetry
-                    telemetry.addData("targetVelocity", motionState.getV());
-                    telemetry.addData("measuredVelocity", currentVelo);
-                    telemetry.addData("error", motionState.getV() - currentVelo);
+                    Util.logger(this, telemetry, Level.INFO, "targetVelocity", motionState.getV(), packet);
+                    Util.logger(this, telemetry, Level.INFO, "measuredVelocity", currentVelo, packet);
+                    Util.logger(this, telemetry, Level.INFO, "error", motionState.getV() - currentVelo, packet);
                     break;
                 case DRIVER_MODE:
                     if (gamepad1.a) {
@@ -144,7 +151,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     break;
             }
 
-            telemetry.update();
+            telemetryUpdate();
         }
     }
 }

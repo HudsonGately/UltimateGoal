@@ -37,9 +37,9 @@ public class Vision extends SubsystemBase {
     public void periodic() {
         currentStack = ringDetector.getStack();
 
-        Util.logger(this, telemetry, Level.INFO, "Current Stack", currentStack);
-        Util.logger(this, telemetry, Level.INFO, "Bottom", ringDetector.getBottomAverage());
-        Util.logger(this, telemetry, Level.INFO, "Top", ringDetector.getTopAverage());
+        Util.logger(this, telemetry, Level.INFO, "Current Stack", currentStack, packet);
+        Util.logger(this, telemetry, Level.INFO, "Bottom", ringDetector.getBottomAverage(), packet);
+        Util.logger(this, telemetry, Level.INFO, "Top", ringDetector.getTopAverage(), packet);
 
     }
 

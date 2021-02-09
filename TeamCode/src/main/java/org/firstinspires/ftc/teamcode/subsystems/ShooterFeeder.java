@@ -27,7 +27,7 @@ public class ShooterFeeder extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Util.logger(this, telemetry, Level.INFO, "Feed Servo Position", feedServo.getPosition());
+        Util.logger(this, telemetry, Level.INFO, "Feed Servo Position", feedServo.getPosition(), packet);
     }
 
     public void setFeedServo(double position) {

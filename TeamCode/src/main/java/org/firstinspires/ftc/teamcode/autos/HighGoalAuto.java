@@ -105,7 +105,7 @@ public class HighGoalAuto extends MatchOpMode {
 
     @Override
     public void robotPeriodic() {
-       Util.logger(this, telemetry, Level.INFO, "Current Stack", vision.getCurrentStack());
+       Util.logger(this, telemetry, Level.INFO, "Current Stack", vision.getCurrentStack(), packet);
     }
 
     @Override

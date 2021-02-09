@@ -28,7 +28,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Util.logger(this, telemetry, Level.INFO, "Current Intake Speed", intake.get());
+        Util.logger(this, telemetry, Level.INFO, "Current Intake Speed", intake.get(), packet);
     }
 
     private void set(double speed) {

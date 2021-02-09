@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -11,12 +12,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
+import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.util.LoggingUtil;
 import org.firstinspires.ftc.teamcode.util.RegressionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_RPM;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.RUN_USING_ENCODER;
@@ -38,7 +41,12 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.rpmToVelocity;
 public class AutomaticFeedforwardTuner extends LinearOpMode {
     public static double MAX_POWER = 0.7;
     public static double DISTANCE = 100; // in
-
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    TelemetryPacket packet = new TelemetryPacket();
+    private void telemetryUpdate() {
+        telemetry.update();
+        dashboard.sendTelemetryPacket(packet);
+    }
     @Override
     public void runOpMode() throws InterruptedException {
         if (RUN_USING_ENCODER) {
@@ -46,9 +54,7 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
                     "when using the built-in drive motor velocity PID.");
         }
 
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
-        SampleTankDrive drive = new SampleTankDrive(hardwareMap);
+        SampleTankDrive drive = new SampleTankDrive(hardwareMap, packet);
 
         NanoClock clock = NanoClock.system();
 
@@ -137,13 +143,19 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
         if (fitIntercept) {
             telemetry.addLine(Misc.formatInvariant("kV = %.5f, kStatic = %.5f (R^2 = %.2f)",
                     rampResult.kV, rampResult.kStatic, rampResult.rSquare));
+            Util.logger(this, telemetry, Level.INFO, "KV: ", rampResult.kV, packet);
+            Util.logger(this, telemetry, Level.INFO, "KStatic: ", rampResult.kStatic, packet);
+            Util.logger(this, telemetry, Level.INFO, "rSquare: ", rampResult.rSquare, packet);
         } else {
             telemetry.addLine(Misc.formatInvariant("kV = %.5f (R^2 = %.2f)",
                     rampResult.kStatic, rampResult.rSquare));
+            Util.logger(this, telemetry, Level.INFO, "KV: ", rampResult.kV, packet);
+            Util.logger(this, telemetry, Level.INFO, "rSquare: ", rampResult.rSquare, packet);
         }
         telemetry.addLine("Would you like to fit kA?");
         telemetry.addLine("Press (A) for yes, (B) for no");
         telemetry.update();
+        telemetryUpdate();
 
         boolean fitAccelFF = false;
         while (!isStopRequested()) {
@@ -212,7 +224,10 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
             telemetry.addLine("Constant power test complete");
             telemetry.addLine(Misc.formatInvariant("kA = %.5f (R^2 = %.2f)",
                     accelResult.kA, accelResult.rSquare));
+            Util.logger(this, telemetry, Level.INFO, "KA: ", accelResult.kA, packet);
+            Util.logger(this, telemetry, Level.INFO, "rSquare: ", rampResult.rSquare, packet);
             telemetry.update();
+            telemetryUpdate();
         }
 
         while (!isStopRequested()) {

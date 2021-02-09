@@ -37,7 +37,6 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         update();
-        Util.logger(this, telemetry, Level.INFO, "Heading", getPoseEstimate().getHeading());
     }
 
     public void setMode(DcMotor.RunMode mode) {

@@ -36,12 +36,15 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
+import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_ACCEL;
@@ -249,15 +252,13 @@ public class SampleTankDrive extends TankDrive {
 
         Canvas fieldOverlay = packet.fieldOverlay();
 
-        packet.put("mode", mode);
-
-        packet.put("x", currentPose.getX());
-        packet.put("y", currentPose.getY());
-        packet.put("heading", currentPose.getHeading());
-
-        packet.put("xError", lastError.getX());
-        packet.put("yError", lastError.getY());
-        packet.put("headingError", lastError.getHeading());
+        Util.logger(this, Level.INFO, "mode", mode, packet);
+        Util.logger(this, Level.INFO, "x", currentPose.getX(), packet);
+        Util.logger(this, Level.INFO, "y", currentPose.getY(), packet);
+        Util.logger(this, Level.INFO, "heading", currentPose.getHeading(), packet);
+        Util.logger(this, Level.INFO, "xError", lastError.getX(), packet);
+        Util.logger(this, Level.INFO, "yError", lastError.getY(), packet);
+        Util.logger(this, Level.INFO, "headingError", lastError.getHeading(), packet);
 
 
         switch (mode) {

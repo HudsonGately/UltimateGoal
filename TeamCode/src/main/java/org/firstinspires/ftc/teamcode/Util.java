@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.logging.Level;
@@ -7,9 +9,14 @@ import java.util.logging.Logger;
 
 public class Util {
 
-    public static void logger(Object currentClass, Telemetry tl, Level level, String caption, Object data) {
+    public static void logger(Object currentClass, Telemetry tl, Level level, String caption, Object data, TelemetryPacket packet) {
         Logger.getLogger(currentClass.getClass().getName()).log(level, caption + " " + data);
         tl.addData(caption, data);
+        packet.put(caption, data);
+    }
+    public static void logger(Object currentClass, Level level, String caption, Object data, TelemetryPacket packet) {
+        Logger.getLogger(currentClass.getClass().getName()).log(level, caption + " " + data);
+        packet.put(caption, data);
     }
 
 
