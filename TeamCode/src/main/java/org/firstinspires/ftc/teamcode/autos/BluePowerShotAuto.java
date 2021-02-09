@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.autos;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -46,6 +48,12 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.logging.Level;
+
+import static org.firstinspires.ftc.teamcode.Trajectories.accelConstraint;
+import static org.firstinspires.ftc.teamcode.Trajectories.fourSquareToIntake;
+import static org.firstinspires.ftc.teamcode.Trajectories.shootToLine;
+import static org.firstinspires.ftc.teamcode.Trajectories.slowConstraint;
+import static org.firstinspires.ftc.teamcode.Trajectories.velConstraint;
 
 @Autonomous(name = "Blue Powershot")
 public class BluePowerShotAuto extends MatchOpMode {
@@ -124,10 +132,17 @@ public class BluePowerShotAuto extends MatchOpMode {
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToFourSquare),
                                     new TurnToCommand(drivetrain, 0, telemetry),
                                     new PlaceWobbleGoal(wobbleGoalArm),
-                                    new InstantCommand(intake::intake, intake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.fourSquareToIntake),
+                                    new InstantCommand(intake::intake, intake),
+                                    new WaitCommand(200),
+                                    new InstantCommand(intake::outtake, intake),
+                                    new WaitCommand(100),
+                                    new InstantCommand(intake::intake, intake),
+                                    new TrajectoryFollowerCommand(drivetrain, new TrajectoryBuilder(fourSquareToIntake.end(), velConstraint, accelConstraint).forward(12).build()),
+                                    new WaitCommand(100),
+                                    new TrajectoryFollowerCommand(drivetrain, new TrajectoryBuilder(fourSquareToIntake.end(), velConstraint, accelConstraint).forward(15).build()),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.intakeToShoot),
-                                    new TurnToCommand(drivetrain, 3, telemetry),
+                                    new TurnToCommand(drivetrain, 2, telemetry),
                                     new ShootRingsCommand(shooterWheels, feeder, 2875, 3, 75),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToLine)
                                     ));

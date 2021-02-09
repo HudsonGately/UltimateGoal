@@ -100,6 +100,7 @@ public class SampleTankDrive extends TankDrive {
     }
     public SampleTankDrive(HardwareMap hardwareMap, TelemetryPacket packet) {
         super(kV, kA, kStatic, TRACK_WIDTH);
+
         match = true;
         this.packet = packet;
         dashboard = FtcDashboard.getInstance();

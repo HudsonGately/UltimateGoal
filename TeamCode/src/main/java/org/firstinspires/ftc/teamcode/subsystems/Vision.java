@@ -13,8 +13,8 @@ import java.util.logging.Level;
 @Config
 public class Vision extends SubsystemBase {
 
-    public static double TOP_PERCENT = 0.142;
-    public static double BOTTOM_PERCENT = 0.295;
+    public static double TOP_PERCENT = 0.15;
+    public static double BOTTOM_PERCENT = 0.3;
 
     private Telemetry telemetry;
     private TelemetryPacket packet;
