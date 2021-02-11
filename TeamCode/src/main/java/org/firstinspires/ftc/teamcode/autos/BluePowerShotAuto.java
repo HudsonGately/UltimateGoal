@@ -16,6 +16,7 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.vision.UGContourRingPipeline;
 import com.arcrobotics.ftclib.vision.UGRectDetector;
@@ -59,10 +60,9 @@ import static org.firstinspires.ftc.teamcode.Trajectories.velConstraint;
 public class BluePowerShotAuto extends MatchOpMode {
     // Motors
     private MotorEx intakeMotor;
-    private MotorEx anglerMotor;
     private DcMotorEx shooterMotorFront, shooterMotorBack;
-    private CRServo arm;
-    private ServoEx feedServo, clawServo;
+    // private MotorEx arm;
+    private ServoEx feedServo; //, clawServo, lazySusanServo;
 
     private ServoEx releaseShooter;
     // Gamepad
@@ -73,7 +73,7 @@ public class BluePowerShotAuto extends MatchOpMode {
     private ShooterWheels shooterWheels;
     private ShooterFeeder feeder;
     private Intake intake;
-    private WobbleGoalArm wobbleGoalArm;
+    //private WobbleGoalArm wobbleGoalArm;
     private Vision vision;
     FtcDashboard dashboard = FtcDashboard.getInstance();
     TelemetryPacket packet = new TelemetryPacket();
@@ -88,13 +88,13 @@ public class BluePowerShotAuto extends MatchOpMode {
         // Shooter hardware initializations
         shooterMotorBack = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_back");
         shooterMotorFront = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_front");
-        anglerMotor = new MotorEx(hardwareMap, "angler");
         feedServo = new SimpleServo(hardwareMap, "feed_servo", 0, 230);
 
         // Wobble Harware initializations
-        arm = hardwareMap.get(com.qualcomm.robotcore.hardware.CRServo.class, "arm");
+        /*arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_60);
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
-
+        lazySusanServo = new SimpleServo(hardwareMap, "lazy_susan", 0, 360);
+        */
         releaseShooter = new SimpleServo(hardwareMap, "release_servo", 0, 180);
 
         // Subsystems
@@ -102,7 +102,7 @@ public class BluePowerShotAuto extends MatchOpMode {
         intake = new Intake(intakeMotor, telemetry, packet);
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry, packet);
         feeder = new ShooterFeeder(feedServo, telemetry, packet);
-        wobbleGoalArm = new WobbleGoalArm(arm, clawServo, telemetry, packet);
+        //wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, telemetry, packet);
         vision = new Vision(hardwareMap, "webcam", telemetry, packet);
     }
 
@@ -131,7 +131,7 @@ public class BluePowerShotAuto extends MatchOpMode {
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder, telemetry),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToFourSquare),
                                     new TurnToCommand(drivetrain, 0, telemetry),
-                                    new PlaceWobbleGoal(wobbleGoalArm),
+                                    //new PlaceWobbleGoal(wobbleGoalArm),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.fourSquareToIntake),
                                     new InstantCommand(intake::intake, intake),
                                     new WaitCommand(200),
@@ -150,7 +150,7 @@ public class BluePowerShotAuto extends MatchOpMode {
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder, telemetry),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToOneSquare),
                                     new TurnToCommand(drivetrain, 0, telemetry),
-                                    new PlaceWobbleGoal(wobbleGoalArm),
+                                    // new PlaceWobbleGoal(wobbleGoalArm),
                                     new InstantCommand(intake::intake, intake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.oneSquareToIntake),
                                     new TrajectoryFollowerCommand(drivetrain, Trajectories.intakeToShoot),
@@ -160,8 +160,8 @@ public class BluePowerShotAuto extends MatchOpMode {
                             ));
                             put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
                                     new GoToLineShootPowershotBlue(drivetrain, shooterWheels, feeder, telemetry),
-                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToZeroSquare),
-                                    new PlaceWobbleGoal(wobbleGoalArm)
+                                    new TrajectoryFollowerCommand(drivetrain, Trajectories.shootToZeroSquare)
+                                    //new PlaceWobbleGoal(wobbleGoalArm)
                             ));
                         }}, vision::getCurrentStack),
                         new InstantCommand(this::stop)
