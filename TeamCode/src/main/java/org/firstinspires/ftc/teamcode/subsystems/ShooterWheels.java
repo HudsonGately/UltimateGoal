@@ -29,8 +29,8 @@ public class ShooterWheels extends SubsystemBase {
     public static int SHOOTER_WHEEL_DIAMETER = 4;
     public static double SHOOTER_TPR = 28;
 
-    public static double SHOOTER_P = 0.002;
-    public static double SHOOTER_F = 1.0 / MAX_SHOOTER_RPM;
+    public static double SHOOTER_P = 0.0035;
+    public static double SHOOTER_F = 0.0002335;
 
 
     public static double TARGET_SPEED = 2900;
@@ -68,6 +68,8 @@ public class ShooterWheels extends SubsystemBase {
             setShooterPower(0);
             return;
         }
+        shooterWheelsPID.setP(SHOOTER_P);
+        shooterWheelsPID.setF(SHOOTER_F);
 
         double output = shooterWheelsPID.calculate(getShooterRPM(), shooterTarget + offset);
         setShooterPower(output);
