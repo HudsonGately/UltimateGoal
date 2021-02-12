@@ -56,6 +56,7 @@ public class UGDetector2 {
         });
     }
 
+
     public void setTopRectangle(double topRectHeightPercentage, double topRectWidthPercentage) {
         ftclibPipeline.setTopRectHeightPercentage(topRectHeightPercentage);
         ftclibPipeline.setTopRectWidthPercentage(topRectWidthPercentage);

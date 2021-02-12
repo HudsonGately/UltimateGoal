@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -32,7 +33,6 @@ import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.commands.GoToLineShootHighGoal;
 import org.firstinspires.ftc.teamcode.commands.GoToLineShootPowershotBlue;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
-import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
@@ -104,6 +104,7 @@ public class BluePowerShotAuto extends MatchOpMode {
         feeder = new ShooterFeeder(feedServo, telemetry, packet);
         //wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, telemetry, packet);
         vision = new Vision(hardwareMap, "webcam", telemetry, packet);
+
     }
 
     @Override

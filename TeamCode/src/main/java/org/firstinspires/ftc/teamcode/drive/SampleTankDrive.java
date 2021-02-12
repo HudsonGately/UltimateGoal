@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
 import org.firstinspires.ftc.teamcode.Util;
+import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
@@ -62,7 +63,8 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  * Simple tank drive hardware implementation for REV hardware.
  */
 @Config
-public class SampleTankDrive extends TankDrive {
+public class
+SampleTankDrive extends TankDrive {
     public static PIDCoefficients AXIAL_PID = new PIDCoefficients(3, 0, 0);
     public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0.01, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(12, 0, 0);
@@ -250,7 +252,7 @@ public class SampleTankDrive extends TankDrive {
 
         poseHistory.add(currentPose);
 
-        Canvas fieldOverlay = packet.fieldOverlay();
+        Canvas fieldOverlay = MatchOpMode.canvas;
 
         Util.logger(this, Level.INFO, "mode", mode, packet);
         Util.logger(this, Level.INFO, "x", currentPose.getX(), packet);
