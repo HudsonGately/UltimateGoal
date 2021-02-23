@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.RunCommand;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,8 +11,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class MatchOpMode extends DashboardOpMode {
+public abstract class MatchOpMode extends CommandOpMode {
 
+    protected FtcDashboard dashboard = FtcDashboard.getInstance();
     public static Map<String, Object> telemetryList = new HashMap<>();
     public static Canvas canvas = new Canvas();
     @Override
@@ -23,7 +26,7 @@ public abstract class MatchOpMode extends DashboardOpMode {
         while(!isStarted() && !isStopRequested()) {
             disabledPeriodic();
             robotPeriodic();
-            updateTelemetry();
+            telemetry.update();
         }
     }
 
@@ -38,9 +41,8 @@ public abstract class MatchOpMode extends DashboardOpMode {
             canvas = newPacket.fieldOverlay();
             run();
             matchLoop();
-            updateTelemetry();
             newPacket.putAll(telemetryList);
-
+            telemetry.update();
             dashboard.sendTelemetryPacket(newPacket);
             robotPeriodic();
         }

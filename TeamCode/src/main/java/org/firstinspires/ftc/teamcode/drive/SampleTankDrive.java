@@ -65,9 +65,9 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 @Config
 public class
 SampleTankDrive extends TankDrive {
-    public static PIDCoefficients AXIAL_PID = new PIDCoefficients(3, 0, 0);
-    public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0.01, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(12, 0, 0);
+    public static PIDCoefficients AXIAL_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
     TelemetryPacket packet;
     public static double VX_WEIGHT = 1;
@@ -254,13 +254,13 @@ SampleTankDrive extends TankDrive {
 
         Canvas fieldOverlay = MatchOpMode.canvas;
 
-        Util.logger(this, Level.INFO, "mode", mode, packet);
-        Util.logger(this, Level.INFO, "x", currentPose.getX(), packet);
-        Util.logger(this, Level.INFO, "y", currentPose.getY(), packet);
-        Util.logger(this, Level.INFO, "heading", currentPose.getHeading(), packet);
-        Util.logger(this, Level.INFO, "xError", lastError.getX(), packet);
-        Util.logger(this, Level.INFO, "yError", lastError.getY(), packet);
-        Util.logger(this, Level.INFO, "headingError", lastError.getHeading(), packet);
+        Util.logger(this, Level.INFO, "mode", mode);
+        Util.logger(this, Level.INFO, "x", currentPose.getX());
+        Util.logger(this, Level.INFO, "y", currentPose.getY());
+        Util.logger(this, Level.INFO, "heading", currentPose.getHeading());
+        Util.logger(this, Level.INFO, "xError", lastError.getX());
+        Util.logger(this, Level.INFO, "yError", lastError.getY());
+        Util.logger(this, Level.INFO, "headingError", lastError.getHeading());
 
 
         switch (mode) {

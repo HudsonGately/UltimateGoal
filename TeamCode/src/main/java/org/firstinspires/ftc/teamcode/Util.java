@@ -10,12 +10,12 @@ import java.util.logging.Logger;
 
 public class Util {
 
-    public static void logger(Object currentClass, Telemetry tl, Level level, String caption, Object data, TelemetryPacket packet) {
+    public static void logger(Object currentClass, Telemetry tl, Level level, String caption, Object data) {
         Logger.getLogger(currentClass.getClass().getName()).log(level, caption + " " + data);
         tl.addData(caption, data);
         MatchOpMode.telemetryList.put(caption, data);
     }
-    public static void logger(Object currentClass, Level level, String caption, Object data, TelemetryPacket packet) {
+    public static void logger(Object currentClass, Level level, String caption, Object data) {
         Logger.getLogger(currentClass.getClass().getName()).log(level, caption + " " + data);
         MatchOpMode.telemetryList.put(caption, data);
     }

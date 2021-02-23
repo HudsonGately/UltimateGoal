@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -14,12 +11,9 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commands.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SlowDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
@@ -30,17 +24,15 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
-
-import java.util.logging.Level;
-
+@Config
 @TeleOp(name = "TeleOp")
 public class TeleopTest extends MatchOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
     private DcMotorEx shooterMotorFront, shooterMotorBack;
-    // private MotorEx arm;
-    private ServoEx feedServo; //, clawServo, lazySusanServo;
+    private MotorEx arm;
+    private ServoEx feedServo, clawServo, lazySusanServo;
 
     // Gamepad
     private GamepadEx driverGamepad;
@@ -50,7 +42,10 @@ public class TeleopTest extends MatchOpMode {
     private ShooterWheels shooterWheels;
     private ShooterFeeder feeder;
     private Intake intake;
-   // private WobbleGoalArm wobbleGoalArm;
+    private WobbleGoalArm wobbleGoalArm;
+    public static double middle_pos = 0.543;
+    public static double right_pos = 0.97;
+    public static double left_pos = .122;
 
     private Button intakeButton, outtakeButton;
     private Button slowModeTrigger, tripleFeedButton, singleFeedButton, shootButton, powershotButton, toggleClawButton, liftArmButton, lowerArmButton;
@@ -69,18 +64,18 @@ public class TeleopTest extends MatchOpMode {
         feedServo = new SimpleServo(hardwareMap, "feed_servo", 0, 230);
 
         // Wobble Harware initializations
-        /*arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_60);
+        arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_60);
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
         lazySusanServo = new SimpleServo(hardwareMap, "lazy_susan", 0, 360);
-        */
+
 
         // Subsystems
-        drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap, packet),telemetry, packet);
+        drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap),telemetry);
         drivetrain.init();
-        intake = new Intake(intakeMotor, telemetry, packet);
-        shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry, packet);
-        feeder = new ShooterFeeder(feedServo, telemetry, packet);
-        //wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, telemetry, packet);
+        intake = new Intake(intakeMotor, telemetry);
+        shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
+        feeder = new ShooterFeeder(feedServo, telemetry);
+        wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, telemetry);
 
         gamepad1.setJoystickDeadzone(0.0f);
         driverGamepad = new GamepadEx(gamepad1);
@@ -102,24 +97,26 @@ public class TeleopTest extends MatchOpMode {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
         intakeButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whileHeld(intake::intake).whenReleased(intake::stop);
         outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whileHeld(intake::outtake).whenReleased(intake::stop);
-        /*
+
         toggleClawButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.A)).toggleWhenPressed(
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::closeClaw, wobbleGoalArm)
         );
 
-        liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whenPressed(wobbleGoalArm::liftWobbleGoal).whileHeld(wobbleGoalArm::liftArm).whenReleased(() -> {
+        liftArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whenPressed(wobbleGoalArm::liftWobbleGoal).whenReleased(() -> {
             if(!wobbleGoalArm.isAutomatic()) wobbleGoalArm.stopArm();
         });
-        lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whenPressed(wobbleGoalArm::placeWobbleGoal).whileHeld(wobbleGoalArm::lowerArm).whenReleased(() -> {
+        lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whenPressed(wobbleGoalArm::placeWobbleGoal).whenReleased(() -> {
             if(!wobbleGoalArm.isAutomatic()) wobbleGoalArm.stopArm();
         });
-        */
 
-        // manualButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenPressed(wobbleGoalArm::toggleAutomatic);
 
-        increaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> shooterWheels.adjustShooterRPM(50));
-        decreaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> shooterWheels.adjustShooterRPM(-50));
+        manualButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenPressed(wobbleGoalArm::toggleAutomatic);
+
+        /*increaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> shooterWheels.adjustShooterRPM(50));
+        decreaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> shooterWheels.adjustShooterRPM(-50));*/
+        increaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> wobbleGoalArm.setLazySusanPosition(left_pos));
+        decreaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() ->  wobbleGoalArm.setLazySusanPosition(right_pos));
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
     }
 
@@ -127,6 +124,7 @@ public class TeleopTest extends MatchOpMode {
     @Override
     public void matchStart() {
         schedule(new InstantCommand(feeder::retractFeed));
+        schedule(new InstantCommand(() -> wobbleGoalArm.setLazySusanPosition(middle_pos)));
     }
 
     @Override
@@ -143,10 +141,9 @@ public class TeleopTest extends MatchOpMode {
 
 // DPAD Up: Wobble arm up
 // DPAD Down: Wobble arm down
-// A - Toggle wobble goal: 
+// A - Toggle wobble goal:
 
 // Right Trigger - Slow Mode. Condition: When Held
-
 
 
 
