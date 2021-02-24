@@ -49,12 +49,12 @@ public class RamseteFollowerMeters extends TrajectoryFollower {
 
         Pose2d targetInchesPose = trajectory.get(t);
         Pose2d targetInchesVelocity = trajectory.velocity(t);
-        Pose2d chassisSpeeds = calculateChassisSpeedsFromMeters(new Pose2d(targetInchesPose.getX() * INCHES_TO_METERS, targetInchesPose.getY() * INCHES_TO_METERS, targetInchesPose.getHeading()),
+        Pose2d chassisSpeeds = calculateChassisSpeedsFromMetersToInches(new Pose2d(targetInchesPose.getX() * INCHES_TO_METERS, targetInchesPose.getY() * INCHES_TO_METERS, targetInchesPose.getHeading()),
                 new Pose2d(targetInchesVelocity.getX() * INCHES_TO_METERS, targetInchesVelocity.getY() * INCHES_TO_METERS, targetInchesVelocity.getHeading()),new Pose2d(currentPose.getX() * INCHES_TO_METERS, currentPose.getY() * INCHES_TO_METERS, currentPose.getHeading()), new Pose2d(currentRobotVel.getX() * INCHES_TO_METERS, currentRobotVel.getY() * INCHES_TO_METERS, currentRobotVel.getHeading()));
         return new DriveSignal(chassisSpeeds);
     }
 
-    private Pose2d calculateChassisSpeedsFromMeters(Pose2d targetPose, Pose2d targetVel, Pose2d currentPose, Pose2d currentVel) {
+    private Pose2d calculateChassisSpeedsFromMetersToInches(Pose2d targetPose, Pose2d targetVel, Pose2d currentPose, Pose2d currentVel) {
 
         Pose2d targetRobotVel = Kinematics.fieldToRobotVelocity(targetPose, targetVel);
 
@@ -74,7 +74,8 @@ public class RamseteFollowerMeters extends TrajectoryFollower {
                 k3 * error.getHeading();
 
         lastError = Kinematics.calculatePoseError(targetPose, currentPose);
-        return new Pose2d(v, 0, omega);
+        return new Pose2d(v / INCHES_TO_METERS, 0, omega);
+
     }
 
     private static double sinc(double x) {
