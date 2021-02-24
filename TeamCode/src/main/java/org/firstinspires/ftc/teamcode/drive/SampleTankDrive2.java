@@ -59,8 +59,8 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleTankDrive2 extends TankDrive {
-    public static PIDCoefficients AXIAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0, 0, 0);
+    public static double b = 2.0;
+    public static double zeta = 0.7;
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(20, 0, 0);
 
     public static double VX_WEIGHT = 1;
@@ -110,8 +110,7 @@ public class SampleTankDrive2 extends TankDrive {
                 new TankVelocityConstraint(MAX_VEL, TRACK_WIDTH)
         ));
         accelConstraint = new ProfileAccelerationConstraint(MAX_ACCEL);
-        follower = new TankPIDVAFollower(AXIAL_PID, CROSS_TRACK_PID,
-                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
+        follower = new RamseteFollowerMeters(b, zeta, new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
         poseHistory = new ArrayList<>();
 
