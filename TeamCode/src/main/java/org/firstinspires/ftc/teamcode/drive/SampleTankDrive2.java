@@ -35,17 +35,12 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
-import org.firstinspires.ftc.teamcode.Util;
-import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_ACCEL;
@@ -63,11 +58,10 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  * Simple tank drive hardware implementation for REV hardware.
  */
 @Config
-public class
-SampleTankDrive extends TankDrive {
+public class SampleTankDrive2 extends TankDrive {
     public static PIDCoefficients AXIAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0.0002, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(12, 0, 0);
+    public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(20, 0, 0);
 
     public static double VX_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
@@ -78,6 +72,7 @@ SampleTankDrive extends TankDrive {
         FOLLOW_TRAJECTORY
     }
 
+    private FtcDashboard dashboard;
     private NanoClock clock;
 
     private Mode mode;
@@ -97,10 +92,11 @@ SampleTankDrive extends TankDrive {
 
     private VoltageSensor batteryVoltageSensor;
 
-    public SampleTankDrive(HardwareMap hardwareMap) {
+    public SampleTankDrive2(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH);
 
-
+        dashboard = FtcDashboard.getInstance();
+        dashboard.setTelemetryTransmissionInterval(25);
 
         clock = NanoClock.system();
 
@@ -137,6 +133,7 @@ SampleTankDrive extends TankDrive {
         // upward (normal to the floor) using a command like the following:
         // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
 
+        // add/remove motors depending on your robot (e.g., 6WD)
         // add/remove motors depending on your robot (e.g., 6WD)
         DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "front_drive_left");
         DcMotorEx leftRear = hardwareMap.get(DcMotorEx.class, "rear_drive_left");
@@ -195,18 +192,6 @@ SampleTankDrive extends TankDrive {
         mode = Mode.TURN;
     }
 
-    public void turnToAsync(double angle) {
-        double heading = getPoseEstimate().getHeading();
-        turnProfile = MotionProfileGenerator.generateSimpleMotionProfile(
-                new MotionState(heading, 0, 0, 0),
-                new MotionState(angle, 0, 0, 0),
-                MAX_ANG_VEL,
-                MAX_ANG_ACCEL
-        );
-        turnStart = clock.seconds();
-        mode = Mode.TURN;
-    }
-
     public void turn(double angle) {
         turnAsync(angle);
         waitForIdle();
@@ -243,16 +228,18 @@ SampleTankDrive extends TankDrive {
 
         poseHistory.add(currentPose);
 
-        Canvas fieldOverlay = MatchOpMode.canvas;
+        TelemetryPacket packet = new TelemetryPacket();
+        Canvas fieldOverlay = packet.fieldOverlay();
 
-        Util.logger(this, Level.INFO, "mode", mode);
-        Util.logger(this, Level.INFO, "x", currentPose.getX());
-        Util.logger(this, Level.INFO, "y", currentPose.getY());
-        Util.logger(this, Level.INFO, "heading", currentPose.getHeading());
-        Util.logger(this, Level.INFO, "xError", lastError.getX());
-        Util.logger(this, Level.INFO, "yError", lastError.getY());
-        Util.logger(this, Level.INFO, "headingError", lastError.getHeading());
+        packet.put("mode", mode);
 
+        packet.put("x", currentPose.getX());
+        packet.put("y", currentPose.getY());
+        packet.put("heading (deg)", Math.toDegrees(currentPose.getHeading()));
+
+        packet.put("xError", lastError.getX());
+        packet.put("yError", lastError.getY());
+        packet.put("headingError (deg)", Math.toDegrees(lastError.getHeading()));
 
         switch (mode) {
             case IDLE:
@@ -304,11 +291,9 @@ SampleTankDrive extends TankDrive {
 
                 break;
             }
-
         }
-        fieldOverlay.setStroke("#3F51B5");
-        DashboardUtil.drawRobot(fieldOverlay, currentPose);
 
+        dashboard.sendTelemetryPacket(packet);
     }
 
     public void waitForIdle() {
@@ -360,7 +345,6 @@ SampleTankDrive extends TankDrive {
 
         setDrivePower(vel);
     }
-    
 
     @NonNull
     @Override
@@ -399,5 +383,28 @@ SampleTankDrive extends TankDrive {
     @Override
     public double getRawExternalHeading() {
         return imu.getAngularOrientation().firstAngle;
+    }
+
+    @Override
+    public Double getExternalHeadingVelocity() {
+        // TODO: This must be changed to match your configuration
+        //                           | Z axis
+        //                           |
+        //     (Motor Port Side)     |   / X axis
+        //                       ____|__/____
+        //          Y axis     / *   | /    /|   (IO Side)
+        //          _________ /______|/    //      I2C
+        //                   /___________ //     Digital
+        //                  |____________|/      Analog
+        //
+        //                 (Servo Port Side)
+        //
+        // The positive x axis points toward the USB port(s)
+        //
+        // Adjust the axis rotation rate as necessary
+        // Rotate about the z axis is the default assuming your REV Hub/Control Hub is laying
+        // flat on a surface
+
+        return (double) imu.getAngularVelocity().zRotationRate;
     }
 }

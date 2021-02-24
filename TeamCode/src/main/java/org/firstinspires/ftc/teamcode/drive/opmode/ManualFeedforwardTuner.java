@@ -44,7 +44,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 @Config
 @Autonomous(group = "drive")
 public class ManualFeedforwardTuner extends LinearOpMode {
-    public static double DISTANCE = 72; // in
+    public static double DISTANCE = 96; // in
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -135,7 +135,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     drive.setWeightedDrivePower(
                             new Pose2d(
                                     -gamepad1.left_stick_y,
-                                    -gamepad1.left_stick_x,
+                                    0,
                                     -gamepad1.right_stick_x
                             )
                     );
