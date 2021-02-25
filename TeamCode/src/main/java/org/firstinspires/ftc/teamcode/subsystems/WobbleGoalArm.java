@@ -89,12 +89,17 @@ public class WobbleGoalArm extends SubsystemBase {
     public void placeWobbleGoal() {
 
         automatic = true;
-        controller.setSetPoint(2.5);
+        controller.setSetPoint(-5);
     }
     public void liftWobbleGoal() {
 
         automatic = true;
-        controller.setSetPoint(-127);
+        controller.setSetPoint(-120);
+    }
+    public void setWobbleGoal(double angle) {
+
+        automatic = true;
+        controller.setSetPoint(angle);
     }
     public boolean atTargetAngle() {
         return controller.atSetPoint();

@@ -24,8 +24,11 @@ public class TurnToCommand extends CommandBase {
     @Override
     public void initialize() {
         double firstAngle = drive.getHeading();
-        if (firstAngle > 180) firstAngle = firstAngle - 360;
+        Util.logger(this, Level.INFO, "curr angle", firstAngle);
+        // if (firstAngle > 180) firstAngle = firstAngle - 360;
         desired = angle - firstAngle;
+        Util.logger(this, Level.INFO, "adjusted angle", firstAngle);
+        Util.logger(this, Level.INFO, "desired angle", desired);
 
         drive.turn(Math.toRadians(desired));
     }
