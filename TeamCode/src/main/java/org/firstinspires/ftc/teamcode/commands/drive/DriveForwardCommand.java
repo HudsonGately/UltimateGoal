@@ -26,7 +26,11 @@ public class DriveForwardCommand extends CommandBase{
 
     @Override
     public void initialize() {
-        trajectory = new TrajectoryBuilder(drive.getPoseEstimate(), Trajectories.slowConstraint, Trajectories.accelConstraint).forward(distance).build();
+        if (distance < 0)
+            trajectory = new TrajectoryBuilder(drive.getPoseEstimate(), Trajectories.slowConstraint, Trajectories.accelConstraint).back(-distance).build();
+        else
+            trajectory = new TrajectoryBuilder(drive.getPoseEstimate(), Trajectories.slowConstraint, Trajectories.accelConstraint).forward(distance).build();
+
         drive.followTrajectory(trajectory);
 
     }
