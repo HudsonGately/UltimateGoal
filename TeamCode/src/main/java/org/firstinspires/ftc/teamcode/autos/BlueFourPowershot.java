@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autos;
 
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
@@ -92,6 +93,7 @@ public class BlueFourPowershot extends MatchOpMode {
                         new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
                         new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.wobbleToHighgoal),
                         //turn and shoot
+                        new ConditionalCommand( new TurnToCommand(drivetrain, 187, telemetry),  new TurnToCommand(drivetrain, 195, telemetry), () -> drivetrain.getPoseEstimate().getY() > 23),
                         new TurnToCommand(drivetrain, 187, telemetry),
                         new FeedRingsCommand(feeder, 4, 75),
                         new TurnToCommand(drivetrain, 180, telemetry),
@@ -99,17 +101,21 @@ public class BlueFourPowershot extends MatchOpMode {
                         new InstantCommand(intake::intake, intake),
                         new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.highGoalHitIntake),
                         new TurnToCommand(drivetrain, 189, telemetry),
-                        new ShootRingsCommand(shooterWheels, feeder, 3000, 5),
+                        new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
+                        new FeedRingsCommand(feeder, 5, 50),
                         new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.intakeRings),
-                        new ShootRingsCommand(shooterWheels, feeder, 3100, 3),
-                        new InstantCommand(intake::intake, intake),
-                        new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.intakeRings)
+                        new TurnToCommand(drivetrain, 180, telemetry),
+                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(0)),
+                        new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.shootMoreRings),
+                        new FeedRingsCommand(feeder, 3, 50),
+                        new InstantCommand(intake::stop),
+                        new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
+                        new InstantCommand(wobbleGoalArm::openClaw),
+                        new InstantCommand(() -> wobbleGoalArm.setLazySusanPosition(.543)),
 
-                        /*
                         new TurnToCommand(drivetrain, Trajectories.BlueLeftTape.wobbleAngle, telemetry),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-5)),
-                        new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.ringsToWobble)
-                        */
+                        new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.ringsToWobble),
+                        new InstantCommand(wobbleGoalArm::closeClaw)
                 )
         );
 
