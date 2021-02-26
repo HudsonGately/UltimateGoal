@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
+import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
@@ -114,9 +115,11 @@ public class BlueFourPowershot extends MatchOpMode {
                         new InstantCommand(() -> wobbleGoalArm.setLazySusanPosition(.543)),
 
                         new TurnToCommand(drivetrain, Trajectories.BlueLeftTape.wobbleAngle, telemetry),
-                        new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.ringsToWobble),
-                        new InstantCommand(wobbleGoalArm::closeClaw)
-                )
+                        new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueLeftTape.wobbleDistance), new WaitCommand(500).andThen(new InstantCommand(wobbleGoalArm::closeClaw))),
+                        new WaitCommand(500),
+                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-100))
+
+                        )
         );
 
     }

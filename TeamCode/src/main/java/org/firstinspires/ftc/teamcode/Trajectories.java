@@ -44,8 +44,8 @@ public class Trajectories {
         public static double outtakeDistance = 36;
         public static double intakeDistance = 12;
         public static double shootMoreDistance = 30;
-        public static double wobbleDistance = 3;
-        public static double wobbleAngle = 230;
+        public static double wobbleDistance = 10;
+        public static double wobbleAngle = 225;
 
         public static Trajectory driveToWobble = new TrajectoryBuilder(startPose, true, velConstraint, accelConstraint).splineTo(new Vector2d(wobbleGoalX, wobbleGoalY), Math.toRadians(0)).build();
         public static Trajectory wobbleToHighgoal = new TrajectoryBuilder(driveToWobble.end(), velConstraint, accelConstraint).splineTo(new Vector2d(highGoalX, highGoalY), Math.toRadians(180)).build();
