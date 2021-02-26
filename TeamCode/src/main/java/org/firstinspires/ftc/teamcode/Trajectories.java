@@ -37,16 +37,19 @@ public class Trajectories {
         public static double wobbleGoalY = 40;
 
         public static double highGoalX = -3;
-        public static double highGoalY = 24;
+        public static double highGoalY = 23;
         public static double outtakeDistance = 36;
         public static double intakeDistance = 36;
+        public static double intakeMoreDistance = 20;
         public static double wobbleDistance = 4;
         public static double wobbleAngle = 200;
+
         public static Trajectory driveToWobble = new TrajectoryBuilder(startPose, true, velConstraint, accelConstraint).splineTo(new Vector2d(wobbleGoalX, wobbleGoalY), Math.toRadians(0)).build();
         public static Trajectory wobbleToHighgoal = new TrajectoryBuilder(driveToWobble.end(), velConstraint, accelConstraint).splineTo(new Vector2d(highGoalX, highGoalY), Math.toRadians(180)).build();
         public static Trajectory highGoalHitIntake = new TrajectoryBuilder(wobbleToHighgoal.end(), velConstraint, accelConstraint).forward(outtakeDistance, velConstraint, accelConstraint).build();
         public static Trajectory intakeRings = new TrajectoryBuilder(highGoalHitIntake.end(), velConstraint, accelConstraint).forward(intakeDistance, velConstraint, accelConstraint).build();
-        public static Trajectory ringsToWobble = new TrajectoryBuilder(intakeRings.end().plus(new Pose2d(0, 0, Math.toRadians(wobbleAngle))), slowConstraint, accelConstraint).forward(wobbleDistance, slowConstraint, accelConstraint).build();
+        public static Trajectory intakeMoreRings = new TrajectoryBuilder(intakeRings.end(), velConstraint, accelConstraint).forward(intakeMoreDistance, velConstraint, accelConstraint).build();
+        public static Trajectory ringsToWobble = new TrajectoryBuilder(intakeMoreRings.end().plus(new Pose2d(0, 0, Math.toRadians(wobbleAngle))), slowConstraint, accelConstraint).forward(wobbleDistance, slowConstraint, accelConstraint).build();
 
 
 

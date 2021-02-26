@@ -91,18 +91,25 @@ public class BlueFourPowershot extends MatchOpMode {
                         new PlaceWobbleGoal(wobbleGoalArm),
                         new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
                         new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.wobbleToHighgoal),
-                        new TurnToCommand(drivetrain, 185, telemetry),
+                        //turn and shoot
+                        new TurnToCommand(drivetrain, 187, telemetry),
                         new FeedRingsCommand(feeder, 4, 75),
                         new TurnToCommand(drivetrain, 180, telemetry),
+                        //go to rings
                         new InstantCommand(intake::intake, intake),
                         new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.highGoalHitIntake),
+                        new TurnToCommand(drivetrain, 189, telemetry),
                         new ShootRingsCommand(shooterWheels, feeder, 3000, 5),
                         new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.intakeRings),
-                        new ShootRingsCommand(shooterWheels, feeder, 3100, 2),
+                        new ShootRingsCommand(shooterWheels, feeder, 3100, 3),
+                        new InstantCommand(intake::intake, intake),
+                        new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.intakeRings)
+
+                        /*
                         new TurnToCommand(drivetrain, Trajectories.BlueLeftTape.wobbleAngle, telemetry),
                         new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-5)),
                         new TrajectoryFollowerCommand(drivetrain, Trajectories.BlueLeftTape.ringsToWobble)
-
+                        */
                 )
         );
 
