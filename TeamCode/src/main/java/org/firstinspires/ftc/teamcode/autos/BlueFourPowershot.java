@@ -94,10 +94,12 @@ public class BlueFourPowershot extends MatchOpMode {
         feeder.retractFeed();
         schedule(
                 new SequentialCommandGroup(
+
                         new InstantCommand(wobbleGoalArm::setTurretMiddle),
                         new InstantCommand(wobbleGoalArm::closeClaw),
                         new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-90)),
                         new WaitUntilCommand(wobbleGoalArm::atTargetAngle),
+
                         new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretLeft)), new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(wobbleGoalX, wobbleGoalY), Math.toDegrees(0))),
                         new TurnToCommand(drivetrain, 180, telemetry),
                         new PlaceWobbleGoal(wobbleGoalArm),

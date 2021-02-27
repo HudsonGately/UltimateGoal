@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
@@ -123,32 +124,27 @@ public class MiddleStartingPosition extends MatchOpMode {
                         new TurnToCommand(drivetrain, Trajectories.BlueMid.wobbleAngle, telemetry),
                         new InstantCommand(wobbleGoalArm::openClaw),
                         new InstantCommand(wobbleGoalArm::setTurretMiddle),
+                        // lower arm
                         new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(4)),
                         new WaitCommand(2000),
-                        new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueMid.wobbleDistance, Trajectories.velConstraint), new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::closeClaw)), new WaitCommand(500), new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-100))
-                )
-
-/*
-                        //turn towards wobble goal
-                        new TurnToCommand(drivetrain, Trajectories.BlueCloseTape.wobbleAngle, telemetry),
-                        new InstantCommand(wobbleGoalArm::openClaw),
-                        new InstantCommand(wobbleGoalArm::setTurretMiddle),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(4)),
-                        new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueCloseTape.wobbleDistance, Trajectories.velConstraint), new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::closeClaw))),
-                        //go to wobble goal
+                        new DriveForwardCommand(drivetrain, -2, Trajectories.slowConstraint),
+                        new DriveForwardCommand(drivetrain, Trajectories.BlueMid.wobbleDistance, Trajectories.slowConstraint),
+                        new WaitCommand(500),
+                        // grab wobble gaol
+                        new InstantCommand(wobbleGoalArm::closeClaw),
                         new WaitCommand(1000),
-                        new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
-                        new DriveForwardCommand(drivetrain, -50),
-                        new TurnToCommand(drivetrain,90, telemetry),
-                        new DriveForwardCommand(drivetrain, 10),
+                        new InstantCommand(wobbleGoalArm::liftWobbleGoal),
+                        new ParallelCommandGroup(
+                            new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(40, 12), Math.toRadians(0)),
+                            new InstantCommand(wobbleGoalArm::setTurretLeft)
+                        ),
+                        new TurnToCommand(drivetrain, 180, telemetry),
 
-                        new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
-                        new WaitCommand(1000),
-                        new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
-                        new DriveForwardCommand(drivetrain, -4),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-127), wobbleGoalArm)
-*/
-                )
+                        new PlaceWobbleGoal(wobbleGoalArm),
+                        new DriveForwardCommand(drivetrain, 24, Trajectories.slowConstraint),
+                        new TurnCommand(drivetrain, 180)
+
+              )
         );
 
     }

@@ -61,7 +61,7 @@ public class Trajectories {
         public static double intakeFirst = 36;
         public static double intakeDistance = 12;
         public static double shootMoreDistance = 24;
-        public static double wobbleDistance = 4;
+        public static double wobbleDistance = 6;
         public static double wobbleAngle = 213;
 
     }
