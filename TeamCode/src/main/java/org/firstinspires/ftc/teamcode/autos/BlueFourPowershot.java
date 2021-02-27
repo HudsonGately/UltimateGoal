@@ -104,8 +104,7 @@ public class BlueFourPowershot extends MatchOpMode {
                         new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
                         new SplineCommand(drivetrain, new Vector2d(highGoalX, highGoalY), Math.toRadians(180)),
                         //turn and shoot
-                        new ConditionalCommand( new TurnToCommand(drivetrain, 187, telemetry),  new TurnToCommand(drivetrain, 195, telemetry), () -> drivetrain.getPoseEstimate().getY() > 23),
-                        new TurnToCommand(drivetrain, 187, telemetry),
+                        new ConditionalCommand( new TurnToCommand(drivetrain, 183, telemetry),  new TurnToCommand(drivetrain, 195, telemetry), () -> drivetrain.getPoseEstimate().getY() > 23),
                         new FeedRingsCommand(feeder, 4, 75),
                         new TurnToCommand(drivetrain, 180, telemetry),
                         //go to rings
@@ -114,20 +113,26 @@ public class BlueFourPowershot extends MatchOpMode {
                         new TurnToCommand(drivetrain, 189, telemetry),
                         new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
                         new FeedRingsCommand(feeder, 5, 50),
+                        new InstantCommand(() -> shooterWheels.setShooterRPM(3050)),
                         new DriveForwardCommand(drivetrain, intakeDistance),
                         new TurnToCommand(drivetrain, 180, telemetry),
                         new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(0)),
                         new DriveForwardCommand(drivetrain, -shootMoreDistance),
+                        new TurnToCommand(drivetrain, 189, telemetry),
                         new FeedRingsCommand(feeder, 3, 50),
                         new InstantCommand(intake::stop),
                         new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
                         new InstantCommand(wobbleGoalArm::openClaw),
                         new InstantCommand(wobbleGoalArm::setTurretMiddle),
-
                         new TurnToCommand(drivetrain, Trajectories.BlueLeftTape.wobbleAngle, telemetry),
-                        new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueLeftTape.wobbleDistance), new WaitCommand(500).andThen(new InstantCommand(wobbleGoalArm::closeClaw))),
+                        new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueLeftTape.wobbleDistance, Trajectories.slowConstraint), new WaitCommand(500).andThen(new InstantCommand(wobbleGoalArm::closeClaw))),
                         new WaitCommand(500),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-100))
+                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-100)),
+                        new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretLeft, wobbleGoalArm)), new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(wobbleGoalX + 4, 30), Math.toDegrees(0))),
+                        new TurnToCommand(drivetrain, 90, telemetry),
+                        new PlaceWobbleGoal(wobbleGoalArm),
+                        new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(20, 30), Math.toRadians(180))
+
 
                         )
         );
