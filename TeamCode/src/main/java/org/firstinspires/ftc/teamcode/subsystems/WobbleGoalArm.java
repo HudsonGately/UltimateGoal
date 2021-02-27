@@ -123,4 +123,8 @@ public class WobbleGoalArm extends SubsystemBase {
     public void setTurretMiddle() {
         setLazySusanPosition(0.566);
     }
+    public void setOffset(double angle) {
+        OFFSET = angle;
+        controller.setSetPoint(getAngle());
+    }
 }

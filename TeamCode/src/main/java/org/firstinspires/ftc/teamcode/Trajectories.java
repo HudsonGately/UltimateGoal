@@ -40,24 +40,53 @@ public class Trajectories {
         public static double wobbleGoalY = 40;
 
         public static double highGoalX = -3;
-        public static double highGoalY = 38;
+        public static double highGoalY = 36;
         public static double intakeFirst = 36;
         public static double intakeDistance = 12;
         public static double shootMoreDistance = 24;
         public static double wobbleDistance = 8.5;
         public static double wobbleAngle = 223;
 
-        public static Trajectory driveToWobble = new TrajectoryBuilder(startPose, true, velConstraint, accelConstraint).splineTo(new Vector2d(wobbleGoalX, wobbleGoalY), Math.toRadians(0)).build();
-        public static Trajectory wobbleToHighgoal = new TrajectoryBuilder(driveToWobble.end(), velConstraint, accelConstraint).splineTo(new Vector2d(highGoalX, highGoalY), Math.toRadians(180)).build();
-        public static Trajectory highGoalHitIntake = new TrajectoryBuilder(wobbleToHighgoal.end(), velConstraint, accelConstraint).forward(intakeFirst, velConstraint, accelConstraint).build();
-        public static Trajectory intakeRings = new TrajectoryBuilder(highGoalHitIntake.end(), velConstraint, accelConstraint).forward(intakeDistance, velConstraint, accelConstraint).build();
-        public static Trajectory shootMoreRings = new TrajectoryBuilder(intakeRings.end(), velConstraint, accelConstraint).back(shootMoreDistance, velConstraint, accelConstraint).build();
 
-        public static Trajectory ringsToWobble = new TrajectoryBuilder(shootMoreRings.end().plus(new Pose2d(0, 0, Math.toRadians(wobbleAngle))), slowConstraint, slowAccelConstraint).forward(wobbleDistance, slowConstraint, slowAccelConstraint).build();
+
+    }
+    @Config
+    public static class BlueMid {
+        public static Pose2d startPose = new Pose2d(-62.5, 52, Math.toRadians(180));
+        public static double shootDistance = 60;
+        public static double wobbleGoalSquareDistance = 48;
+
+        public static double ringX = -30;
+        public static double ringY = 32;
+        public static double intakeFirst = 36;
+        public static double intakeDistance = 12;
+        public static double shootMoreDistance = 24;
+        public static double wobbleDistance = 4;
+        public static double wobbleAngle = 213;
+
+    }
+    @Config
+    public static class BlueCloseTape {
+        public static Pose2d startPose = new Pose2d(-62.5, 52, Math.toRadians(180));
+
+        public static double wobbleGoalSquareDistance = 84;
+        public static double wobbleGoalX = 20;
+
+        public static double wobbleGoalY = 30;
+
+        public static double highGoalX = -3;
+        public static double highGoalY = 38;
+        public static double intakeFirst = 36;
+        public static double intakeDistance = 12;
+        public static double shootMoreDistance = 24;
+        public static double wobbleDistance = 26;
+        public static double wobbleAngle = 200;
+
+
+
 
 
 
     }
-
 
 }

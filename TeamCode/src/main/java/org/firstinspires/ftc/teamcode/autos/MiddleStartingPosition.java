@@ -33,16 +33,17 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.highGoalX;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.highGoalY;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.intakeDistance;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.intakeFirst;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.shootMoreDistance;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.wobbleGoalX;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.wobbleGoalY;
+import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.shootDistance;
+import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.wobbleGoalSquareDistance;
+import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.ringX;
+import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.ringY;
+import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.intakeDistance;
+import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.intakeFirst;
+import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.shootMoreDistance;
 
-@Autonomous(name = "BlueFour Powershot")
-public class BlueFourPowershot extends MatchOpMode {
+
+@Autonomous(name = "Middle")
+public class MiddleStartingPosition extends MatchOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
@@ -85,7 +86,7 @@ public class BlueFourPowershot extends MatchOpMode {
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, telemetry);
-        drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
+        drivetrain.setPoseEstimate(Trajectories.BlueMid.startPose);
 
     }
 
@@ -98,43 +99,56 @@ public class BlueFourPowershot extends MatchOpMode {
                         new InstantCommand(wobbleGoalArm::closeClaw),
                         new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-90)),
                         new WaitUntilCommand(wobbleGoalArm::atTargetAngle),
-                        new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretLeft)), new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(wobbleGoalX, wobbleGoalY), Math.toDegrees(0))),
-                        new TurnToCommand(drivetrain, 180, telemetry),
-                        new PlaceWobbleGoal(wobbleGoalArm),
                         new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
-                        new SplineCommand(drivetrain, new Vector2d(highGoalX, highGoalY), Math.toRadians(180)),
-                        //turn and shoot
-                        new ConditionalCommand( new TurnToCommand(drivetrain, 183, telemetry),  new TurnToCommand(drivetrain, 195, telemetry), () -> drivetrain.getPoseEstimate().getY() > 23),
+                        new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretRight)), new DriveForwardCommand(drivetrain, -shootDistance)),
+                        // turn and shoot
+                        new TurnToCommand(drivetrain, 178, telemetry),
                         new FeedRingsCommand(feeder, 4, 75),
-                        new TurnToCommand(drivetrain, 180, telemetry),
-                        //go to rings
-                        new InstantCommand(intake::intake, intake),
-                        new DriveForwardCommand(drivetrain, intakeFirst),
-                        new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
-                        new TurnToCommand(drivetrain, 185, telemetry),
-                        new FeedRingsCommand(feeder, 5, 50),
-                        new InstantCommand(() -> shooterWheels.setShooterRPM(3000)),
-                        new DriveForwardCommand(drivetrain, intakeDistance),
-                        new TurnToCommand(drivetrain, 185, telemetry),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(0)),
-                        new DriveForwardCommand(drivetrain, -shootMoreDistance),
-                        new FeedRingsCommand(feeder, 3, 50),
-                        new TurnToCommand(drivetrain, 180, telemetry),
                         new InstantCommand(intake::stop),
                         new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
+                        new TurnToCommand(drivetrain, 180, telemetry),
+                        //place wobble goal
+                        new DriveForwardCommand(drivetrain, -wobbleGoalSquareDistance),
+                        new PlaceWobbleGoal(wobbleGoalArm),
+                        //go to ring
+                        new InstantCommand(intake::intake),
+                        new InstantCommand(() -> shooterWheels.setShooterRPM(2750)),
+                        new SplineCommand(drivetrain, new Vector2d(Trajectories.BlueMid.ringX, Trajectories.BlueMid.ringY), Math.toRadians(180)),
+                        //align for powershot
+                        new TurnToCommand(drivetrain, 180, telemetry),
+                        new FeedRingsCommand(feeder, 4, 75),
+                        new InstantCommand(intake::stop),
+                        new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
+                        //wobble goal
+                        new TurnToCommand(drivetrain, Trajectories.BlueMid.wobbleAngle, telemetry),
                         new InstantCommand(wobbleGoalArm::openClaw),
                         new InstantCommand(wobbleGoalArm::setTurretMiddle),
-                        new TurnToCommand(drivetrain, Trajectories.BlueLeftTape.wobbleAngle, telemetry),
-                        new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueLeftTape.wobbleDistance, Trajectories.slowConstraint), new WaitCommand(500).andThen(new InstantCommand(wobbleGoalArm::closeClaw))),
-                        new WaitCommand(500),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-100)),
-                        new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretLeft, wobbleGoalArm)), new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(wobbleGoalX - 4, 30), Math.toDegrees(0))),
-                        new TurnToCommand(drivetrain, 90, telemetry),
-                        new PlaceWobbleGoal(wobbleGoalArm),
-                        new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(20, 30), Math.toRadians(180))
+                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(4)),
+                        new WaitCommand(2000),
+                        new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueMid.wobbleDistance, Trajectories.velConstraint), new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::closeClaw)), new WaitCommand(500), new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-100))
+                )
 
+/*
+                        //turn towards wobble goal
+                        new TurnToCommand(drivetrain, Trajectories.BlueCloseTape.wobbleAngle, telemetry),
+                        new InstantCommand(wobbleGoalArm::openClaw),
+                        new InstantCommand(wobbleGoalArm::setTurretMiddle),
+                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(4)),
+                        new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueCloseTape.wobbleDistance, Trajectories.velConstraint), new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::closeClaw))),
+                        //go to wobble goal
+                        new WaitCommand(1000),
+                        new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
+                        new DriveForwardCommand(drivetrain, -50),
+                        new TurnToCommand(drivetrain,90, telemetry),
+                        new DriveForwardCommand(drivetrain, 10),
 
-                        )
+                        new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
+                        new WaitCommand(1000),
+                        new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
+                        new DriveForwardCommand(drivetrain, -4),
+                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-127), wobbleGoalArm)
+*/
+                )
         );
 
     }
