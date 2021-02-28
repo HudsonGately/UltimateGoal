@@ -112,7 +112,7 @@ public class TeleopTest extends MatchOpMode {
 
         manualButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenPressed(wobbleGoalArm::toggleAutomatic);
 
-        lowMidWobbleButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> wobbleGoalArm.setWobbleGoal(-30));
+        lowMidWobbleButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> wobbleGoalArm.setWobbleGoal(-65));
         highMidWobbleGoal = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> wobbleGoalArm.setWobbleGoal(-100));
 
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
@@ -123,7 +123,7 @@ public class TeleopTest extends MatchOpMode {
     public void matchStart() {
         schedule(new InstantCommand(feeder::retractFeed));
         schedule(new InstantCommand(() -> wobbleGoalArm.setTurretMiddle()));
-        //schedule(new HomeWobbleArm(wobbleGoalArm));
+        schedule(new HomeWobbleArm(wobbleGoalArm));
     }
 
     @Override

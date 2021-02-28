@@ -23,7 +23,7 @@ public class WobbleGoalArm extends SubsystemBase {
     private MotorEx arm;
     private TouchSensor homeSwitch;
     public static PIDFCoefficients pidfCoefficients = new PIDFCoefficients(0.02, 0, 0.002, 0);
-    public double OFFSET = -127;
+    public static double ARM_OFFSET = -160;
     private PIDFController controller;
     private ServoEx claw, lazySusan;
     private boolean automatic;
@@ -31,11 +31,12 @@ public class WobbleGoalArm extends SubsystemBase {
     public static double CPR = 2786;
     public static double ARM_SPEED = 0.3;
 
+    private double encoderOffset = 0;
+
     public WobbleGoalArm(MotorEx arm, ServoEx lazySusan, ServoEx claw, TouchSensor homeSensor, Telemetry tl) {
         this.arm = arm;
         this.arm.setDistancePerPulse(360/CPR);
         arm.setInverted(true);
-        OFFSET -= arm.getDistance();
         controller = new PIDFController(pidfCoefficients.p, pidfCoefficients.i, pidfCoefficients.d, pidfCoefficients.f,  getAngle(), getAngle());
         controller.setTolerance(10);
 
@@ -71,7 +72,9 @@ public class WobbleGoalArm extends SubsystemBase {
         Util.logger(this, telemetry, Level.INFO, "Home Position", isAtHome());
     }
 
-
+    private double getEncoderDistance() {
+        return arm.getDistance() - encoderOffset;
+    }
 
     public void liftArmManual() {
         automatic = false;
@@ -92,11 +95,11 @@ public class WobbleGoalArm extends SubsystemBase {
     }
 
     public void resetEncoder() {
-        arm.resetEncoder();
+        encoderOffset = arm.getDistance();
     }
 
     public double getAngle() {
-        return OFFSET + arm.getDistance();
+        return ARM_OFFSET + getEncoderDistance();
     }
 
     public void placeWobbleGoal() {
@@ -107,10 +110,9 @@ public class WobbleGoalArm extends SubsystemBase {
     public void liftWobbleGoal() {
 
         automatic = true;
-        controller.setSetPoint(-125);
+        controller.setSetPoint(ARM_OFFSET + 5);
     }
     public void setWobbleGoal(double angle) {
-
         automatic = true;
         controller.setSetPoint(angle);
     }
@@ -136,8 +138,8 @@ public class WobbleGoalArm extends SubsystemBase {
     public void setTurretMiddle() {
         setLazySusanPosition(0.566);
     }
-    public void setOffset(double angle) {
-        OFFSET = angle;
+    public void setOffset() {
+        resetEncoder();
         controller.setSetPoint(getAngle());
     }
 }

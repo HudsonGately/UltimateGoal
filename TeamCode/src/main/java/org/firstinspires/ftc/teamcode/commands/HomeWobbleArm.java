@@ -24,7 +24,7 @@ public class HomeWobbleArm extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         arm.stopArm();
-        arm.setOffset(arm.getAngle() + arm.OFFSET);
+        arm.setOffset();
         arm.setAutomatic(true);
     }
 }
