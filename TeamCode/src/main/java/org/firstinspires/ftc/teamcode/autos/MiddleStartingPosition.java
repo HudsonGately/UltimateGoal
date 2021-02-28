@@ -125,9 +125,9 @@ public class MiddleStartingPosition extends MatchOpMode {
                         new InstantCommand(wobbleGoalArm::openClaw),
                         new InstantCommand(wobbleGoalArm::setTurretMiddle),
                         // lower arm
+                        new DriveForwardCommand(drivetrain, -2, Trajectories.slowConstraint),
                         new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(4)),
                         new WaitCommand(2000),
-                        new DriveForwardCommand(drivetrain, -2, Trajectories.slowConstraint),
                         new DriveForwardCommand(drivetrain, Trajectories.BlueMid.wobbleDistance, Trajectories.slowConstraint),
                         new WaitCommand(500),
                         // grab wobble gaol

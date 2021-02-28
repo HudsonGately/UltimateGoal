@@ -37,15 +37,15 @@ public class Trajectories {
         public static Pose2d startPose = new Pose2d(-62.5, 52, Math.toRadians(180));
 
         public static double wobbleGoalX = 66;
-        public static double wobbleGoalY = 40;
+        public static double wobbleGoalY = 53;
 
         public static double highGoalX = -3;
-        public static double highGoalY = 36;
+        public static double highGoalY = 39;
         public static double intakeFirst = 36;
         public static double intakeDistance = 12;
         public static double shootMoreDistance = 24;
-        public static double wobbleDistance = 8.5;
-        public static double wobbleAngle = 223;
+        public static double wobbleDistance = 9;
+        public static double wobbleAngle = 220;
 
 
 
