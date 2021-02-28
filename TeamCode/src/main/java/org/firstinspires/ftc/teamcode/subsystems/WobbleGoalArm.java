@@ -68,6 +68,7 @@ public class WobbleGoalArm extends SubsystemBase {
         Util.logger(this, telemetry, Level.INFO, "Wobble Angle", getAngle());
         Util.logger(this, telemetry, Level.INFO, "Wobble Goal", controller.getSetPoint());
         Util.logger(this, telemetry, Level.INFO, "Wobble Power", arm.get());
+        Util.logger(this, telemetry, Level.INFO, "Home Position", isAtHome());
     }
 
 

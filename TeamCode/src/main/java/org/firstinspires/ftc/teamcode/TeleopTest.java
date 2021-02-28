@@ -123,7 +123,7 @@ public class TeleopTest extends MatchOpMode {
     public void matchStart() {
         schedule(new InstantCommand(feeder::retractFeed));
         schedule(new InstantCommand(() -> wobbleGoalArm.setTurretMiddle()));
-        schedule(new HomeWobbleArm(wobbleGoalArm));
+        //schedule(new HomeWobbleArm(wobbleGoalArm));
     }
 
     @Override
