@@ -16,6 +16,7 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
@@ -51,6 +52,7 @@ public class MiddleStartingPosition extends MatchOpMode {
     private DcMotorEx shooterMotorFront, shooterMotorBack;
     private MotorEx arm;
     private ServoEx feedServo, clawServo, lazySusanServo;
+    private TouchSensor wobbleTouchSensor;
 
     // Gamepad
     private GamepadEx driverGamepad;
@@ -78,6 +80,7 @@ public class MiddleStartingPosition extends MatchOpMode {
         arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_60);
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
         lazySusanServo = new SimpleServo(hardwareMap, "lazy_susan", 0, 360);
+        wobbleTouchSensor = hardwareMap.get(TouchSensor.class, "Touch");
 
 
         // Subsystems
@@ -86,7 +89,7 @@ public class MiddleStartingPosition extends MatchOpMode {
         intake = new Intake(intakeMotor, telemetry);
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
-        wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, telemetry);
+        wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
         drivetrain.setPoseEstimate(Trajectories.BlueMid.startPose);
 
     }

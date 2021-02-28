@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Util;
@@ -20,6 +21,7 @@ import java.util.logging.Level;
 public class WobbleGoalArm extends SubsystemBase {
     private Telemetry telemetry;
     private MotorEx arm;
+    private TouchSensor homeSwitch;
     public static PIDFCoefficients pidfCoefficients = new PIDFCoefficients(0.02, 0, 0.002, 0);
     public double OFFSET = -127;
     private PIDFController controller;
@@ -27,9 +29,9 @@ public class WobbleGoalArm extends SubsystemBase {
     private boolean automatic;
 
     public static double CPR = 2786;
-    public static double ARM_SPEED = 1;
+    public static double ARM_SPEED = 0.3;
 
-    public WobbleGoalArm(MotorEx arm, ServoEx lazySusan, ServoEx claw, Telemetry tl) {
+    public WobbleGoalArm(MotorEx arm, ServoEx lazySusan, ServoEx claw, TouchSensor homeSensor, Telemetry tl) {
         this.arm = arm;
         this.arm.setDistancePerPulse(360/CPR);
         arm.setInverted(true);
@@ -39,6 +41,7 @@ public class WobbleGoalArm extends SubsystemBase {
 
         this.claw = claw;
         this.lazySusan = lazySusan;
+        this.homeSwitch = homeSensor;
         this.telemetry = tl;
         automatic = true;
     }
@@ -46,7 +49,9 @@ public class WobbleGoalArm extends SubsystemBase {
     public void toggleAutomatic() {
         automatic = !automatic;
     }
-
+    public boolean isAtHome() {
+        return homeSwitch.isPressed();
+    }
     public boolean isAutomatic() {
         return automatic;
     }
@@ -67,17 +72,24 @@ public class WobbleGoalArm extends SubsystemBase {
 
 
 
-    public void liftArm() {
-            arm.set(-ARM_SPEED);
+    public void liftArmManual() {
+        automatic = false;
+        arm.set(-ARM_SPEED);
     }
-    public void lowerArm() {
-            arm.set(ARM_SPEED);
+    public void lowerArmManual() {
+        automatic = false;
+        arm.set(ARM_SPEED);
     }
     public void stopArm() {
         arm.stopMotor();
         controller.setSetPoint(getAngle());
         automatic = false;
     }
+
+    public void setAutomatic(boolean auto) {
+        this.automatic = auto;
+    }
+
     public void resetEncoder() {
         arm.resetEncoder();
     }
@@ -89,12 +101,12 @@ public class WobbleGoalArm extends SubsystemBase {
     public void placeWobbleGoal() {
 
         automatic = true;
-        controller.setSetPoint(-5);
+        controller.setSetPoint(-2);
     }
     public void liftWobbleGoal() {
 
         automatic = true;
-        controller.setSetPoint(-120);
+        controller.setSetPoint(-125);
     }
     public void setWobbleGoal(double angle) {
 
