@@ -91,6 +91,7 @@ public class CompAuto extends MatchOpMode {
     public void matchStart() {
         feeder.retractFeed();
         releaseShooter.setPosition(0.2);
+        wobbleGoalArm.setOffset();
         schedule(
                 new SelectCommand(new HashMap<Object, Command>() {{
                     put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(

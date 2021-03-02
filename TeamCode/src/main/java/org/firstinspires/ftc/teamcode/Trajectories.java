@@ -47,7 +47,7 @@ public class Trajectories {
         public static double intakeDistance = 12;
         public static double shootMoreDistance = 24;
         public static double wobbleDistance = 9;
-        public static double wobbleAngle = 228;
+        public static double wobbleAngle = 226;
 
 
 
@@ -64,7 +64,7 @@ public class Trajectories {
         public static double intakeDistance = 12;
         public static double shootMoreDistance = 24;
         public static double wobbleDistance = 9.25;
-        public static double wobbleAngle = 217;
+        public static double wobbleAngle = 211;
 
     }
     @Config
@@ -82,7 +82,7 @@ public class Trajectories {
         public static double intakeDistance = 12;
         public static double shootMoreDistance = 24;
         public static double wobbleDistance = 26;
-        public static double wobbleAngle = 196;
+        public static double wobbleAngle = 195;
 
 
 

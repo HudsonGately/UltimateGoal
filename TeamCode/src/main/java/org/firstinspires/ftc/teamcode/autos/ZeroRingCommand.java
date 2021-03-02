@@ -45,7 +45,7 @@ public class ZeroRingCommand extends SequentialCommandGroup {
                 new TurnToCommand(drivetrain, Trajectories.BlueCloseTape.wobbleAngle, telemetry),
                 new InstantCommand(wobbleGoalArm::openClaw),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
-                new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(4)),
+                new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueCloseTape.wobbleDistance, Trajectories.velConstraint), new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::closeClaw))),
                 //go to wobble goal
                 new WaitCommand(1000),

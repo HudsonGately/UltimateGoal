@@ -38,13 +38,14 @@ public class FourRingCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
                 new InstantCommand(wobbleGoalArm::closeClaw),
 
-
+                new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
                 new DriveForwardCommand(drivetrain, -60),
+
                 new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-85)),
                 //turn and shoot
                 // turn and shoot
                 new TurnToCommand(drivetrain, 178, telemetry),
-                new ShootRingsCommand(shooterWheels, feeder, 2900, 4, 75),
+                new FeedRingsCommand(feeder, 4, 75),
                 new InstantCommand(intake::stop),
                 new TurnToCommand(drivetrain, 180, telemetry),
 
@@ -62,7 +63,7 @@ public class FourRingCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
                 new DriveForwardCommand(drivetrain, intakeDistance),
                 new TurnToCommand(drivetrain, 185, telemetry),
-                new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-5)),
+                new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new DriveForwardCommand(drivetrain, -shootMoreDistance),
                 new FeedRingsCommand(feeder, 3, 50),
                 new TurnToCommand(drivetrain, 180, telemetry),
@@ -73,7 +74,7 @@ public class FourRingCommand extends SequentialCommandGroup {
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueLeftTape.wobbleDistance, Trajectories.slowConstraint), new WaitCommand(500).andThen(new InstantCommand(wobbleGoalArm::closeClaw))),
                 new WaitCommand(500),
                 new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-100)),
-                new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretLeft, wobbleGoalArm)), new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(wobbleGoalX+6, 26), Math.toDegrees(0))),
+                new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretLeft, wobbleGoalArm)), new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(wobbleGoalX+6, 28), Math.toDegrees(0))),
                 new TurnToCommand(drivetrain, 180, telemetry),
                 new PlaceWobbleGoal(wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),

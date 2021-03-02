@@ -22,7 +22,7 @@ public class WobbleGoalArm extends SubsystemBase {
     private Telemetry telemetry;
     private MotorEx arm;
     private TouchSensor homeSwitch;
-    public static PIDFCoefficients pidfCoefficients = new PIDFCoefficients(0.02, 0, 0.002, 0);
+    public static PIDFCoefficients pidfCoefficients = new PIDFCoefficients(0.02, 0, 0.003, 0);
     public static double ARM_OFFSET = -152;
     private PIDFController controller;
     private ServoEx claw, lazySusan;
@@ -45,6 +45,7 @@ public class WobbleGoalArm extends SubsystemBase {
         this.homeSwitch = homeSensor;
         this.telemetry = tl;
         automatic = true;
+        setOffset();
     }
 
     public void toggleAutomatic() {
@@ -106,7 +107,7 @@ public class WobbleGoalArm extends SubsystemBase {
     public void placeWobbleGoal() {
         // TODO CHNAGNE
         automatic = true;
-        controller.setSetPoint(-3);
+        controller.setSetPoint(-1);
     }
     public void liftWobbleGoal() {
 
@@ -124,8 +125,8 @@ public class WobbleGoalArm extends SubsystemBase {
     public void setClawPosition(double position) {
         claw.setPosition(position);
     }
-    public void openClaw() { setClawPosition(0.45); }
-    public void closeClaw() { setClawPosition(0.92); }
+    public void openClaw() { setClawPosition(0.06); }
+    public void closeClaw() { setClawPosition(0.64); }
 
     public void setLazySusanPosition(double position) {
         lazySusan.setPosition(position);

@@ -58,7 +58,7 @@ public class OneRingCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
                 // lower arm
                 new DriveForwardCommand(drivetrain, -2, Trajectories.slowConstraint),
-                new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-1)),
+                new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new WaitCommand(2000),
                 new DriveForwardCommand(drivetrain, Trajectories.BlueMid.wobbleDistance, Trajectories.slowConstraint),
                 new WaitCommand(500),
@@ -67,7 +67,7 @@ public class OneRingCommand extends SequentialCommandGroup {
                 new WaitCommand(1000),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal),
                 new ParallelCommandGroup(
-                        new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(45, 12), Math.toRadians(0)),
+                        new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(45, 13), Math.toRadians(0)),
                         new InstantCommand(wobbleGoalArm::setTurretLeft)
                 ),
                 new TurnToCommand(drivetrain, 180, telemetry),
