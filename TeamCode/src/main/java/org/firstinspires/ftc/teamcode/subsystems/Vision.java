@@ -13,9 +13,9 @@ import java.util.logging.Level;
 @Config
 public class Vision extends SubsystemBase {
 
-    public static double TOP_PERCENT = 0.15;
-    public static double BOTTOM_PERCENT = 0.3;
-
+    public static double TOP_PERCENT = 0.38;
+    public static double BOTTOM_PERCENT = 0.48;
+    public static double WIDTH_PERCENT = 0.9;
     private Telemetry telemetry;
     private UGDetector2 ringDetector;
     private UGDetector2.Stack currentStack;
@@ -26,8 +26,10 @@ public class Vision extends SubsystemBase {
 
         telemetry = tl;
         currentStack = ringDetector.getStack();
-        ringDetector.setBottomRectangle(BOTTOM_PERCENT, .8);
-        ringDetector.setTopRectangle(TOP_PERCENT, .8);
+        ringDetector.setBottomRectangle(BOTTOM_PERCENT, WIDTH_PERCENT);
+        ringDetector.setTopRectangle(TOP_PERCENT, WIDTH_PERCENT);
+
+        ringDetector.setRectangleSize(25, 10);
 
     }
 

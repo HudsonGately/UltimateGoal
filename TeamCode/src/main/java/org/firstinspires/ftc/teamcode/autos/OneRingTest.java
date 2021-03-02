@@ -44,8 +44,8 @@ import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.intakeFirst;
 import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.shootMoreDistance;
 
 
-@Autonomous(name = "Middle")
-public class MiddleStartingPosition extends MatchOpMode {
+@Autonomous(name = "One Ring Test")
+public class OneRingTest extends MatchOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
@@ -97,58 +97,7 @@ public class MiddleStartingPosition extends MatchOpMode {
     @Override
     public void matchStart() {
         feeder.retractFeed();
-        schedule(
-                new SequentialCommandGroup(
-                        new InstantCommand(wobbleGoalArm::setTurretMiddle),
-                        new InstantCommand(wobbleGoalArm::closeClaw),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-90)),
-                        new WaitUntilCommand(wobbleGoalArm::atTargetAngle),
-                        new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
-                        new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretRight)), new DriveForwardCommand(drivetrain, -shootDistance)),
-                        // turn and shoot
-                        new TurnToCommand(drivetrain, 178, telemetry),
-                        new FeedRingsCommand(feeder, 4, 75),
-                        new InstantCommand(intake::stop),
-                        new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
-                        new TurnToCommand(drivetrain, 180, telemetry),
-                        //place wobble goal
-                        new DriveForwardCommand(drivetrain, -wobbleGoalSquareDistance),
-                        new PlaceWobbleGoal(wobbleGoalArm),
-                        //go to ring
-                        new InstantCommand(intake::intake),
-                        new InstantCommand(() -> shooterWheels.setShooterRPM(2750)),
-                        new SplineCommand(drivetrain, new Vector2d(Trajectories.BlueMid.ringX, Trajectories.BlueMid.ringY), Math.toRadians(180)),
-                        //align for powershot
-                        new TurnToCommand(drivetrain, 180, telemetry),
-                        new FeedRingsCommand(feeder, 4, 75),
-                        new InstantCommand(intake::stop),
-                        new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
-                        //wobble goal
-                        new TurnToCommand(drivetrain, Trajectories.BlueMid.wobbleAngle, telemetry),
-                        new InstantCommand(wobbleGoalArm::openClaw),
-                        new InstantCommand(wobbleGoalArm::setTurretMiddle),
-                        // lower arm
-                        new DriveForwardCommand(drivetrain, -2, Trajectories.slowConstraint),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(4)),
-                        new WaitCommand(2000),
-                        new DriveForwardCommand(drivetrain, Trajectories.BlueMid.wobbleDistance, Trajectories.slowConstraint),
-                        new WaitCommand(500),
-                        // grab wobble gaol
-                        new InstantCommand(wobbleGoalArm::closeClaw),
-                        new WaitCommand(1000),
-                        new InstantCommand(wobbleGoalArm::liftWobbleGoal),
-                        new ParallelCommandGroup(
-                            new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(40, 12), Math.toRadians(0)),
-                            new InstantCommand(wobbleGoalArm::setTurretLeft)
-                        ),
-                        new TurnToCommand(drivetrain, 180, telemetry),
-
-                        new PlaceWobbleGoal(wobbleGoalArm),
-                        new DriveForwardCommand(drivetrain, 24, Trajectories.slowConstraint),
-                        new TurnCommand(drivetrain, 180)
-
-              )
-        );
+        schedule(new OneRingCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
 }

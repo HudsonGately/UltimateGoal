@@ -25,8 +25,10 @@ public class Trajectories {
         ));
     public static MinVelocityConstraint slowConstraint = new MinVelocityConstraint(Arrays.asList(
             new AngularVelocityConstraint(MAX_ANG_VEL),
-            new TankVelocityConstraint(12, TRACK_WIDTH)
+            new TankVelocityConstraint(20, TRACK_WIDTH)
     ));
+
+
 
 
     public static ProfileAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(MAX_ACCEL);
@@ -45,7 +47,7 @@ public class Trajectories {
         public static double intakeDistance = 12;
         public static double shootMoreDistance = 24;
         public static double wobbleDistance = 9;
-        public static double wobbleAngle = 220;
+        public static double wobbleAngle = 228;
 
 
 
@@ -61,8 +63,8 @@ public class Trajectories {
         public static double intakeFirst = 36;
         public static double intakeDistance = 12;
         public static double shootMoreDistance = 24;
-        public static double wobbleDistance = 6;
-        public static double wobbleAngle = 213;
+        public static double wobbleDistance = 9.25;
+        public static double wobbleAngle = 217;
 
     }
     @Config
@@ -80,7 +82,7 @@ public class Trajectories {
         public static double intakeDistance = 12;
         public static double shootMoreDistance = 24;
         public static double wobbleDistance = 26;
-        public static double wobbleAngle = 200;
+        public static double wobbleAngle = 196;
 
 
 

@@ -42,8 +42,8 @@ import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.shootMore
 import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.wobbleGoalX;
 import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.wobbleGoalY;
 
-@Autonomous(name = "BlueFour Powershot")
-public class BlueFourPowershot extends MatchOpMode {
+@Autonomous(name = "Four Ring Test")
+public class FourRingTest extends MatchOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
@@ -94,55 +94,7 @@ public class BlueFourPowershot extends MatchOpMode {
     @Override
     public void matchStart() {
         feeder.retractFeed();
-        schedule(
-                new SequentialCommandGroup(
-
-                        new InstantCommand(wobbleGoalArm::setTurretMiddle),
-                        new InstantCommand(wobbleGoalArm::closeClaw),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-90)),
-                        new WaitUntilCommand(wobbleGoalArm::atTargetAngle),
-
-                        new DriveForwardCommand(drivetrain, -60),
-                        //turn and shoot
-                        // turn and shoot
-                        new TurnToCommand(drivetrain, 178, telemetry),
-                        new ShootRingsCommand(shooterWheels, feeder, 2900, 4, 75),
-                        new InstantCommand(intake::stop),
-                        new TurnToCommand(drivetrain, 180, telemetry),
-
-                        new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretLeft)), new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(wobbleGoalX, wobbleGoalY), Math.toDegrees(0))),
-                        new TurnToCommand(drivetrain, 180, telemetry),
-                        new PlaceWobbleGoal(wobbleGoalArm),
-                        new SplineCommand(drivetrain, new Vector2d(highGoalX, highGoalY), Math.toRadians(180)),
-                        new TurnToCommand(drivetrain, 180, telemetry),
-                        //go to rings
-                        new InstantCommand(intake::intake, intake),
-                        new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
-                        new DriveForwardCommand(drivetrain, intakeFirst),
-                        new TurnToCommand(drivetrain, 185, telemetry),
-                        new FeedRingsCommand(feeder, 5, 50),
-                        new InstantCommand(wobbleGoalArm::setTurretMiddle),
-                        new DriveForwardCommand(drivetrain, intakeDistance),
-                        new TurnToCommand(drivetrain, 185, telemetry),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(0)),
-                        new DriveForwardCommand(drivetrain, -shootMoreDistance),
-                        new FeedRingsCommand(feeder, 3, 50),
-                        new TurnToCommand(drivetrain, 180, telemetry),
-                        new InstantCommand(intake::stop),
-                        new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
-                        new InstantCommand(wobbleGoalArm::openClaw),
-                        new TurnToCommand(drivetrain, Trajectories.BlueLeftTape.wobbleAngle, telemetry),
-                        new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueLeftTape.wobbleDistance, Trajectories.slowConstraint), new WaitCommand(500).andThen(new InstantCommand(wobbleGoalArm::closeClaw))),
-                        new WaitCommand(500),
-                        new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-100)),
-                        new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretLeft, wobbleGoalArm)), new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(wobbleGoalX+4, 26), Math.toDegrees(0))),
-                        new TurnToCommand(drivetrain, 180, telemetry),
-                        new PlaceWobbleGoal(wobbleGoalArm),
-                        new SplineCommand(drivetrain, Trajectories.velConstraint, false, new Vector2d(20, 30), Math.toRadians(180))
-
-
-                        )
-        );
+        schedule(new FourRingCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
 }

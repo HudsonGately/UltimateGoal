@@ -53,6 +53,7 @@ public class TeleopTest extends MatchOpMode {
     private Button slowModeTrigger, tripleFeedButton, singleFeedButton, shootButton, powershotButton, toggleClawButton, liftArmButton, lowerArmButton;
     private Button lowMidWobbleButton, highMidWobbleGoal;
     private Button manualButton;
+    private Button increaseSpeedButton;
     @Override
     public void robotInit() {
         // Drivetrain Hardware Initializations
@@ -114,7 +115,7 @@ public class TeleopTest extends MatchOpMode {
 
         lowMidWobbleButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> wobbleGoalArm.setWobbleGoal(-65));
         highMidWobbleGoal = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> wobbleGoalArm.setWobbleGoal(-100));
-
+        increaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenPressed(() -> shooterWheels.adjustShooterRPM(50));
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
     }
 

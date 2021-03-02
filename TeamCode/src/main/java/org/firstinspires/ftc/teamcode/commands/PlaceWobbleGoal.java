@@ -17,7 +17,7 @@ public class PlaceWobbleGoal extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoal::stopArm, wobbleGoal),
                 new WaitCommand(200),
                 new InstantCommand(() -> wobbleGoal.openClaw()),
-                new WaitCommand(200),
+                new WaitCommand(500),
                 new InstantCommand(wobbleGoal::liftWobbleGoal, wobbleGoal),
                 new WaitUntilCommand(wobbleGoal::atTargetAngle),
                 new InstantCommand(wobbleGoal::stopArm, wobbleGoal),
