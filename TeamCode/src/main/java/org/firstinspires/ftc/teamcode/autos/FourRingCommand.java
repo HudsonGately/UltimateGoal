@@ -56,7 +56,7 @@ public class FourRingCommand extends SequentialCommandGroup {
                 new TurnToCommand(drivetrain, 180, telemetry),
                 //go to rings
                 new InstantCommand(intake::intake, intake),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(3000)),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(2950)),
                 new DriveForwardCommand(drivetrain, intakeFirst),
                 new TurnToCommand(drivetrain, 188, telemetry),
                 new FeedRingsCommand(feeder, 5, 80),
@@ -74,7 +74,7 @@ public class FourRingCommand extends SequentialCommandGroup {
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, Trajectories.BlueLeftTape.wobbleDistance, Trajectories.slowConstraint), new WaitCommand(500).andThen(new InstantCommand(wobbleGoalArm::closeClaw))),
                 new WaitCommand(500),
                 new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-100)),
-                new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretLeft, wobbleGoalArm)), new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(wobbleGoalX+6, 28), Math.toDegrees(0))),
+                new ParallelCommandGroup(new WaitCommand(1000).andThen(new InstantCommand(wobbleGoalArm::setTurretLeft, wobbleGoalArm)), new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(wobbleGoalX+7, 28), Math.toDegrees(0))),
                 new TurnToCommand(drivetrain, 180, telemetry),
                 new PlaceWobbleGoal(wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
