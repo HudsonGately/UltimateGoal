@@ -20,6 +20,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+<<<<<<< HEAD
         mavenLocal()
         maven {
             url 'https://dl.bintray.com/openftc/maven';
@@ -29,6 +30,9 @@ allprojects {
             url = "https://dl.bintray.com/first-tech-challenge/ftcsdk/"
         }
         maven { url "https://jitpack.io" }
+=======
+        mavenCentral()
+>>>>>>> a4308f7eb7a8ebd18536c857d79c858f6c00ebd5
     }
 }
 
