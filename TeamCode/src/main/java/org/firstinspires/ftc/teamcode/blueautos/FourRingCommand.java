@@ -1,21 +1,18 @@
-package org.firstinspires.ftc.teamcode.autos;
+package org.firstinspires.ftc.teamcode.blueautos;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
-import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
@@ -29,7 +26,6 @@ import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.intakeFir
 import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.shootMoreDistance;
 import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.wobbleGoalX;
 import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.wobbleGoalY;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.shootDistance;
 
 public class FourRingCommand extends SequentialCommandGroup {
 

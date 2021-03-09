@@ -18,6 +18,7 @@ public abstract class MatchOpMode extends CommandOpMode {
     public static Canvas canvas = new Canvas();
     @Override
     public void initialize() {
+        
         telemetryList.clear();
         canvas.clear();
         dashboard.setTelemetryTransmissionInterval(50);

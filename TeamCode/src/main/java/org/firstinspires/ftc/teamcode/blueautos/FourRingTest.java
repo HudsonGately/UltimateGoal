@@ -1,13 +1,5 @@
-package org.firstinspires.ftc.teamcode.autos;
+package org.firstinspires.ftc.teamcode.blueautos;
 
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -19,13 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Trajectories;
-import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
-import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
-import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
-import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -34,15 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.highGoalX;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.highGoalY;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.intakeDistance;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.intakeFirst;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.shootMoreDistance;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.wobbleGoalX;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueLeftTape.wobbleGoalY;
-
-@Autonomous(name = "Four Ring Test")
+@Autonomous(name = "Four Ring Test", group = "Blue")
 public class FourRingTest extends MatchOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;

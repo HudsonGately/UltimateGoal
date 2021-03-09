@@ -33,6 +33,10 @@ public class SplineCommand extends CommandBase{
        this(drive, Trajectories.velConstraint, false, splinePos, endHeading);
     }
 
+    public SplineCommand(Drivetrain drive, Vector2d splinePos, double endHeading, boolean reverse) {
+        this(drive, Trajectories.velConstraint, reverse, splinePos, endHeading);
+    }
+
 
     @Override
     public void initialize() {

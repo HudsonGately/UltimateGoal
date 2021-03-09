@@ -13,6 +13,7 @@ public class TurnToCommand extends CommandBase {
     private final Drivetrain drive;
     private final double angle;
     double desired, firstAngle;
+    boolean weird = false;
     Telemetry tl;
     public TurnToCommand(Drivetrain drive, double angle, Telemetry tl) {
         this.drive = drive;
@@ -21,11 +22,19 @@ public class TurnToCommand extends CommandBase {
         addRequirements(drive);
     }
 
+    public TurnToCommand(Drivetrain drive, double angle, boolean weird, Telemetry tl) {
+        this.drive = drive;
+        this.angle = angle;
+        this.tl = tl;
+        this.weird = weird;
+        addRequirements(drive);
+    }
+
     @Override
     public void initialize() {
         double firstAngle = drive.getHeading();
         Util.logger(this, Level.INFO, "curr angle", firstAngle);
-        // if (firstAngle > 180) firstAngle = firstAngle - 360;
+        if (weird && firstAngle > 180) firstAngle = firstAngle - 360;
         desired = angle - firstAngle;
         Util.logger(this, Level.INFO, "adjusted angle", firstAngle);
         Util.logger(this, Level.INFO, "desired angle", desired);

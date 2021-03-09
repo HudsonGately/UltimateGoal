@@ -1,12 +1,5 @@
-package org.firstinspires.ftc.teamcode.autos;
+package org.firstinspires.ftc.teamcode.blueautos;
 
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -18,11 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Trajectories;
-import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
-import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
-import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -31,20 +19,16 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueCloseTape.highGoalX;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueCloseTape.highGoalY;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueCloseTape.wobbleGoalSquareDistance;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueCloseTape.wobbleGoalX;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueCloseTape.wobbleGoalY;
 
-@Autonomous(name = "Zero Ring Test")
-public class ZeroRingTest extends MatchOpMode {
+@Autonomous(name = "One Ring Test", group = "Blue")
+public class OneRingTest extends MatchOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
     private DcMotorEx shooterMotorFront, shooterMotorBack;
     private MotorEx arm;
     private ServoEx feedServo, clawServo, lazySusanServo;
+    private TouchSensor wobbleTouchSensor;
 
     // Gamepad
     private GamepadEx driverGamepad;
@@ -55,7 +39,6 @@ public class ZeroRingTest extends MatchOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
-    private TouchSensor wobbleTouchSensor;
 
     @Override
     public void robotInit() {
@@ -83,14 +66,14 @@ public class ZeroRingTest extends MatchOpMode {
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
-        drivetrain.setPoseEstimate(Trajectories.BlueCloseTape.startPose);
+        drivetrain.setPoseEstimate(Trajectories.BlueMid.startPose);
 
     }
 
     @Override
     public void matchStart() {
         feeder.retractFeed();
-        schedule(new ZeroRingCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
+        schedule(new OneRingCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
 }

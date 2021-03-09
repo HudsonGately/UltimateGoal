@@ -1,13 +1,5 @@
-package org.firstinspires.ftc.teamcode.autos;
+package org.firstinspires.ftc.teamcode.blueautos;
 
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -19,14 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Trajectories;
-import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
-import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.TrajectoryFollowerCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
-import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
-import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -35,24 +19,14 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.shootDistance;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.wobbleGoalSquareDistance;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.ringX;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.ringY;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.intakeDistance;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.intakeFirst;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueMid.shootMoreDistance;
-
-
-@Autonomous(name = "One Ring Test")
-public class OneRingTest extends MatchOpMode {
+@Autonomous(name = "Blue Zero Ring Test", group = "Blue")
+public class ZeroRingTest extends MatchOpMode {
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
     private DcMotorEx shooterMotorFront, shooterMotorBack;
     private MotorEx arm;
     private ServoEx feedServo, clawServo, lazySusanServo;
-    private TouchSensor wobbleTouchSensor;
 
     // Gamepad
     private GamepadEx driverGamepad;
@@ -63,6 +37,7 @@ public class OneRingTest extends MatchOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
+    private TouchSensor wobbleTouchSensor;
 
     @Override
     public void robotInit() {
@@ -90,14 +65,14 @@ public class OneRingTest extends MatchOpMode {
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
-        drivetrain.setPoseEstimate(Trajectories.BlueMid.startPose);
+        drivetrain.setPoseEstimate(Trajectories.BlueCloseTape.startPose);
 
     }
 
     @Override
     public void matchStart() {
         feeder.retractFeed();
-        schedule(new OneRingCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
+        schedule(new ZeroRingCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
 }
