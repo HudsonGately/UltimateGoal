@@ -37,7 +37,7 @@ public class TeleopTest extends MatchOpMode {
     private ServoEx feedServo, clawServo, lazySusanServo;
     private TouchSensor wobbleTouchSensor;
     // Gamepad
-    private GamepadEx driverGamepad;
+    private GamepadEx driverGamepad, operatorGamepad;
 
     // Subsystems
     private Drivetrain drivetrain;
@@ -83,6 +83,7 @@ public class TeleopTest extends MatchOpMode {
 
         gamepad1.setJoystickDeadzone(0.0f);
         driverGamepad = new GamepadEx(gamepad1);
+        operatorGamepad = new GamepadEx(gamepad2);
     }
 
     @Override
@@ -117,6 +118,9 @@ public class TeleopTest extends MatchOpMode {
         highMidWobbleGoal = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> wobbleGoalArm.setWobbleGoal(-100));
         increaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenPressed(() -> shooterWheels.adjustShooterRPM(50));
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
+        (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)).whenPressed(wobbleGoalArm::liftArmManual).whenReleased(wobbleGoalArm::stopArm);
+        (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)).whenPressed(wobbleGoalArm::lowerArmManual).whenReleased(wobbleGoalArm::stopArm);
+
     }
 
 

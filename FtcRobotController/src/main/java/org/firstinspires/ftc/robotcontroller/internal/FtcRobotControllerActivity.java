@@ -384,7 +384,7 @@ public class FtcRobotControllerActivity extends Activity
 
     FtcAboutActivity.setBuildTimeFromBuildConfig(BuildConfig.BUILD_TIME);
 
-    FtcDashboard.start();
+    FtcDashboard.start(false); // TODO I have changed this
     // check to see if there is a preferred Wi-Fi to use.
     checkPreferredChannel();
   }
