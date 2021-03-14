@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.redautos;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -10,6 +12,7 @@ import org.apache.commons.math3.stat.descriptive.moment.VectorialCovariance;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.commands.HomeWobbleArm;
+import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
@@ -42,29 +45,28 @@ public class RedFourHGCommand extends SequentialCommandGroup {
                 // Shoot powershots
                 new InstantCommand(() -> shooterWheels.setShooterRPM(2850), shooterWheels),
                 new TurnToCommand(drivetrain, 180, telemetry),
-                new TurnCommand(drivetrain, 45),
+                new TurnCommand(drivetrain, 40),
+
+                // Shoot Powershots
                 new InstantCommand(intake::intake, intake),
                 new DriveForwardCommand(drivetrain, 30, Trajectories.slowConstraint),
-                new TurnCommand(drivetrain, -19),
-                new WaitCommand(500),
-                new FeedRingsCommand(feeder, 2),
+                new TurnCommand(drivetrain, -15),
+                new FeedRingsCommand(feeder, 1),
+                new TurnCommand(drivetrain, 40),
 
+                // Shoot HG
                 new DriveForwardCommand(drivetrain, 12),
-                new InstantCommand(intake::stop),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(2900), shooterWheels),
+                new TurnToCommand(drivetrain, 195, telemetry),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(2850), shooterWheels),
+                new FeedRingsCommand(feeder, 3),
 
-                new TurnToCommand(drivetrain, 194, false, telemetry),
-                new InstantCommand(intake::intake, intake),
-                new WaitCommand(300),
-                new FeedRingsCommand(feeder, 5),
-                new InstantCommand(intake::stop),
                 new TurnToCommand(drivetrain, 180, telemetry),
-                new InstantCommand(shooterWheels::stopShooter),
-
-
+                new InstantCommand(shooterWheels::stopShooter, shooterWheels),
+                new InstantCommand(intake::stop, intake),
+                
                 // Go to FourSquare
                 new InstantCommand(wobbleGoalArm::setTurretRight, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(60, -26), 0, true),
+                new SplineCommand(drivetrain, new Vector2d(65, -25.5), 0, true),
                 new TurnToCommand(drivetrain, 180, false, telemetry),
                 new PlaceWobbleGoal(wobbleGoalArm),
 
@@ -74,9 +76,9 @@ public class RedFourHGCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 // Grab 2nd Wobble
-                new SplineCommand(drivetrain, new Vector2d(-33, -27), Math.toRadians(180)),
+                new SplineCommand(drivetrain, new Vector2d(-30, -26), Math.toRadians(180)),
                 new InstantCommand(wobbleGoalArm::closeClaw, wobbleGoalArm),
-                new WaitCommand(300),
+                new WaitCommand(500),
                 new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm),
 
                 // Place 2nd Wobble Goal
@@ -86,13 +88,6 @@ public class RedFourHGCommand extends SequentialCommandGroup {
                 new WaitCommand(300),
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 new SplineCommand(drivetrain, new Vector2d(15, 0), Math.toRadians(180), true)
-
-
-
-
-
-
-
 
 
                 );

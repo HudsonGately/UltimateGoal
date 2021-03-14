@@ -29,12 +29,13 @@ public class OneRingCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
                 new InstantCommand(wobbleGoalArm::closeClaw),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
-                new ParallelCommandGroup(new WaitCommand(750).andThen(new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-90))).andThen(new WaitCommand(500)).andThen(new InstantCommand(wobbleGoalArm::setTurretRight)), new DriveForwardCommand(drivetrain, -shootDistance)),
+                new ParallelCommandGroup(new WaitCommand(750).andThen(new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-110))).andThen(new WaitCommand(500)), new DriveForwardCommand(drivetrain, -shootDistance)),
                 // turn and shoot
                 new TurnToCommand(drivetrain, 178, telemetry),
                 new FeedRingsCommand(feeder, 4, 75),
                 new InstantCommand(intake::stop),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
+                new InstantCommand(wobbleGoalArm::setTurretRight),
                 new TurnToCommand(drivetrain, 180, telemetry),
                 //place wobble goal
                 new DriveForwardCommand(drivetrain, -Trajectories.BlueMid.wobbleGoalSquareDistance),
@@ -44,7 +45,7 @@ public class OneRingCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(2750)),
                 new SplineCommand(drivetrain, new Vector2d(Trajectories.BlueMid.ringX, Trajectories.BlueMid.ringY), Math.toRadians(180)),
                 //align for powershot
-                new TurnToCommand(drivetrain, 180, telemetry),
+                new TurnToCommand(drivetrain, 200, telemetry),
                 new FeedRingsCommand(feeder, 4, 75),
                 new InstantCommand(intake::stop),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0)),

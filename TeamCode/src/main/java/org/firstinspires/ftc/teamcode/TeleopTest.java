@@ -53,7 +53,7 @@ public class TeleopTest extends MatchOpMode {
     private Button intakeButton, outtakeButton;
     private Button slowModeTrigger, tripleFeedButton, singleFeedButton, shootButton, powershotButton, toggleClawButton, liftArmButton, lowerArmButton;
     private Button lowMidWobbleButton, highMidWobbleGoal;
-    private Button manualButton;
+    private Button autoPowershotButton;
     private Button increaseSpeedButton;
     @Override
     public void robotInit() {
@@ -113,11 +113,11 @@ public class TeleopTest extends MatchOpMode {
         lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whenPressed(wobbleGoalArm::placeWobbleGoal);
 
 
-        manualButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenPressed(new TeleopPowershot(drivetrain, shooterWheels, feeder, telemetry));
+        autoPowershotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenPressed(new TeleopPowershot(drivetrain, shooterWheels, feeder, telemetry));
 
         lowMidWobbleButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> wobbleGoalArm.setWobbleGoal(-65));
         highMidWobbleGoal = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> wobbleGoalArm.setWobbleGoal(-100));
-        increaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenPressed(() -> shooterWheels.adjustShooterRPM(50));
+        //increaseSpeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenPressed(() -> shooterWheels.adjustShooterRPM(50));
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
         (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)).whenPressed(wobbleGoalArm::liftArmManual).whenReleased(wobbleGoalArm::stopArm);
         (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)).whenPressed(wobbleGoalArm::lowerArmManual).whenReleased(wobbleGoalArm::stopArm);
