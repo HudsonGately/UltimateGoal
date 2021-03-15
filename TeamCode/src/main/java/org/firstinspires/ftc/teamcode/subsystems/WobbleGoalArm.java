@@ -142,6 +142,9 @@ public class WobbleGoalArm extends SubsystemBase {
     public void setTurretRight() {
         setLazySusanPosition(0.143);
     }
+    public void setTurretFarRight() {
+        setLazySusanPosition(0);
+    }
     public void setTurretMiddle() {
         setLazySusanPosition(0.566);
     }
