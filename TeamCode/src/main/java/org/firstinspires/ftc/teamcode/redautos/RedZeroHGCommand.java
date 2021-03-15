@@ -34,25 +34,30 @@ public class RedZeroHGCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::closeClaw),
                 new InstantCommand(feeder::retractFeed),
                 new HomeWobbleArm(wobbleGoalArm),
+
                 // Spin up wheels
                 new InstantCommand(() -> shooterWheels.setShooterRPM(2950), shooterWheels),
+
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
                 new TurnToCommand(drivetrain, 177, telemetry),
+
                 // Shoot rings
                 new FeedRingsCommand(feeder, 3),
                 new InstantCommand(shooterWheels::stopShooter),
                 new TurnToCommand(drivetrain, 180, telemetry),
+
                 // Go to ZeroSquare
                 new TurnCommand(drivetrain, 110),
                 new DriveForwardCommand(drivetrain, 25),
                 new PlaceWobbleGoal(wobbleGoalArm),
+
                 // Go to Second Wobble Goal
                 new TurnToCommand(drivetrain, 180, telemetry),
                 new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::openClaw),
-                new SplineCommand(drivetrain, new Vector2d(-37, -24), Math.toRadians(180)),
+                new SplineCommand(drivetrain, new Vector2d(-33, -24), Math.toRadians(180)),
                 new InstantCommand(wobbleGoalArm::closeClaw),
                 new WaitCommand(800),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
@@ -63,12 +68,6 @@ public class RedZeroHGCommand extends SequentialCommandGroup {
                 new TurnCommand(drivetrain, 90),
                 new PlaceWobbleGoal(wobbleGoalArm),
                 new DriveForwardCommand(drivetrain, -5)
-
-
-
-
-
-
                 );
     }
 }

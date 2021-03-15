@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
+import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
@@ -41,7 +42,7 @@ public class RedFourHGAltCommand extends SequentialCommandGroup {
 
                 // Place 1st Wobble Goal
                 new InstantCommand(wobbleGoalArm::setTurretRight, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(65, -25.5), 0, true),
+                new SplineCommand(drivetrain, new Vector2d(60, -25.5), 0, true),
                 new TurnToCommand(drivetrain, 180, false, telemetry),
                 new PlaceWobbleGoal(wobbleGoalArm),
 
@@ -50,17 +51,35 @@ public class RedFourHGAltCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 // Grab 2nd Wobble
-                new SplineCommand(drivetrain, new Vector2d(-30, -26), Math.toRadians(180)),
+                new SplineCommand(drivetrain, new Vector2d(-32, -30), Math.toRadians(180)),
                 new InstantCommand(wobbleGoalArm::closeClaw, wobbleGoalArm),
                 new WaitCommand(500),
                 new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm),
+                new InstantCommand(wobbleGoalArm::setTurretFarRight, wobbleGoalArm),
 
-                // Place 2nd Wobble Goal
-                new SplineCommand(drivetrain, new Vector2d(67, -20), 0, true),
+                // Place 2nd kkkblk Goalk
+                new SplineCommand(drivetrain, new Vector2d(64, -20), 0, true),
                 new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new WaitCommand(300),
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(-15, -12), Math.toRadians(0))
+                new InstantCommand(intake::intake, intake),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(2900), shooterWheels),
+                new SplineCommand(drivetrain, new Vector2d(-18, -12), Math.toRadians(180)),
+                new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
+                new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
+                // HGkkkkk
+                new TurnToCommand(drivetrain, 188, telemetry),
+                new FeedRingsCommand(feeder, 2),
+                new TurnToCommand(drivetrain, 170, telemetry),
+                new DriveForwardCommand(drivetrain, 34),
+                new DriveForwardCommand(drivetrain, -34),
+                new TurnToCommand(drivetrain, 188, telemetry),
+                new FeedRingsCommand(feeder, 6),
+                new InstantCommand(intake::stop, intake),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
+                new DriveForwardCommand(drivetrain, -28)
+
+
 
 
                 );
