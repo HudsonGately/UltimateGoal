@@ -34,21 +34,19 @@ public class TeleopPowershot extends SequentialCommandGroup {
     public TeleopPowershot(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Telemetry telemetry) {
         addCommands(
                 // Starts shooter
-                new InstantCommand(() -> shooterWheels.setShooterRPM(2655)),
-                new InstantCommand(feeder::retractFeed),
-                new WaitUntilCommand(shooterWheels::atSetpoint),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(2655), shooterWheels),
+                new InstantCommand(feeder::retractFeed, feeder),
+                new WaitUntilCommand(shooterWheels::atSetpoint).raceWith(new WaitCommand(800)),
 
                 // Shoots/turn repeat
                 new FeedRingsCommand(feeder, 1),
                 new TurnCommand(drivetrain, 6),
                 new WaitCommand(200),
                 new FeedRingsCommand(feeder, 1),
-                new TurnCommand(drivetrain, 4.75),
+                new TurnCommand(drivetrain, 7),
                 new WaitCommand(200),
                 new FeedRingsCommand(feeder, 1),
-                new InstantCommand(shooterWheels::stopShooter)
-
-
+                new InstantCommand(shooterWheels::stopShooter, shooterWheels)
                 );
     }
 }

@@ -38,6 +38,7 @@ public class CompAuto extends MatchOpMode {
     private ServoEx feedServo, clawServo, lazySusanServo;
     private TouchSensor wobbleTouchSensor;
     private ServoEx releaseShooter;
+    private ServoEx intakeServo;
 
     // Gamepad
     private GamepadEx driverGamepad;
@@ -55,6 +56,7 @@ public class CompAuto extends MatchOpMode {
         // Drivetrain Hardware Initializations
         // Intake hardware Initializations
         intakeMotor = new MotorEx(hardwareMap, "intake");
+        intakeServo = new SimpleServo(hardwareMap, "intake_wall_servo", 0, 180);
 
         // Shooter hardware initializations
         shooterMotorBack = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_back");
@@ -72,7 +74,7 @@ public class CompAuto extends MatchOpMode {
         // Subsystems
         drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap), telemetry);
         drivetrain.init();
-        intake = new Intake(intakeMotor, telemetry);
+        intake = new Intake(intakeMotor, intakeServo, telemetry);
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);

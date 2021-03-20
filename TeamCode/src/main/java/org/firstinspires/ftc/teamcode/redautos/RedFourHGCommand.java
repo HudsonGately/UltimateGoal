@@ -55,7 +55,7 @@ public class RedFourHGCommand extends SequentialCommandGroup {
                 new TurnCommand(drivetrain, 40),
 
                 // Shoot HG
-                new DriveForwardCommand(drivetrain, 12),
+                new DriveForwardCommand(drivetrain, 11, Trajectories.slowConstraint),
                 new TurnToCommand(drivetrain, 195, telemetry),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(2850), shooterWheels),
                 new FeedRingsCommand(feeder, 3),
@@ -63,7 +63,7 @@ public class RedFourHGCommand extends SequentialCommandGroup {
                 new TurnToCommand(drivetrain, 180, telemetry),
                 new InstantCommand(shooterWheels::stopShooter, shooterWheels),
                 new InstantCommand(intake::stop, intake),
-                
+
                 // Go to FourSquare
                 new InstantCommand(wobbleGoalArm::setTurretRight, wobbleGoalArm),
                 new SplineCommand(drivetrain, new Vector2d(65, -25.5), 0, true),

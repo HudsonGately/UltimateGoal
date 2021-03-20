@@ -27,6 +27,7 @@ public class FourRingTest extends MatchOpMode {
     private DcMotorEx shooterMotorFront, shooterMotorBack;
     private MotorEx arm;
     private ServoEx feedServo, clawServo, lazySusanServo;
+    private ServoEx intakeServo;
     private TouchSensor wobbleTouchSensor;
 
     // Gamepad
@@ -44,7 +45,7 @@ public class FourRingTest extends MatchOpMode {
 // Drivetrain Hardware Initializations
         // Intake hardware Initializations
         intakeMotor = new MotorEx(hardwareMap, "intake");
-
+        intakeServo = new SimpleServo(hardwareMap, "intake_wall_servo", 0, 180);
         // Shooter hardware initializations
         shooterMotorBack = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_back");
         shooterMotorFront = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_front");
@@ -60,7 +61,7 @@ public class FourRingTest extends MatchOpMode {
         // Subsystems
         drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap), telemetry);
         drivetrain.init();
-        intake = new Intake(intakeMotor, telemetry);
+        intake = new Intake(intakeMotor, intakeServo, telemetry);
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);

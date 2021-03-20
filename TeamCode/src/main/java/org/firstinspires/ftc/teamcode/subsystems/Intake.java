@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Util;
@@ -18,9 +19,10 @@ public class Intake extends SubsystemBase {
 
     Telemetry telemetry;
     private MotorEx intake;
-
-    public Intake(MotorEx intake, Telemetry tl) {
+    private ServoEx servo;
+    public Intake(MotorEx intake, ServoEx servo, Telemetry tl) {
         this.intake = intake;
+        this.servo = servo;
         this.telemetry = tl;
     }
 
@@ -32,7 +34,12 @@ public class Intake extends SubsystemBase {
     public void set(double speed) {
         intake.set(speed);
     }
-
+    public void dropIntake() {
+        servo.setPosition(0.28);
+    }
+    public void liftIntake() {
+        servo.setPosition(0.6);
+    }
     public void intake() {
         set(INTAKE_SPEED);
     }
