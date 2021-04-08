@@ -42,10 +42,10 @@ public class OneRingCommand extends SequentialCommandGroup {
                 new PlaceWobbleGoal(wobbleGoalArm),
                 //go to ring
                 new InstantCommand(intake::intake),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(2750)),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(2775)),
                 new SplineCommand(drivetrain, new Vector2d(Trajectories.BlueMid.ringX, Trajectories.BlueMid.ringY), Math.toRadians(180)),
                 //align for powershot
-                new TurnToCommand(drivetrain, 200, telemetry),
+                new TurnToCommand(drivetrain, 203, telemetry),
                 new FeedRingsCommand(feeder, 4, 75),
                 new InstantCommand(intake::stop),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
@@ -64,7 +64,7 @@ public class OneRingCommand extends SequentialCommandGroup {
                 new WaitCommand(1000),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal),
                 new ParallelCommandGroup(
-                        new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(45, 13), Math.toRadians(0)),
+                        new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(43, 20), Math.toRadians(0)),
                         new InstantCommand(wobbleGoalArm::setTurretLeft)
                 ),
                 new TurnToCommand(drivetrain, 180, telemetry),

@@ -29,7 +29,7 @@ public class WobbleGoalArm extends SubsystemBase {
     private boolean automatic;
 
     public static double CPR = 2786;
-    public static double ARM_SPEED = 0.3;
+    public static double ARM_SPEED = 0.8;
 
     private double encoderOffset = 0;
 
@@ -107,7 +107,7 @@ public class WobbleGoalArm extends SubsystemBase {
     public void placeWobbleGoal() {
         // TODO CHNAGNE
         automatic = true;
-        controller.setSetPoint(5);
+        controller.setSetPoint(7);
     }
     public void liftWobbleGoal() {
 
@@ -131,7 +131,7 @@ public class WobbleGoalArm extends SubsystemBase {
         claw.setPosition(position);
     }
     public void openClaw() { setClawPosition(.8); }
-    public void closeClaw() { setClawPosition(0.2525); }
+    public void closeClaw() { setClawPosition(0.3); }
 
     public void setLazySusanPosition(double position) {
         lazySusan.setPosition(position);

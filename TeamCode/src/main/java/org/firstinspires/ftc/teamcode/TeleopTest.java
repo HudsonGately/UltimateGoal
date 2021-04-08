@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -130,7 +131,7 @@ public class TeleopTest extends MatchOpMode {
         intake.liftIntake();
         schedule(new InstantCommand(feeder::retractFeed));
         schedule(new InstantCommand(() -> wobbleGoalArm.setTurretMiddle()));
-        schedule(new HomeWobbleArm(wobbleGoalArm));
+        schedule(new HomeWobbleArm(wobbleGoalArm).raceWith(new WaitCommand(700)));
     }
 
     @Override

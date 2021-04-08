@@ -42,7 +42,8 @@ public class RedFourHGAltCommand extends SequentialCommandGroup {
 
                 // Place 1st Wobble Goal
                 new InstantCommand(wobbleGoalArm::setTurretRight, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(60, -25.5), 0, true),
+                new SplineCommand(drivetrain, new Vector2d(60, -27.5), 0, true),
+                new InstantCommand(wobbleGoalArm::setTurretFarRight, wobbleGoalArm),
                 new TurnToCommand(drivetrain, 180, false, telemetry),
                 new PlaceWobbleGoal(wobbleGoalArm),
 
@@ -51,27 +52,32 @@ public class RedFourHGAltCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 // Grab 2nd Wobble
-                new SplineCommand(drivetrain, new Vector2d(-32.5, -27), Math.toRadians(180)),
+                new SplineCommand(drivetrain, new Vector2d(-33, -26.5), Math.toRadians(180)),
                 new InstantCommand(wobbleGoalArm::closeClaw, wobbleGoalArm),
                 new WaitCommand(500),
                 new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretFarRight, wobbleGoalArm),
 
                 // Place 2nd Wobble Goal
-                new SplineCommand(drivetrain, new Vector2d(64, -20), 0, true),
+                new SplineCommand(drivetrain, new Vector2d(64.5, -25), 0, true),
                 new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new WaitCommand(300),
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 // Drive to Rings
                 new InstantCommand(intake::dropIntake, intake),
                 new InstantCommand(intake::intake, intake),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(3000), shooterWheels),
-                new SplineCommand(drivetrain, new Vector2d(-24, -12), Math.toRadians(180)),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(2900), shooterWheels),
+                new SplineCommand(drivetrain, new Vector2d(-29, -8), Math.toRadians(180)),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 // Shoot HG
-                new TurnToCommand(drivetrain, 188, telemetry),
-                new FeedRingsCommand(feeder, 2),
+                new TurnToCommand(drivetrain, 190, telemetry),
+                new InstantCommand(intake::outtake, intake),
+                new WaitCommand(150),
+                new InstantCommand(intake::intake, intake),
+                new DriveForwardCommand(drivetrain, 5, Trajectories.velConstraint),
+                new FeedRingsCommand(feeder, 6),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(3000), shooterWheels),
                 new TurnToCommand(drivetrain, 170, telemetry),
                 new DriveForwardCommand(drivetrain, 34, Trajectories.slowConstraint),
                 new WaitCommand(100),
@@ -83,7 +89,7 @@ public class RedFourHGAltCommand extends SequentialCommandGroup {
                 new FeedRingsCommand(feeder, 6),
                 new InstantCommand(intake::stop, intake),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-                new DriveForwardCommand(drivetrain, -28)
+                new DriveForwardCommand(drivetrain, -30)
 
 
 

@@ -33,7 +33,6 @@ public class RedZeroHGCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
                 new InstantCommand(wobbleGoalArm::closeClaw),
                 new InstantCommand(feeder::retractFeed),
-                new HomeWobbleArm(wobbleGoalArm),
 
                 // Spin up wheels
                 new InstantCommand(() -> shooterWheels.setShooterRPM(2950), shooterWheels),
@@ -67,7 +66,7 @@ public class RedZeroHGCommand extends SequentialCommandGroup {
                 new SplineCommand(drivetrain, new Vector2d(9, -22), Math.toRadians(0), true),
                 new TurnCommand(drivetrain, 90),
                 new PlaceWobbleGoal(wobbleGoalArm),
-                new DriveForwardCommand(drivetrain, -5)
+                new DriveForwardCommand(drivetrain, -24)
                 );
     }
 }
