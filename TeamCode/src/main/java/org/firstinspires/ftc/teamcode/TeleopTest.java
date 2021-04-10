@@ -58,7 +58,7 @@ public class TeleopTest extends MatchOpMode {
     private Button increaseSpeedButton;
     @Override
     public void robotInit() {
-        // Drivetrain Hardware Initializations
+        //Drivetrain Hardware Initializations
         // Intake hardware Initializations
         intakeMotor = new MotorEx(hardwareMap, "intake");
 
@@ -95,7 +95,8 @@ public class TeleopTest extends MatchOpMode {
         slowModeTrigger = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.RIGHT_TRIGGER)).whileHeld(new SlowDriveCommand(drivetrain, driverGamepad));
 
         singleFeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).whenPressed(new FeedRingsCommand(feeder, 1));
-        tripleFeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whenPressed(new FeedRingsCommand(feeder, 3));
+        // TRIPLE SHOT SPEED *********************
+        tripleFeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whenPressed(new FeedRingsCommand(feeder, 4, 5));
         shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).toggleWhenPressed(
                 new InstantCommand(() -> shooterWheels.setShooterRPM(ShooterWheels.TARGET_SPEED), shooterWheels),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
@@ -115,7 +116,7 @@ public class TeleopTest extends MatchOpMode {
         lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whenPressed(wobbleGoalArm::placeWobbleGoal);
 
 
-        autoPowershotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenHeld(new TeleopPowershot(drivetrain, shooterWheels, feeder, telemetry));
+        //autoPowershotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenHeld(new TeleopPowershot(drivetrain, shooterWheels, feeder, telemetry));
 
         lowMidWobbleButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> wobbleGoalArm.setWobbleGoal(-65));
         (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).toggleWhenPressed(new InstantCommand(intake::dropIntake, intake), new InstantCommand(intake::liftIntake, intake));

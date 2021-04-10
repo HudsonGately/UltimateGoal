@@ -28,18 +28,18 @@ public class ShooterWheels extends SubsystemBase {
     public static int SHOOTER_WHEEL_DIAMETER = 4;
     public static double SHOOTER_TPR = 28;
 
-    public static double SHOOTER_P = 0.0035;
-    public static double SHOOTER_F = 0.0002335;
+    public static double SHOOTER_P = 0.0015;
+    public static double SHOOTER_F = 0.000185;
 
     // *************************************************** TELEOP SPEED *************** /
-    public static double TARGET_SPEED = 2950;
+    public static double TARGET_SPEED = 3450;
     private PIDFController shooterWheelsPID;
     private double shooterTarget, offset;
     DcMotorEx frontMotor, backMotor;
 
     public ShooterWheels(DcMotorEx frontMotor, DcMotorEx backMotor, Telemetry tl) {
-        frontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        backMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        backMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         this.frontMotor = frontMotor;
         this.backMotor = backMotor;
         shooterWheelsPID = new PIDFController(SHOOTER_P, 0, 0, SHOOTER_F);
@@ -91,16 +91,14 @@ public class ShooterWheels extends SubsystemBase {
     }
 
     public double getShooterRPM() {
-        return (60 * ((double) frontMotor.getVelocity() / (double) SHOOTER_TPR)) / 1.125;
+        return (60 * ((double) frontMotor.getVelocity() / (double) SHOOTER_TPR));
     }
 
     public double getBackShooterRPM() {
-        return (60 * ((double) backMotor.getVelocity() / (double) SHOOTER_TPR)) / 1.125;
+        return (60 * ((double) backMotor.getVelocity() / (double) SHOOTER_TPR));
     }
 
     public boolean atSetpoint() {
         return shooterWheelsPID.atSetPoint();
     }
-
-
 }
