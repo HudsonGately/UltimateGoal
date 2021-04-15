@@ -30,11 +30,11 @@ public class RedFourHGAltCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::closeClaw),
                 new InstantCommand(feeder::retractFeed),
                 // Spin up wheels
-                new InstantCommand(() -> shooterWheels.setShooterRPM(2950), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(3650), shooterWheels),
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
-                new TurnToCommand(drivetrain, 177, telemetry),
+                new TurnToCommand(drivetrain, 170, telemetry),
                 // Shoot rings
                 new FeedRingsCommand(feeder, 3),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
@@ -52,7 +52,7 @@ public class RedFourHGAltCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 // Grab 2nd Wobble
-                new SplineCommand(drivetrain, new Vector2d(-33, -26.5), Math.toRadians(180)),
+                new SplineCommand(drivetrain, new Vector2d(-33, -26), Math.toRadians(180)),
                 new InstantCommand(wobbleGoalArm::closeClaw, wobbleGoalArm),
                 new WaitCommand(500),
                 new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm),
@@ -66,33 +66,18 @@ public class RedFourHGAltCommand extends SequentialCommandGroup {
                 // Drive to Rings
                 new InstantCommand(intake::dropIntake, intake),
                 new InstantCommand(intake::intake, intake),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(2900), shooterWheels),
-                new SplineCommand(drivetrain, new Vector2d(-29, -8), Math.toRadians(180)),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(3650), shooterWheels),
+                new SplineCommand(drivetrain, new Vector2d(-29, -15.5), Math.toRadians(180)),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 // Shoot HG
-                new TurnToCommand(drivetrain, 190, telemetry),
+                new TurnToCommand(drivetrain, 175, telemetry),
                 new InstantCommand(intake::outtake, intake),
                 new WaitCommand(150),
                 new InstantCommand(intake::intake, intake),
-                new DriveForwardCommand(drivetrain, 5, Trajectories.velConstraint),
+                new DriveForwardCommand(drivetrain, -20, Trajectories.velConstraint),
                 new FeedRingsCommand(feeder, 6),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(3000), shooterWheels),
-                new TurnToCommand(drivetrain, 170, telemetry),
-                new DriveForwardCommand(drivetrain, 34, Trajectories.slowConstraint),
-                new WaitCommand(100),
-                new InstantCommand(intake::outtake, intake),
-                new WaitCommand(150),
-                new InstantCommand(intake::intake, intake),
-                new DriveForwardCommand(drivetrain, -35),
-                new TurnToCommand(drivetrain, 188, telemetry),
-                new FeedRingsCommand(feeder, 6),
-                new InstantCommand(intake::stop, intake),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-                new DriveForwardCommand(drivetrain, -30)
-
-
-
+                new InstantCommand(() -> shooterWheels.setShooterRPM(3650), shooterWheels)
 
                 );
     }

@@ -96,13 +96,13 @@ public class TeleopTest extends MatchOpMode {
 
         singleFeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).whenPressed(new FeedRingsCommand(feeder, 1));
         // TRIPLE SHOT SPEED *********************
-        tripleFeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whenPressed(new FeedRingsCommand(feeder, 4, 5));
+        tripleFeedButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_BUMPER)).whenPressed(new FeedRingsCommand(feeder, 4,25 ));
         shootButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_BUMPER)).toggleWhenPressed(
                 new InstantCommand(() -> shooterWheels.setShooterRPM(ShooterWheels.TARGET_SPEED), shooterWheels),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
 
         powershotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).toggleWhenPressed(
-                new InstantCommand(() -> shooterWheels.setShooterRPM(2620), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(2950), shooterWheels),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
         intakeButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whileHeld(intake::intake).whenReleased(intake::stop);
         outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whileHeld(intake::outtake).whenReleased(intake::stop);
@@ -116,10 +116,10 @@ public class TeleopTest extends MatchOpMode {
         lowerArmButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whenPressed(wobbleGoalArm::placeWobbleGoal);
 
 
-        //autoPowershotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenHeld(new TeleopPowershot(drivetrain, shooterWheels, feeder, telemetry));
+        (new GamepadButton(driverGamepad, GamepadKeys.Button.BACK)).whenPressed(() -> shooterWheels.adjustShooterRPM(200));
 
         lowMidWobbleButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> wobbleGoalArm.setWobbleGoal(-65));
-        (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).toggleWhenPressed(new InstantCommand(intake::dropIntake, intake), new InstantCommand(intake::liftIntake, intake));
+        (new GamepadButton(driverGamepad, GamepadKeys.Button.RIGHT_STICK_BUTTON)).toggleWhenPressed(new InstantCommand(intake::dropIntake, intake), new InstantCommand(intake::liftIntake, intake));
         drivetrain.setDefaultCommand(new DefaultDriveCommand(drivetrain, driverGamepad));
         (new GamepadButton(operatorGamepad, GamepadKeys.Button.Y)).whenPressed(wobbleGoalArm::liftArmManual).whenReleased(wobbleGoalArm::stopArm);
         (new GamepadButton(operatorGamepad, GamepadKeys.Button.X)).whenPressed(wobbleGoalArm::lowerArmManual).whenReleased(wobbleGoalArm::stopArm);
@@ -132,7 +132,6 @@ public class TeleopTest extends MatchOpMode {
         intake.liftIntake();
         schedule(new InstantCommand(feeder::retractFeed));
         schedule(new InstantCommand(() -> wobbleGoalArm.setTurretMiddle()));
-        schedule(new HomeWobbleArm(wobbleGoalArm).raceWith(new WaitCommand(700)));
     }
 
     @Override

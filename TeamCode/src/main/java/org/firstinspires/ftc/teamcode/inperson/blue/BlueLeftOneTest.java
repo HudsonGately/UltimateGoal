@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.redautos;
+package org.firstinspires.ftc.teamcode.inperson.blue;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -13,9 +11,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.teamcode.Trajectories;
-import org.firstinspires.ftc.teamcode.blueautos.OneRingCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
+import org.firstinspires.ftc.teamcode.inperson.red.RightRedOneCommand;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -23,8 +20,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-@Autonomous(name = "RED One Ring Test", group = "RED")
-public class RedOneRingTest extends MatchOpMode {
+@Autonomous(name = "Blue Left One Test", group = "Blue")
+public class BlueLeftOneTest extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;
     public static double startPoseHeading = 180;
@@ -78,11 +75,8 @@ public class RedOneRingTest extends MatchOpMode {
 
     @Override
     public void matchStart() {
-        schedule(new SequentialCommandGroup(
-                new InstantCommand(() -> drivetrain.setPoseEstimate(Trajectories.BlueMid.startPose)),
-                new OneRingCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
-        ));
-
+        feeder.retractFeed();
+        schedule(new LeftBlueOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
 }

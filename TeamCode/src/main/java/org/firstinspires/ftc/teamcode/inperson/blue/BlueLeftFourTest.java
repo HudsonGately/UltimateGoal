@@ -1,10 +1,6 @@
-package org.firstinspires.ftc.teamcode.redautos;
+package org.firstinspires.ftc.teamcode.inperson.blue;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SelectCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -15,26 +11,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.teamcode.Trajectories;
-import org.firstinspires.ftc.teamcode.UGDetector2;
-import org.firstinspires.ftc.teamcode.Util;
-import org.firstinspires.ftc.teamcode.blueautos.FourRingCommand;
-import org.firstinspires.ftc.teamcode.blueautos.OneRingCommand;
-import org.firstinspires.ftc.teamcode.blueautos.ZeroRingCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
-import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-import java.util.HashMap;
-import java.util.logging.Level;
-
-@Autonomous(name = "Competition Autonomous (Red)", group = "Red")
-public class RedCompAuto extends MatchOpMode {
+@Autonomous(name = "Blue Left Four Test", group = "Blue")
+public class BlueLeftFourTest extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;
     public static double startPoseHeading = 180;
@@ -44,28 +30,24 @@ public class RedCompAuto extends MatchOpMode {
     private DcMotorEx shooterMotorFront, shooterMotorBack;
     private MotorEx arm;
     private ServoEx feedServo, clawServo, lazySusanServo;
-    private TouchSensor wobbleTouchSensor;
-    private ServoEx releaseShooter;
     private ServoEx intakeServo;
+    private TouchSensor wobbleTouchSensor;
 
     // Gamepad
     private GamepadEx driverGamepad;
 
-    // Subsystems
     private Drivetrain drivetrain;
     private ShooterWheels shooterWheels;
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
-    private Vision vision;
 
     @Override
     public void robotInit() {
-        // Drivetrain Hardware Initializations
+// Drivetrain Hardware Initializations
         // Intake hardware Initializations
         intakeMotor = new MotorEx(hardwareMap, "intake");
         intakeServo = new SimpleServo(hardwareMap, "intake_wall_servo", 0, 180);
-
         // Shooter hardware initializations
         shooterMotorBack = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_back");
         shooterMotorFront = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_front");
@@ -77,7 +59,6 @@ public class RedCompAuto extends MatchOpMode {
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
         lazySusanServo = new SimpleServo(hardwareMap, "lazy_susan", 0, 360);
         wobbleTouchSensor = hardwareMap.get(TouchSensor.class, "Touch");
-        releaseShooter = new SimpleServo(hardwareMap, "release_servo", 0, 180);
 
         // Subsystems
         drivetrain = new Drivetrain(new SampleTankDrive(hardwareMap), telemetry);
@@ -86,36 +67,14 @@ public class RedCompAuto extends MatchOpMode {
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
-        drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
-        vision = new Vision(hardwareMap, "webcam", telemetry);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
 
     }
 
     @Override
-    public void disabledPeriodic() {
-        Util.logger(this, telemetry, Level.INFO, "Current Stack", vision.getCurrentStack());
-    }
-
-    @Override
     public void matchStart() {
         feeder.retractFeed();
-        releaseShooter.setPosition(0.2);
-        wobbleGoalArm.setOffset();
-        schedule(
-                new SelectCommand(new HashMap<Object, Command>() {{
-                    put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
-                            new RedFourHGAltCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
-                    ));
-                    put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
-                            new InstantCommand(() -> drivetrain.setPoseEstimate(Trajectories.BlueMid.startPose)),
-                            new OneRingCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
-                    ));
-                    put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
-                            new RedZeroHGCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
-                    ));
-                }}, vision::getCurrentStack)
-        );
+        schedule(new LeftBlueFourCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
 }

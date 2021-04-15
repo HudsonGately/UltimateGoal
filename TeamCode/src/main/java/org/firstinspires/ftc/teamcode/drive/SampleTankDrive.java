@@ -71,7 +71,7 @@ public class
 SampleTankDrive extends TankDrive {
     public static PIDCoefficients AXIAL_PID = new PIDCoefficients(12, 0, 0);
     public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0.00012, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(14, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(14, 0, 0.1);
     public static PIDCoefficients LEFT_DRIVE_PID =new PIDCoefficients(0.01, 0, 0);
     public static PIDCoefficients RIGHT_DRIVE_PID =new PIDCoefficients(0.01, 0, 0);
     private PIDController leftDriveVeloPID;
@@ -154,8 +154,8 @@ SampleTankDrive extends TankDrive {
 
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
