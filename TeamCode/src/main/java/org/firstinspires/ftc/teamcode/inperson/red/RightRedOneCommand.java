@@ -36,24 +36,24 @@ public class RightRedOneCommand extends SequentialCommandGroup {
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
-                new TurnToCommand(drivetrain, 190, telemetry),
+                new TurnToCommand(drivetrain, 195, telemetry),
 
                 // Shoot 3 rings
                 new FeedRingsCommand(feeder, 3),
                 //Place Wobble Goal
                 new TurnToCommand(drivetrain, 170, telemetry),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-                new DriveForwardCommand(drivetrain, -40),
+                new DriveForwardCommand(drivetrain, -45),
                 new InstantCommand(wobbleGoalArm::setTurretLeft,wobbleGoalArm),
                 new WaitCommand(500),
-                new InstantCommand(wobbleGoalArm::placeWobbleGoal,wobbleGoalArm),
+                new PlaceWobbleGoal(wobbleGoalArm),
                 new WaitCommand(500),
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(15.5, -20), Math.toRadians(0))
+                new SplineCommand(drivetrain, new Vector2d(15.5, -10), Math.toRadians(0)),
                 // new DriveForwardCommand(drivetrain, 30),
-                // new TurnCommand(drivetrain,90),
+                new TurnToCommand(drivetrain,0, true, telemetry)
 
                // new DriveForwardCommand(drivetrain, 10)
 
