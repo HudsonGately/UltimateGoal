@@ -47,7 +47,7 @@ public class LeftBlueZeroCommand extends SequentialCommandGroup {
                 new WaitCommand(500),
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 new WaitCommand(500),
-                new DriveForwardCommand(drivetrain, -35),
+                new DriveForwardCommand(drivetrain, -38),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal,wobbleGoalArm),
                 new TurnCommand(drivetrain, -90)
 

@@ -13,23 +13,23 @@ import java.util.logging.Level;
 @Config
 public class Vision extends SubsystemBase {
 
-    public static double TOP_PERCENT = 0.38;
-    public static double BOTTOM_PERCENT = 0.48;
+    public static double TOP_PERCENT = 0.39;
+    public static double BOTTOM_PERCENT = 0.52;
     public static double WIDTH_PERCENT = 0.9;
     private Telemetry telemetry;
     private UGDetector2 ringDetector;
     private UGDetector2.Stack currentStack;
 
-    public Vision(HardwareMap hw, String webcamName, Telemetry tl) {
+    public Vision(HardwareMap hw, String webcamName, Telemetry tl, double top, double bottom, double width) {
         ringDetector = new UGDetector2(hw, webcamName, tl);
         ringDetector.init();
 
         telemetry = tl;
         currentStack = ringDetector.getStack();
-        ringDetector.setBottomRectangle(BOTTOM_PERCENT, WIDTH_PERCENT);
-        ringDetector.setTopRectangle(TOP_PERCENT, WIDTH_PERCENT);
+        ringDetector.setBottomRectangle(bottom, width);
+        ringDetector.setTopRectangle(top, width);
 
-        ringDetector.setRectangleSize(25, 10);
+        ringDetector.setRectangleSize(5, 5);
 
     }
 
