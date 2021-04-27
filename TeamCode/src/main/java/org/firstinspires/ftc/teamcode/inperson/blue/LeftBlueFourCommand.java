@@ -44,14 +44,14 @@ public class LeftBlueFourCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
                 new TurnToCommand(drivetrain, 180, telemetry),
                 new InstantCommand(wobbleGoalArm::setTurretFarRight,wobbleGoalArm),
-                new TurnCommand(drivetrain, 180),
+                new TurnCommand(drivetrain, 185),
                 new DriveForwardCommand(drivetrain, 52),
                 new PlaceWobbleGoal(wobbleGoalArm),
                 new DriveForwardCommand(drivetrain,-43),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 new TurnCommand(drivetrain, -90),
-                new DriveForwardCommand(drivetrain, -7)
+                new DriveForwardCommand(drivetrain, -10)
 
                 //new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 //new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),

@@ -50,7 +50,6 @@ public class RightRedFourCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(-24, 8), Math.toRadians(180)),
                 new DriveForwardCommand(drivetrain, 50)
 
 

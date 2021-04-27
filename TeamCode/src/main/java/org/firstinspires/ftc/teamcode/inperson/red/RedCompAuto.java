@@ -88,7 +88,7 @@ public class RedCompAuto extends MatchOpMode {
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
         drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
-        vision = new Vision(hardwareMap, "webcam", telemetry, 0.43, 0.58, RED_CAMERA_WIDTH);
+        vision = new Vision(hardwareMap, "webcam", telemetry, 0.43, 0.56  , RED_CAMERA_WIDTH);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
 
     }
@@ -105,7 +105,7 @@ public class RedCompAuto extends MatchOpMode {
         schedule(
                 new SelectCommand(new HashMap<Object, Command>() {{
                     put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
-                            new RightRedFourAltCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
+                            new RightRedFourCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
                     put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
                             new RightRedOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)

@@ -66,7 +66,7 @@ public class RedFourHGAltCommand extends SequentialCommandGroup {
                 // Drive to Rings
                 new InstantCommand(intake::dropIntake, intake),
                 new InstantCommand(intake::intake, intake),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(3650), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(3600), shooterWheels),
                 new SplineCommand(drivetrain, new Vector2d(-29, -15.5), Math.toRadians(180)),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
@@ -77,7 +77,8 @@ public class RedFourHGAltCommand extends SequentialCommandGroup {
                 new InstantCommand(intake::intake, intake),
                 new DriveForwardCommand(drivetrain, -20, Trajectories.velConstraint),
                 new FeedRingsCommand(feeder, 6),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(3650), shooterWheels)
+                new TurnCommand(drivetrain, 5),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(3400), shooterWheels)
 
                 );
     }

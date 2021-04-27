@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 public class RightRedFourAltCommand extends SequentialCommandGroup {
     public RightRedFourAltCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
-        final int HG_SPEED = 3450;
+        final int HG_SPEED = 3400;
         final int POWERSHOT_SPEED = 3000;
 
         addCommands(
@@ -45,6 +45,7 @@ public class RightRedFourAltCommand extends SequentialCommandGroup {
                 new TurnToCommand(drivetrain, 180, telemetry),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
                 new DriveForwardCommand(drivetrain, -60),
+                new TurnToCommand(drivetrain, 180, telemetry),
                 new InstantCommand(wobbleGoalArm::setTurretFarRight,wobbleGoalArm),
                 new WaitCommand(500),
                 new PlaceWobbleGoal(wobbleGoalArm),
@@ -56,7 +57,7 @@ public class RightRedFourAltCommand extends SequentialCommandGroup {
                 // Drive to Rings
                 new InstantCommand(intake::dropIntake, intake),
                 new InstantCommand(intake::intake, intake),
-                new InstantCommand(() -> shooterWheels.setShooterRPM(3450), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(3300), shooterWheels),
                 new SplineCommand(drivetrain, new Vector2d(-47, 15.5), Math.toRadians(180)),
 
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
@@ -67,7 +68,7 @@ public class RightRedFourAltCommand extends SequentialCommandGroup {
                 new InstantCommand(intake::outtake, intake),
                 new WaitCommand(300),
                 new InstantCommand(intake::intake, intake),
-                new TurnToCommand(drivetrain,174, telemetry),
+                new TurnToCommand(drivetrain,180, telemetry),
                 new FeedRingsCommand(feeder, 4),
                 new DriveForwardCommand(drivetrain, -20),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),

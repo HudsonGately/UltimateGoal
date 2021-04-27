@@ -14,7 +14,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 public class UGDetector2 {
 
     public static double MIN = 105;
-    public static double MAX = 112;
+    public static double MAX = 110;
     private OpenCvCamera camera;
     private boolean isUsingWebcam;
     private String webcamName;
