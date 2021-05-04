@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-@Autonomous(name = "RED Left POWERSHOT Zero Test", group = "RED")
-public class RedLeftPSZeroTest extends MatchOpMode {
+@Autonomous(name = "RED Right PS One Test", group = "RED")
+public class RedRightPSOneTest extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;
     public static double startPoseHeading = 180;
@@ -75,7 +75,7 @@ public class RedLeftPSZeroTest extends MatchOpMode {
     @Override
     public void matchStart() {
         feeder.retractFeed();
-        schedule(new LeftRedPSZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
+        schedule(new RightRedPSOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
 }

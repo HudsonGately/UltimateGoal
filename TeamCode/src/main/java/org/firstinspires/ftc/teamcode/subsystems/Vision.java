@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.pipelines.HighGoalDetector;
 import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
 import org.firstinspires.ftc.teamcode.pipelines.UGDetector2;
 import org.firstinspires.ftc.teamcode.Util;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 import java.util.logging.Level;
 @Config
@@ -25,10 +26,17 @@ public class Vision extends SubsystemBase {
 
     public Vision(HardwareMap hw, String ringWebcam, String goalWebcam, Telemetry tl, double top, double bottom, double width, UGBasicHighGoalPipeline.Mode color) {
         ringDetector = new UGDetector2(hw, ringWebcam, tl);
-        ringDetector.init();
+        int cameraMonitorViewId = hw.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hw.appContext.getPackageName());
+
+        int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
+                .splitLayoutForMultipleViewports(
+                        cameraMonitorViewId, //The container we're splitting
+                        2, //The number of sub-containers to create
+                        OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY); //Whether to split the container vertically or horizontally
+        ringDetector.init(viewportContainerIds[0]);
 
         goalDetector = new HighGoalDetector(hw, goalWebcam, tl, color);
-        goalDetector.init();
+        goalDetector.init(viewportContainerIds[1]);
 
         telemetry = tl;
 

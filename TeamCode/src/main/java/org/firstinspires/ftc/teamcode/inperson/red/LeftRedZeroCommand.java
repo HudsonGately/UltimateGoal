@@ -20,10 +20,10 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 @Config
-public class LeftRedPSZeroCommand extends SequentialCommandGroup {
+public class LeftRedZeroCommand extends SequentialCommandGroup {
     public static int HG_SPEED = 3450;
     public static int POWERSHOT_SPEED = 2850;
-    public LeftRedPSZeroCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
+    public LeftRedZeroCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
 
 
         addCommands(
@@ -41,42 +41,16 @@ public class LeftRedPSZeroCommand extends SequentialCommandGroup {
                 new TurnToCommand(drivetrain, 175, telemetry),
 
                 // Shokot 3k ringsk
-                new FeedRingsCommand(feeder, 2),
-                new TurnCommand(drivetrain, 13),
-                new DriveForwardCommand(drivetrain, 5),
-                new ShootRingsCommand(shooterWheels, feeder, POWERSHOT_SPEED, 1),
+                new FeedRingsCommand(feeder, 3),
 
-                //Placek Wobblek Goalk
+
+                //Placek Wobble Goal
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
                 new TurnToCommand(drivetrain, 180, telemetry),
                 new TurnCommand(drivetrain, 110),
                 new DriveForwardCommand(drivetrain, 25),
                 new PlaceWobbleGoal(wobbleGoalArm),
                 new DriveForwardCommand(drivetrain, -40)
-
-
-
-
-
-                //new TurnCommand(drivetrain, 90),
-
-                //new DriveForwardCommand(drivetrain, 42),
-                //new InstantCommand(() -> shooterWheels.setShooterRPM(3000), shooterWheels),
-               // new DriveForwardCommand(drivetrain, 20),
-                //new TurnToCommand(drivetrain, 190, telemetry),
-                //new FeedRingsCommand(feeder, 3, 50),
-                //new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-                //new InstantCommand(intake::stop, intake)
-                //new DriveForwardCommand(drivetrain, -15)
-
-
-
-
-
-
-
-
-
 
                 );
     }

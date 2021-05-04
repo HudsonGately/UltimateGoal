@@ -16,8 +16,10 @@ dependencies {
      */
     // Testing
     dependencies {
-        implementation 'com.arcrobotics.ftclib:vision:1.1.0'
-        implementation 'com.github.FTCLib.FTCLib:ftclib:dev-SNAPSHOT'
+        implementation 'org.ftclib.ftclib:core:1.2.0'
+        implementation 'org.ftclib.ftclib:vision:1.1.0'
+
+
         implementation('com.acmerobotics.dashboard:dashboard:0.4.0') {
             exclude group: 'org.firstinspires.ftc'
         }

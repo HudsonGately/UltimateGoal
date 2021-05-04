@@ -71,8 +71,8 @@ public class UGAngleHighGoalPipeline extends UGBasicHighGoalPipeline {
     @Override
     public Mat processFrame(Mat input) {
 
-       super.processFrame(input);
-       return input;
+      return super.processFrame(input);
+
     }
 
     /**

@@ -106,7 +106,7 @@ public class RedCompAuto extends MatchOpMode {
                             new RightRedOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
                     put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
-                            new RightRedZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
+                            new RightRedZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, vision, telemetry)
                     ));
                 }}, vision::getCurrentStack)
         );

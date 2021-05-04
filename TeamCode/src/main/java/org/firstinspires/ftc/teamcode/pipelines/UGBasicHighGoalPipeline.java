@@ -91,9 +91,8 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
         }
         // Convert RGB input to YCrCB, this is for better Red and blue identification
         currentThreshold.release();
-        currentChannel.release();
+        return currentChannel;
 
-        return input;
     }
 
     /**
@@ -142,7 +141,7 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
 
         // Creating new list of contours to add suitable high goal candidates (ones that have a child and fit aspect ratio)
         List<MatOfPoint> filteredContours = new ArrayList<>();
-
+        Imgproc.drawContours(channel, currentContours, -1, new Scalar(255, 0, 0));
         for (int i = 0; i < currentContours.size(); i++) {
             //Filtering out all countours that don't have children.
             if(hierarchy.get(0, i)[2] != -1) {

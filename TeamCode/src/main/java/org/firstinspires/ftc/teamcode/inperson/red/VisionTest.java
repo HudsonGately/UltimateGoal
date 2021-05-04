@@ -21,7 +21,7 @@ public class VisionTest extends MatchOpMode {
     public void robotInit() {
         //This will instantiate an OpenCvCamera object for the camera we'll be using
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam1"), cameraMonitorViewId);
         telemetry.addData("Camera:", camera);
         //Set the pipeline the camera should use and start streaming
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
