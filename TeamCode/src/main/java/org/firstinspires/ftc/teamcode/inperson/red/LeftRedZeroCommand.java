@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
-import org.firstinspires.ftc.teamcode.commands.shooter.ShootRingsCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
@@ -38,7 +37,7 @@ public class LeftRedZeroCommand extends SequentialCommandGroup {
                 // Drikve tko Skpot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
-                new TurnToCommand(drivetrain, 175, telemetry),
+                new TurnToCommand(drivetrain, 175),
 
                 // Shokot 3k ringsk
                 new FeedRingsCommand(feeder, 3),
@@ -46,11 +45,13 @@ public class LeftRedZeroCommand extends SequentialCommandGroup {
 
                 //Placek Wobble Goal
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-                new TurnToCommand(drivetrain, 180, telemetry),
-                new TurnCommand(drivetrain, 110),
+                new TurnToCommand(drivetrain, 190),
+                new TurnCommand(drivetrain, 100),
                 new DriveForwardCommand(drivetrain, 25),
                 new PlaceWobbleGoal(wobbleGoalArm),
+                new TurnCommand(drivetrain, -30),
                 new DriveForwardCommand(drivetrain, -40)
+
 
                 );
     }

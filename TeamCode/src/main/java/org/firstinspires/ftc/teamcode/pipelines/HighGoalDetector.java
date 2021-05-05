@@ -15,16 +15,20 @@ public class HighGoalDetector {
     private boolean isUsingWebcam;
     private String webcamName;
     private HardwareMap hardwareMap;
-    private Telemetry tl;
     private UGBasicHighGoalPipeline.Mode color;
 
     private UGAngleHighGoalPipeline pipeline;
-    public HighGoalDetector(HardwareMap hMap, String webcamName, Telemetry tl, UGBasicHighGoalPipeline.Mode color) {
+    public HighGoalDetector(HardwareMap hMap, String webcamName, Telemetry tl, UGBasicHighGoalPipeline.Mode color, int viewId) {
         hardwareMap = hMap;
         isUsingWebcam = true;
         this.webcamName = webcamName;
-        this.tl = tl;
+
         this.color = color;
+
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), viewId);
+        camera.openCameraDevice();
+        camera.setPipeline(pipeline = new UGAngleHighGoalPipeline(55, color));
+
     }
 
     public double getTargetAngle() {
@@ -33,24 +37,14 @@ public class HighGoalDetector {
     public double getTargetPitch() {
         return pipeline.calculatePitch(color);
     }
-
-    public void init(int viewId) {
-        //This will instantiate an OpenCvCamera object for the camera we'll be using
-        if (isUsingWebcam) {
-            camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), viewId);
-        } else {
-            camera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, viewId);
-        }
-
-        tl.addData("Camera:", camera);
+    public boolean isTargetVisible() {
+        if (color == UGBasicHighGoalPipeline.Mode.RED_ONLY)
+            return pipeline.isRedVisible();
+        return pipeline.isBlueVisible();
+    }
+    public void init() {
         //Set the pipeline the camera should use and start streaming
-        camera.setPipeline(pipeline = new UGAngleHighGoalPipeline(55, color));
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-            }
-        });
+        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
     }
 
 }

@@ -35,11 +35,11 @@ public class RedOneHGCommand extends SequentialCommandGroup {
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
-                new TurnToCommand(drivetrain, 177, telemetry),
+                new TurnToCommand(drivetrain, 177),
                 // Shoot rings
                 new FeedRingsCommand(feeder, 3),
                 new InstantCommand(shooterWheels::stopShooter),
-                new TurnToCommand(drivetrain, 180, telemetry),
+                new TurnToCommand(drivetrain, 180),
                 // Go to OneSquare
                 new InstantCommand(wobbleGoalArm::setTurretRight, wobbleGoalArm),
                 new DriveForwardCommand(drivetrain, -45),

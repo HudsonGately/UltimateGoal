@@ -15,17 +15,15 @@ public class TurnToCommand extends CommandBase {
     double desired, firstAngle;
     boolean weird = false;
     Telemetry tl;
-    public TurnToCommand(Drivetrain drive, double angle, Telemetry tl) {
+    public TurnToCommand(Drivetrain drive, double angle) {
         this.drive = drive;
         this.angle = angle;
-        this.tl = tl;
         addRequirements(drive);
     }
 
-    public TurnToCommand(Drivetrain drive, double angle, boolean weird, Telemetry tl) {
+    public TurnToCommand(Drivetrain drive, double angle, boolean weird) {
         this.drive = drive;
         this.angle = angle;
-        this.tl = tl;
         this.weird = weird;
         addRequirements(drive);
     }

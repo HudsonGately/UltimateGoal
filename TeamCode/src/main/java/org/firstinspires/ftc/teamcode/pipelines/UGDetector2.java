@@ -28,30 +28,21 @@ public class UGDetector2 {
         this.tl = tl;
     }
 
-    public UGDetector2(HardwareMap hMap, String webcamName, Telemetry tl) {
+    public UGDetector2(HardwareMap hMap, String webcamName, Telemetry tl, int viewId) {
         hardwareMap = hMap;
         isUsingWebcam = true;
         this.webcamName = webcamName;
         this.tl = tl;
+
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), viewId);
+        camera.openCameraDevice();
+        camera.setPipeline(ftclibPipeline = new UGRectRingPipeline());
     }
 
-    public void init(int viewId) {
+    public void init() {
         //This will instantiate an OpenCvCamera object for the camera we'll be using
-        if (isUsingWebcam) {
-            camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), viewId);
-        } else {
-            camera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, viewId);
-        }
-
-        tl.addData("Camera:", camera);
         //Set the pipeline the camera should use and start streaming
-        camera.setPipeline(ftclibPipeline = new UGRectRingPipeline());
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-            }
-        });
+        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
     }
 
 

@@ -33,17 +33,17 @@ public class RightRedPSFourCommand extends SequentialCommandGroup {
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
-                new TurnToCommand(drivetrain, 193, telemetry),
+                new TurnToCommand(drivetrain, 193),
 
                 // Shoot 2 rings
                 new FeedRingsCommand(feeder, 2),
                 // Shoot ring at the Powershots
                 new InstantCommand(() -> shooterWheels.setShooterRPM(POWERSHOT_SPEED), shooterWheels),
                 new WaitCommand(500),
-                new TurnToCommand(drivetrain, 204, telemetry),
+                new TurnToCommand(drivetrain, 204),
                 new FeedRingsCommand(feeder, 2),
                 //Place Wobble Goal
-                new TurnToCommand(drivetrain, 170, telemetry),
+                new TurnToCommand(drivetrain, 170),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
                 new DriveForwardCommand(drivetrain, -60),
                 new InstantCommand(wobbleGoalArm::setTurretFarRight,wobbleGoalArm),

@@ -7,8 +7,6 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Trajectories;
-import org.firstinspires.ftc.teamcode.commands.HomeWobbleArm;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
@@ -20,10 +18,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
-
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueCloseTape.highGoalX;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueCloseTape.highGoalY;
-import static org.firstinspires.ftc.teamcode.Trajectories.BlueCloseTape.wobbleGoalSquareDistance;
 
 public class RedZeroHGCommand extends SequentialCommandGroup {
 
@@ -40,12 +34,12 @@ public class RedZeroHGCommand extends SequentialCommandGroup {
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
-                new TurnToCommand(drivetrain, 177, telemetry),
+                new TurnToCommand(drivetrain, 177),
 
                 // Shoot rings
                 new FeedRingsCommand(feeder, 3),
                 new InstantCommand(shooterWheels::stopShooter),
-                new TurnToCommand(drivetrain, 180, telemetry),
+                new TurnToCommand(drivetrain, 180),
 
                 // Go to ZeroSquare
                 new TurnCommand(drivetrain, 110),
@@ -53,7 +47,7 @@ public class RedZeroHGCommand extends SequentialCommandGroup {
                 new PlaceWobbleGoal(wobbleGoalArm),
 
                 // Go to Second Wobble Goal
-                new TurnToCommand(drivetrain, 180, telemetry),
+                new TurnToCommand(drivetrain, 180),
                 new InstantCommand(wobbleGoalArm::placeWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::openClaw),
                 new SplineCommand(drivetrain, new Vector2d(-33, -24), Math.toRadians(180)),
@@ -62,7 +56,7 @@ public class RedZeroHGCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
 
                 // Drop off wobble goal
-                new TurnToCommand(drivetrain, 180, telemetry),
+                new TurnToCommand(drivetrain, 180),
                 new SplineCommand(drivetrain, new Vector2d(9, -22), Math.toRadians(0), true),
                 new TurnCommand(drivetrain, 90),
                 new PlaceWobbleGoal(wobbleGoalArm),

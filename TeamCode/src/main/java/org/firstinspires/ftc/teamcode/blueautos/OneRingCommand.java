@@ -31,12 +31,12 @@ public class OneRingCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(2900)),
                 new ParallelCommandGroup(new WaitCommand(750).andThen(new InstantCommand(() -> wobbleGoalArm.setWobbleGoal(-110))).andThen(new WaitCommand(500)), new DriveForwardCommand(drivetrain, -shootDistance)),
                 // turn and shoot
-                new TurnToCommand(drivetrain, 178, telemetry),
+                new TurnToCommand(drivetrain, 178),
                 new FeedRingsCommand(feeder, 4, 75),
                 new InstantCommand(intake::stop),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
                 new InstantCommand(wobbleGoalArm::setTurretRight),
-                new TurnToCommand(drivetrain, 180, telemetry),
+                new TurnToCommand(drivetrain, 180),
                 //place wobble goal
                 new DriveForwardCommand(drivetrain, -Trajectories.BlueMid.wobbleGoalSquareDistance),
                 new PlaceWobbleGoal(wobbleGoalArm),
@@ -45,12 +45,12 @@ public class OneRingCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(2775)),
                 new SplineCommand(drivetrain, new Vector2d(Trajectories.BlueMid.ringX, Trajectories.BlueMid.ringY), Math.toRadians(180)),
                 //align for powershot
-                new TurnToCommand(drivetrain, 203, telemetry),
+                new TurnToCommand(drivetrain, 203),
                 new FeedRingsCommand(feeder, 4, 75),
                 new InstantCommand(intake::stop),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0)),
                 //wobble goal
-                new TurnToCommand(drivetrain, Trajectories.BlueMid.wobbleAngle, telemetry),
+                new TurnToCommand(drivetrain, Trajectories.BlueMid.wobbleAngle),
                 new InstantCommand(wobbleGoalArm::openClaw),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
                 // lower arm
@@ -67,7 +67,7 @@ public class OneRingCommand extends SequentialCommandGroup {
                         new SplineCommand(drivetrain, Trajectories.velConstraint, true, new Vector2d(43, 20), Math.toRadians(0)),
                         new InstantCommand(wobbleGoalArm::setTurretLeft)
                 ),
-                new TurnToCommand(drivetrain, 180, telemetry),
+                new TurnToCommand(drivetrain, 180),
 
                 new PlaceWobbleGoal(wobbleGoalArm),
 

@@ -76,7 +76,7 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
             Core.extractChannel(adjustedColorSpace, currentChannel, YCBCR_CB_CHANNEL);
             redGoal = findTarget(currentChannel);
             if (redGoal != null) {
-                Imgproc.rectangle(input, redGoal, new Scalar(255, 0, 0), 3);
+                Imgproc.rectangle(adjustedColorSpace, redGoal, new Scalar(255, 0, 0), 3);
             }
         }
 
@@ -86,13 +86,13 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
             Core.extractChannel(adjustedColorSpace, currentChannel, YCBCR_CR_CHANNEL);
             blueGoal = findTarget(currentChannel);
             if (blueGoal != null) {
-                Imgproc.rectangle(input, blueGoal, new Scalar(0, 0, 255), 3);
+                Imgproc.rectangle(adjustedColorSpace, blueGoal, new Scalar(0, 0, 255), 3);
             }
         }
         // Convert RGB input to YCrCB, this is for better Red and blue identification
         currentThreshold.release();
         currentChannel.release();
-        return input;
+        return adjustedColorSpace;
 
     }
 
@@ -136,6 +136,11 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
 
         // Filters channel based on threshold - giving us a binary image
         Imgproc.threshold(channel, currentThreshold, MIN_COLOR_THRESHOLD, MAX_COLOR_THRESHOLD, Imgproc.THRESH_BINARY);
+        int kernelSize = 3;
+        Mat element = Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT, new Size( kernelSize + 1,  kernelSize + 1),
+                new Point(kernelSize, kernelSize));
+        Imgproc.dilate(currentThreshold, currentThreshold, element);
+
         // Finding the contours along with its heirarchy (so we can find interior/child contours)
         Mat hierarchy = new Mat();
         Imgproc.findContours(currentThreshold, currentContours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_NONE);
@@ -145,11 +150,12 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
         Imgproc.drawContours(currentChannel, currentContours, -1, new Scalar(255, 0, 0));
         for (int i = 0; i < currentContours.size(); i++) {
             //Filtering out all countours that don't have children.
+            Imgproc.drawContours(adjustedColorSpace, currentContours, i, new Scalar(0, 0, 0), 2);
             if(hierarchy.get(0, i)[2] != -1) {
                 MatOfPoint currentContour = currentContours.get(i);
-
+                MatOfPoint childContour = currentContours.get((int) hierarchy.get(0, i)[2]);
                 //Further filtering out contours that don't pass this apsect ratio.
-                if (isPossibleContour(currentContour)) {
+                if (isPossibleContour(currentContour) && Imgproc.contourArea(childContour) > 25) {
                     filteredContours.add(currentContour);
                 }
             }
@@ -170,7 +176,9 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
      */
     private boolean isPossibleContour(MatOfPoint contour) {
         Rect boundingRect = Imgproc.boundingRect(contour);
-        return Imgproc.contourArea(contour) > 50  && boundingRect.width / boundingRect.height > 0.6 && boundingRect.width /boundingRect.height < 1.8;
+        double aspectRatio = (double) boundingRect.width / (double) boundingRect.height;
+        Imgproc.putText(adjustedColorSpace, Double.toString(aspectRatio), new Point(boundingRect.x, boundingRect.y), 2, 1, new Scalar(255, 255, 255));
+        return Imgproc.contourArea(contour) > 50  && aspectRatio > 0.6 && aspectRatio < 1.8;
     }
 
     public Point getCenterofRect(Rect rect) {

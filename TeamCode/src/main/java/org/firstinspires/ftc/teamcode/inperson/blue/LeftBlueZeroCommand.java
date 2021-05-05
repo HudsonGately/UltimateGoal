@@ -33,13 +33,13 @@ public class LeftBlueZeroCommand extends SequentialCommandGroup {
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
-                new TurnToCommand(drivetrain, 170, telemetry),
+                new TurnToCommand(drivetrain, 170),
 
                 // Shoot 3 rings
                 new FeedRingsCommand(feeder, 3),
                 //Place Wobble Goal
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-                new TurnToCommand(drivetrain, 190, telemetry),
+                new TurnToCommand(drivetrain, 190),
                 new DriveForwardCommand(drivetrain, -15),
                 new TurnCommand(drivetrain,-90),
                 new DriveForwardCommand(drivetrain, -10),
