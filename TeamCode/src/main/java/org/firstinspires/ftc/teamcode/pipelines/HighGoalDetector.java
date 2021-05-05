@@ -16,13 +16,13 @@ public class HighGoalDetector {
     private String webcamName;
     private HardwareMap hardwareMap;
     private UGBasicHighGoalPipeline.Mode color;
-
+    private Telemetry tl;
     private UGAngleHighGoalPipeline pipeline;
     public HighGoalDetector(HardwareMap hMap, String webcamName, Telemetry tl, UGBasicHighGoalPipeline.Mode color, int viewId) {
         hardwareMap = hMap;
         isUsingWebcam = true;
         this.webcamName = webcamName;
-
+        this.tl = tl;
         this.color = color;
 
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), viewId);
@@ -44,6 +44,7 @@ public class HighGoalDetector {
     }
     public void init() {
         //Set the pipeline the camera should use and start streaming
+        tl.addData("Camera", camera);
         camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
     }
 

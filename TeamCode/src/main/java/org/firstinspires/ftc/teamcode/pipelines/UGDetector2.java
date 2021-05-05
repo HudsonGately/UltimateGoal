@@ -42,6 +42,7 @@ public class UGDetector2 {
     public void init() {
         //This will instantiate an OpenCvCamera object for the camera we'll be using
         //Set the pipeline the camera should use and start streaming
+        tl.addData("Camera", camera);
         camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
     }
 
