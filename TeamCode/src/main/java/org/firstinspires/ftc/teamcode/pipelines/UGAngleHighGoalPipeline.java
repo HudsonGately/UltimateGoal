@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.pipelines;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 
 public class UGAngleHighGoalPipeline extends UGBasicHighGoalPipeline {
@@ -37,6 +38,10 @@ public class UGAngleHighGoalPipeline extends UGBasicHighGoalPipeline {
     private double horizontalFocalLength;
     private double verticalFocalLength;
 
+    public enum Target {
+        RED, BLUE
+    }
+
     public UGAngleHighGoalPipeline() {
         this(55);
     }
@@ -46,7 +51,7 @@ public class UGAngleHighGoalPipeline extends UGBasicHighGoalPipeline {
     }
 
     public UGAngleHighGoalPipeline(double fov) {
-        this(fov, Mode.BOTH);
+        this(fov, Mode.BLUE_ONLY);
     }
 
     @Override
@@ -71,16 +76,20 @@ public class UGAngleHighGoalPipeline extends UGBasicHighGoalPipeline {
     @Override
     public Mat processFrame(Mat input) {
 
-      return super.processFrame(input);
-
+       super.processFrame(input);
+       System.out.println(calculateYaw(Target.RED));
+       System.out.println(calculatePitch(Target.RED));
+       return input;
     }
 
     /**
      * @param color         Alliance color
      */
-    public double calculateYaw(Mode color) {
-        Rect currentRect = color == Mode.RED_ONLY ? getRedRect() : getBlueRect();
-        double targetCenterX = getCenterofRect(currentRect).x;
+    public double calculateYaw(Target color) {
+        Point currentPoint = color == Target.RED ? getCenterRed() : getCenterBlue();
+        if (currentPoint == null)
+            return 0;
+        double targetCenterX = currentPoint.x;
         return Math.toDegrees(
                 Math.atan((targetCenterX - centerX) / horizontalFocalLength)
         );
@@ -89,9 +98,12 @@ public class UGAngleHighGoalPipeline extends UGBasicHighGoalPipeline {
     /**
      * @param color         Alliance color
      */
-    public double calculatePitch(Mode color) {
-        Rect currentRect = color == Mode.RED_ONLY ? getRedRect() : getBlueRect();
-        double targetCenterY = getCenterofRect(currentRect).y;
+    public double calculatePitch(Target color) {
+        Point currentPoint = color == Target.RED ? getCenterRed() : getCenterBlue();
+        if (currentPoint == null)
+            return 0;
+
+        double targetCenterY = currentPoint.y;
         return -Math.toDegrees(
                 Math.atan((targetCenterY - centerY) / verticalFocalLength)
         );

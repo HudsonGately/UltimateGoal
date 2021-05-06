@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.pipelines;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
 public class UGBasicHighGoalPipeline extends OpenCvPipeline {
     // Thresholds for filtering red and blue contours such as High Goal
     public static double MIN_COLOR_THRESHOLD = 155;
@@ -36,10 +36,10 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
     // List to read contours into
     private List<MatOfPoint> currentContours, interiorContours;
     private MatOfPoint biggestContour;
-    private Rect blueGoal, redGoal;
+    private Point blueCenter, redCenter;
 
     public UGBasicHighGoalPipeline() {
-        this(Mode.BOTH);
+        this(Mode.RED_ONLY);
     }
 
     public UGBasicHighGoalPipeline(Mode mode) {
@@ -55,8 +55,10 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
 
         biggestContour = new MatOfPoint();
 
-        blueGoal = new Rect();
-        redGoal = new Rect();
+        blueCenter = new Point();
+        redCenter = new Point();
+
+
     }
 
     @Override
@@ -74,9 +76,9 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
         {
             // Extract necessary Channels to apropritae Mats
             Core.extractChannel(adjustedColorSpace, currentChannel, YCBCR_CB_CHANNEL);
-            redGoal = findTarget(currentChannel);
-            if (redGoal != null) {
-                Imgproc.rectangle(adjustedColorSpace, redGoal, new Scalar(255, 0, 0), 3);
+            redCenter = findTarget(input, currentChannel);
+            if (redCenter != null) {
+                Imgproc.drawMarker(input, redCenter, new Scalar (255, 0, 0));
             }
         }
 
@@ -84,44 +86,38 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
         {
             // Extract necessary Channels to apropritae Mats
             Core.extractChannel(adjustedColorSpace, currentChannel, YCBCR_CR_CHANNEL);
-            blueGoal = findTarget(currentChannel);
-            if (blueGoal != null) {
-                Imgproc.rectangle(adjustedColorSpace, blueGoal, new Scalar(0, 0, 255), 3);
+            blueCenter = findTarget(input, currentChannel);
+            if (blueCenter != null) {
+                Imgproc.drawMarker(input, blueCenter, new Scalar (255, 0, 0));
             }
         }
         // Convert RGB input to YCrCB, this is for better Red and blue identification
         currentThreshold.release();
         currentChannel.release();
-        return adjustedColorSpace;
+        adjustedColorSpace.release();
+        return input;
 
     }
 
-    /**
-     * @return red high goal as a Rect (null if not visible)
-     */
-    public Rect getRedRect() {
-        return redGoal;
+    public Point getCenterRed() {
+        return redCenter;
     }
 
-    /**
-     * @return blue high goal as a Rect (null if not visible)
-     */
-    public Rect getBlueRect() {
-        return blueGoal;
+    public Point getCenterBlue() {
+        return blueCenter;
     }
-
     /**
      * @return whether the red high goal is visible
      */
     public boolean isRedVisible() {
-        return (redGoal != null);
+        return (redCenter != null);
     }
 
     /**
      * @return whether the blue high goal is visible
      */
     public boolean isBlueVisible() {
-        return (blueGoal != null);
+        return (blueCenter != null);
     }
 
     /**
@@ -129,7 +125,7 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
      * @param channel The Cr or Cb channel to filter out red & blue high goal
      * @return High goal target
      */
-    private Rect findTarget(Mat channel) {
+    private Point findTarget(Mat draw, Mat channel) {
         // Clears current contour lists
         currentContours.clear();
         interiorContours.clear();
@@ -166,7 +162,15 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
         } else {
             // Comparing width instead of area because wobble goals that are close to the camera tend to have a large area
             biggestContour = Collections.max(filteredContours, Comparator.comparingDouble(t0 -> Imgproc.minAreaRect(new MatOfPoint2f(t0.toArray())).size.area()));
-            return Imgproc.boundingRect(biggestContour);
+
+            Moments targetMoments = Imgproc.moments(biggestContour);
+            Point targetCenter = new Point((int) (targetMoments.m10 / targetMoments.m00), (int) (targetMoments.m01 / targetMoments.m00));
+
+
+            Rect boundingRect = Imgproc.boundingRect(biggestContour);
+            Imgproc.rectangle(draw, boundingRect, new Scalar(255, 0, 255), 3);
+
+            return targetCenter;
         }
     }
 
@@ -188,3 +192,5 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
         return new Point(rect.x + rect.width / 2.0, rect.y + rect.height / 2.0);
     }
 }
+
+
