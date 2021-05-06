@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pipelines.HighGoalDetector;
+import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
 import org.firstinspires.ftc.teamcode.pipelines.UGDetector2;
 import org.firstinspires.ftc.teamcode.Util;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -22,7 +23,8 @@ public class Vision extends SubsystemBase {
     private UGDetector2.Stack currentStack;
 
     private HighGoalDetector goalDetector;
-    UGBasicHighGoalPipeline.Mode color;
+    private UGBasicHighGoalPipeline.Mode color;
+
     public Vision(HardwareMap hw, String ringWebcam, String goalWebcam, Telemetry tl, double top, double bottom, double width, UGBasicHighGoalPipeline.Mode color) {
         int cameraMonitorViewId = hw.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hw.appContext.getPackageName());
 

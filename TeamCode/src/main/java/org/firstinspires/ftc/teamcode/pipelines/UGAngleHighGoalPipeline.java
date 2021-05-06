@@ -38,10 +38,6 @@ public class UGAngleHighGoalPipeline extends UGBasicHighGoalPipeline {
     private double horizontalFocalLength;
     private double verticalFocalLength;
 
-    public enum Target {
-        RED, BLUE
-    }
-
     public UGAngleHighGoalPipeline() {
         this(55);
     }
@@ -77,16 +73,14 @@ public class UGAngleHighGoalPipeline extends UGBasicHighGoalPipeline {
     public Mat processFrame(Mat input) {
 
        super.processFrame(input);
-       System.out.println(calculateYaw(Target.RED));
-       System.out.println(calculatePitch(Target.RED));
        return input;
     }
 
     /**
      * @param color         Alliance color
      */
-    public double calculateYaw(Target color) {
-        Point currentPoint = color == Target.RED ? getCenterRed() : getCenterBlue();
+    public double calculateYaw(Mode color) {
+        Point currentPoint = color == Mode.RED_ONLY ? getCenterRed() : getCenterBlue();
         if (currentPoint == null)
             return 0;
         double targetCenterX = currentPoint.x;
@@ -98,8 +92,8 @@ public class UGAngleHighGoalPipeline extends UGBasicHighGoalPipeline {
     /**
      * @param color         Alliance color
      */
-    public double calculatePitch(Target color) {
-        Point currentPoint = color == Target.RED ? getCenterRed() : getCenterBlue();
+    public double calculatePitch(Mode color) {
+        Point currentPoint = color == Mode.RED_ONLY ? getCenterRed() : getCenterBlue();
         if (currentPoint == null)
             return 0;
 

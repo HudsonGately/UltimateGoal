@@ -24,8 +24,7 @@ import java.util.logging.Level;
 public class ShooterWheels extends SubsystemBase {
     private Telemetry telemetry;
 
-    public static double MAX_SHOOTER_RPM = 3886;
-    public static int SHOOTER_WHEEL_DIAMETER = 4;
+
     public static double SHOOTER_TPR = 28;
 
     public static double SHOOTER_P = 0.0015;
