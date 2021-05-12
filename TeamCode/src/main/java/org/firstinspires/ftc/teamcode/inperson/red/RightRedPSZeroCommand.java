@@ -31,6 +31,8 @@ public class RightRedPSZeroCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::closeClaw),
                 new InstantCommand(feeder::retractFeed),
 
+                new WaitCommand(10000),
+
                 // Spkin up wkheels
                 new InstantCommand(() -> shooterWheels.setShooterRPM(HG_SPEED), shooterWheels),
 

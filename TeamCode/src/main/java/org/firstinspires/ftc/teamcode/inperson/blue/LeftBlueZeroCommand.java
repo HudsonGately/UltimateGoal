@@ -26,6 +26,7 @@ public class LeftBlueZeroCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
                 new InstantCommand(wobbleGoalArm::closeClaw),
                 new InstantCommand(feeder::retractFeed),
+                new WaitCommand(10000),
 
                 // Spin up wheels
                 new InstantCommand(() -> shooterWheels.setShooterRPM(HG_SPEED), shooterWheels),

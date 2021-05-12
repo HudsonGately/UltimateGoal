@@ -30,7 +30,9 @@ public class RightRedZeroCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::closeClaw),
                 new InstantCommand(feeder::retractFeed),
 
+                
                 // Spin up wheels
+                new WaitCommand(10000),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(HG_SPEED), shooterWheels),
 
                 // Drive to Spot
@@ -47,10 +49,9 @@ public class RightRedZeroCommand extends SequentialCommandGroup {
                 new TurnCommand(drivetrain,90),
                 new DriveForwardCommand(drivetrain, -5),
                 new PlaceWobbleGoal(wobbleGoalArm),
-                new DriveForwardCommand(drivetrain, -38),
-                new InstantCommand(wobbleGoalArm::liftWobbleGoal,wobbleGoalArm),
-                new TurnCommand(drivetrain, 90),
-                new DriveForwardCommand(drivetrain, -5)
+                new DriveForwardCommand(drivetrain, -3)
+                
+
 
 
 

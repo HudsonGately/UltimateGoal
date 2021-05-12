@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.inperson.blue;
 
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -8,6 +9,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
@@ -29,6 +31,7 @@ public class LeftBlueFourCommand extends SequentialCommandGroup {
                 new InstantCommand(feeder::retractFeed),
 
                 // Spin up wheels
+                new WaitCommand(12000),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(HG_SPEED), shooterWheels),
 
                 // Drive to Spot
@@ -46,11 +49,14 @@ public class LeftBlueFourCommand extends SequentialCommandGroup {
                 new DriveForwardCommand(drivetrain, 52),
                 new PlaceWobbleGoal(wobbleGoalArm),
                 new DriveForwardCommand(drivetrain,-43),
-                new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
+                new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm)
+
+                //new SplineCommand(drivetrain, new Vector2d(15.5, 10), Math.toRadians(180), )
+
+                /*new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 new TurnCommand(drivetrain, -90),
-                new DriveForwardCommand(drivetrain, -10)
-
+                */
                 //new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 //new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 //new DriveForwardCommand(drivetrain, 50),
