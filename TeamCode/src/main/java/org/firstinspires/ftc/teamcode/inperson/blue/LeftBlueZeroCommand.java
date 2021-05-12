@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
@@ -41,16 +42,13 @@ public class LeftBlueZeroCommand extends SequentialCommandGroup {
                 //Place Wobble Goal
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
                 new TurnToCommand(drivetrain, 190),
-                new DriveForwardCommand(drivetrain, -15),
+                new DriveForwardCommand(drivetrain, -3),
                 new TurnCommand(drivetrain,-90),
                 new DriveForwardCommand(drivetrain, -10),
-                new InstantCommand(wobbleGoalArm::placeWobbleGoal,wobbleGoalArm),
-                new WaitCommand(500),
-                new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
-                new WaitCommand(500),
-                new DriveForwardCommand(drivetrain, -38),
-                new InstantCommand(wobbleGoalArm::liftWobbleGoal,wobbleGoalArm),
-                new TurnCommand(drivetrain, -90)
+                new PlaceWobbleGoal(wobbleGoalArm),
+                new DriveForwardCommand(drivetrain, -3)
+
+
 
 
 
