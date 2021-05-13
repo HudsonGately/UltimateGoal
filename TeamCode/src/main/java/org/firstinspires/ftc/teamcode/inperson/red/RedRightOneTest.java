@@ -55,7 +55,7 @@ public class RedRightOneTest extends MatchOpMode {
 
         feedServo = new SimpleServo(hardwareMap, "feed_servo", 0, 230);
 
-        // Wobble Harware initializations
+        // Wobble Hardware initializations
         arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_60);
         clawServo = new SimpleServo(hardwareMap, "claw_servo", 0, 230);
         lazySusanServo = new SimpleServo(hardwareMap, "lazy_susan", 0, 360);
@@ -75,7 +75,7 @@ public class RedRightOneTest extends MatchOpMode {
     @Override
     public void matchStart() {
         feeder.retractFeed();
-        schedule(new RightRedOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
+        schedule(new FellowshipRedOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
 }

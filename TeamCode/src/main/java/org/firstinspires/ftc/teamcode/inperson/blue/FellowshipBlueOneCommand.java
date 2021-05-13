@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.inperson.red;
+package org.firstinspires.ftc.teamcode.inperson.blue;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
@@ -20,12 +20,10 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-@Config
-public class LeftRedFourCommand extends SequentialCommandGroup {
-    public static int HG_SPEED = 3450;
-    public static int POWERSHOT_SPEED = 2850;
-    public LeftRedFourCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
-
+public class FellowshipBlueOneCommand extends SequentialCommandGroup {
+    public FellowshipBlueOneCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
+        final int HG_SPEED = 3450;
+        final int POWERSHOT_SPEED = 3000;
 
         addCommands(
                 // Setup
@@ -41,34 +39,36 @@ public class LeftRedFourCommand extends SequentialCommandGroup {
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
                 new TurnToCommand(drivetrain, 170),
 
-                // Shokot 3k ringsk
+                // Shoot 3 rings
                 new FeedRingsCommand(feeder, 3),
-
-
-                //Placek Wobble Goal
+                //Place Wobble Goal
+                new TurnToCommand(drivetrain, 170),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-
-
-                new InstantCommand(wobbleGoalArm::setTurretRight, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(62, -27.5), 0, true),
+                new DriveForwardCommand(drivetrain, -50),
+                new InstantCommand(wobbleGoalArm::setTurretRight,wobbleGoalArm),
+                new WaitCommand(5000),
                 new PlaceWobbleGoal(wobbleGoalArm),
+                new WaitCommand(500),
+                new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(11, 0), Math.toRadians(180))
-                /*
-                new WaitCommand(500),
-                new DriveForwardCommand(drivetrain, 20),
-                new TurnCommand(drivetrain, -90),
-                new InstantCommand(intake::intake, intake),
-                new DriveForwardCommand(drivetrain, 20),
-                new TurnCommand(drivetrain, 100),
-                new DriveForwardCommand(drivetrain, 40),
-                new InstantCommand(intake::stop, intake)
 
-*/
+                new TurnToCommand(drivetrain, 165),
+                new SplineCommand(drivetrain, new Vector2d(11, 10), Math.toRadians(180)),
 
 
 
-                );
+                new TurnToCommand(drivetrain,0, true)
+
+
+
+
+
+
+
+
+
+        );
     }
 }
+

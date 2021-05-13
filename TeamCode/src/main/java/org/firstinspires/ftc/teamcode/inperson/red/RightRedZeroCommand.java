@@ -32,7 +32,7 @@ public class RightRedZeroCommand extends SequentialCommandGroup {
 
                 
                 // Spin up wheels
-                new WaitCommand(10000),
+                //new WaitCommand(10000),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(HG_SPEED), shooterWheels),
 
                 // Drive to Spot

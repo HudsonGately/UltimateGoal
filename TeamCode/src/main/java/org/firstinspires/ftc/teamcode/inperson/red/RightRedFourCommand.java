@@ -30,7 +30,7 @@ public class RightRedFourCommand extends SequentialCommandGroup {
                 new InstantCommand(feeder::retractFeed),
 
                 // Spin up wheels
-                new WaitCommand(12000),
+                //new WaitCommand(12000),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(HG_SPEED), shooterWheels),
 
                 // Drive to Spot
