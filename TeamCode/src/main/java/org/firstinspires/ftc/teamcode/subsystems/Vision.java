@@ -49,6 +49,13 @@ public class Vision extends SubsystemBase {
 
     }
 
+    public void setBottomPercent(double bottomPercent, double width) {
+        ringDetector.setBottomRectangle(bottomPercent, width);
+    }
+
+    public void setTopPercent(double topPercent, double width) {
+        ringDetector.setBottomRectangle(topPercent, width);
+    }
 
     @Override
     public void periodic() {
@@ -57,6 +64,7 @@ public class Vision extends SubsystemBase {
         Util.logger(this, Level.INFO, "Current Stack", currentStack);
         Util.logger(this, Level.INFO, "Bottom", ringDetector.getBottomAverage());
         Util.logger(this, Level.INFO, "Top", ringDetector.getTopAverage());
+
         Util.logger(this, Level.INFO, "Goal yaw (0 if not visible)", goalDetector.getTargetAngle());
         Util.logger(this, Level.INFO, "Goal pitch (0 if not visible)", goalDetector.getTargetPitch());
 

@@ -45,7 +45,7 @@ public class HighGoalDetector {
     public void init() {
         //Set the pipeline the camera should use and start streaming
         tl.addData("Camera", camera);
-        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+        //camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
     }
 
 }
