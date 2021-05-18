@@ -28,6 +28,7 @@ public class LeftRedFourCommand extends SequentialCommandGroup {
 
 
         addCommands(
+                new WaitCommand(5000),
                 // Setup
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
                 new InstantCommand(wobbleGoalArm::closeClaw),
@@ -49,24 +50,12 @@ public class LeftRedFourCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
 
 
-                new InstantCommand(wobbleGoalArm::setTurretRight, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(62, -27.5), 0, true),
+                new InstantCommand(wobbleGoalArm::setTurretFarRight, wobbleGoalArm),
+                new SplineCommand(drivetrain, new Vector2d(64, -27.5), 0, true),
                 new PlaceWobbleGoal(wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 new SplineCommand(drivetrain, new Vector2d(11, 0), Math.toRadians(180))
-                /*
-                new WaitCommand(500),
-                new DriveForwardCommand(drivetrain, 20),
-                new TurnCommand(drivetrain, -90),
-                new InstantCommand(intake::intake, intake),
-                new DriveForwardCommand(drivetrain, 20),
-                new TurnCommand(drivetrain, 100),
-                new DriveForwardCommand(drivetrain, 40),
-                new InstantCommand(intake::stop, intake)
-
-*/
-
 
 
                 );

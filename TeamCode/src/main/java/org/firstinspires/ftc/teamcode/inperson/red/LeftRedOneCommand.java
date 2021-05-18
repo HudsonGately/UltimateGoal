@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.inperson.red;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -9,6 +10,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -44,14 +46,16 @@ public class LeftRedOneCommand extends SequentialCommandGroup {
 
                 //Placek Wobble Goal
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
+                new SplineCommand(drivetrain, new Vector2d(35, 4), Math.toRadians(0), true),
 
-                new DriveForwardCommand(drivetrain, -50),
-                new InstantCommand(wobbleGoalArm::setTurretRight, wobbleGoalArm),
+                new InstantCommand(wobbleGoalArm::setTurretFarRight, wobbleGoalArm),
+                new TurnToCommand(drivetrain, 165),
                 new PlaceWobbleGoal(wobbleGoalArm),
+                new TurnToCommand(drivetrain, 180),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 new WaitCommand(500),
-                new DriveForwardCommand(drivetrain, 38)
+                new SplineCommand(drivetrain, new Vector2d(11, 8), Math.toRadians(180))
 
 
                 );

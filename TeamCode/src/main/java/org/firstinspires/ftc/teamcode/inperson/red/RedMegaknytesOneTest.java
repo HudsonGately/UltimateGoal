@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-@Autonomous(name = "RED Right One Test", group = "RED")
-public class RedRightOneTest extends MatchOpMode {
+@Autonomous(name = "RED Megaknytes One Test", group = "RED")
+public class RedMegaknytesOneTest extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;
     public static double startPoseHeading = 180;
@@ -75,7 +75,7 @@ public class RedRightOneTest extends MatchOpMode {
     @Override
     public void matchStart() {
         feeder.retractFeed();
-        schedule(new FellowshipRedOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
+        schedule(new MegaknightsRedOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
 }

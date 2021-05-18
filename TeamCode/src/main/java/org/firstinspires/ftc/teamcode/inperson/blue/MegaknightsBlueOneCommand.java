@@ -30,7 +30,7 @@ public class MegaknightsBlueOneCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::closeClaw),
                 new InstantCommand(feeder::retractFeed),
 
-                new WaitCommand(10000),
+                new WaitCommand(11000),
                 // Spin up wheels
                 new InstantCommand(() -> shooterWheels.setShooterRPM(HG_SPEED), shooterWheels),
 
@@ -44,7 +44,7 @@ public class MegaknightsBlueOneCommand extends SequentialCommandGroup {
                 //Place Wobble Goal
                 new TurnToCommand(drivetrain, 170),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-                new DriveForwardCommand(drivetrain, -45),
+                new SplineCommand(drivetrain, new Vector2d(40, 4), Math.toRadians(0), true),
                 new InstantCommand(wobbleGoalArm::setTurretRight,wobbleGoalArm),
                 new WaitCommand(500),
                 new PlaceWobbleGoal(wobbleGoalArm),
@@ -52,7 +52,7 @@ public class MegaknightsBlueOneCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(15.5, 10), Math.toRadians(0)),
+                new SplineCommand(drivetrain, new Vector2d(15, 10), Math.toRadians(0)),
                 // new DriveForwardCommand(drivetrain, 30),
                 new TurnToCommand(drivetrain,0, true)
 
