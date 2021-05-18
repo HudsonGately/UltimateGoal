@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
-import org.firstinspires.ftc.teamcode.subsystems.Vision;
+import org.firstinspires.ftc.teamcode.subsystems.VisionStack;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 import java.util.logging.Level;
@@ -47,7 +47,6 @@ public class WobbleDiagonalTest extends MatchOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
-    private Vision vision;
     @Override
     public void robotInit() {
 // Drivetrain Hardware Initializations
@@ -74,19 +73,17 @@ public class WobbleDiagonalTest extends MatchOpMode {
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
-        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.43, 0.56, 0.5, UGBasicHighGoalPipeline.Mode.RED_ONLY);
     }
 
     @Override
     public void robotPeriodic() {
         super.robotPeriodic();
-        Util.logger(this, Level.INFO, "Target angle", vision.getHighGoalAngle());
     }
 
     @Override
     public void matchStart() {
         feeder.retractFeed();
-        schedule(new WobbleDiagonalCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, vision, telemetry));
+        schedule(new WobbleDiagonalCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
 }

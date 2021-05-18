@@ -12,15 +12,17 @@ import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
+import org.firstinspires.ftc.teamcode.commands.drive.TurnToGoalCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
+import org.firstinspires.ftc.teamcode.subsystems.VisionHG;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 public class RightRedFourAltCommand extends SequentialCommandGroup {
-    public RightRedFourAltCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
+    public RightRedFourAltCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, VisionHG vision, Telemetry telemetry) {
         final int HG_SPEED = 3400;
         final int POWERSHOT_SPEED = 3000;
 
@@ -67,7 +69,7 @@ public class RightRedFourAltCommand extends SequentialCommandGroup {
                 new InstantCommand(intake::outtake, intake),
                 new WaitCommand(300),
                 new InstantCommand(intake::intake, intake),
-                new TurnToCommand(drivetrain,180),
+                new TurnToGoalCommand(drivetrain, vision, 180),
                 new FeedRingsCommand(feeder, 4),
                 new DriveForwardCommand(drivetrain, -20),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),

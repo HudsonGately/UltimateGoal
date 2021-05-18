@@ -27,7 +27,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
-import org.firstinspires.ftc.teamcode.subsystems.Vision;
+import org.firstinspires.ftc.teamcode.subsystems.VisionHG;
+import org.firstinspires.ftc.teamcode.subsystems.VisionStack;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 import java.util.HashMap;
@@ -57,7 +58,8 @@ public class RedCompAuto extends MatchOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
-    private Vision vision;
+    private VisionStack visionStack;
+    private VisionHG visionHG;
 
     @Override
     public void robotInit() {
@@ -86,14 +88,15 @@ public class RedCompAuto extends MatchOpMode {
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
         drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
-        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.43, 0.56, RED_CAMERA_WIDTH, UGBasicHighGoalPipeline.Mode.RED_ONLY);
+        visionStack = new VisionStack(hardwareMap, "webcam",  telemetry, 0.43, 0.56, RED_CAMERA_WIDTH);
+        visionHG = new VisionHG(hardwareMap, "webcam1", telemetry, UGBasicHighGoalPipeline.Mode.RED_ONLY);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
 
     }
 
     @Override
     public void disabledPeriodic() {
-        Util.logger(this, telemetry, Level.INFO, "Current Stack", vision.getCurrentStack());
+        Util.logger(this, telemetry, Level.INFO, "Current Stack", visionStack.getCurrentStack());
     }
 
     @Override
@@ -109,9 +112,9 @@ public class RedCompAuto extends MatchOpMode {
                             new RightRedOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
                     put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
-                            new RightRedZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, vision, telemetry)
+                            new RightRedZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, visionHG, telemetry)
                     ));
-                }}, vision::getCurrentStack)
+                }}, visionStack::getCurrentStack)
         );
 
     }

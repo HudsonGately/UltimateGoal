@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 
 import java.util.logging.Level;
 @Config
-public class Vision extends SubsystemBase {
+public class VisionStack extends SubsystemBase {
 
     public static double TOP_PERCENT = 0.39;
     public static double BOTTOM_PERCENT = 0.52;
@@ -22,10 +22,8 @@ public class Vision extends SubsystemBase {
     private UGDetector2 ringDetector;
     private UGDetector2.Stack currentStack;
 
-    private HighGoalDetector goalDetector;
-    private UGBasicHighGoalPipeline.Mode color;
 
-    public Vision(HardwareMap hw, String ringWebcam, String goalWebcam, Telemetry tl, double top, double bottom, double width, UGBasicHighGoalPipeline.Mode color) {
+    public VisionStack(HardwareMap hw, String ringWebcam, Telemetry tl, double top, double bottom, double width) {
         int cameraMonitorViewId = hw.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hw.appContext.getPackageName());
 
         int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
@@ -34,13 +32,9 @@ public class Vision extends SubsystemBase {
                         2, //The number of sub-containers to create
                         OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY); //Whether to split the container vertically or horizontally
         ringDetector = new UGDetector2(hw, ringWebcam, tl, viewportContainerIds[0]);
-        goalDetector = new HighGoalDetector(hw, goalWebcam, tl, color, viewportContainerIds[1]);
         ringDetector.init();
-        goalDetector.init();
-        this.color = color;
         telemetry = tl;
 
-        goalDetector.getTargetAngle();
         currentStack = ringDetector.getStack();
         ringDetector.setBottomRectangle(bottom, width);
         ringDetector.setTopRectangle(top, width);
@@ -64,23 +58,13 @@ public class Vision extends SubsystemBase {
         Util.logger(this, Level.INFO, "Current Stack", currentStack);
         Util.logger(this, Level.INFO, "Bottom", ringDetector.getBottomAverage());
         Util.logger(this, Level.INFO, "Top", ringDetector.getTopAverage());
-
-        Util.logger(this, Level.INFO, "Goal yaw (0 if not visible)", goalDetector.getTargetAngle());
-        Util.logger(this, Level.INFO, "Goal pitch (0 if not visible)", goalDetector.getTargetPitch());
-
     }
 
     public double getTopAverage() {
         return ringDetector.getTopAverage();
     }
-
     public double getBottomAverage() {
         return ringDetector.getTopAverage();
-    }
-
-    public double getHighGoalAngle() { return goalDetector.getTargetAngle(); }
-    public boolean isTargetVisible() {
-        return goalDetector.isTargetVisible();
     }
     public UGDetector2.Stack getCurrentStack() {
         return ringDetector.getStack();

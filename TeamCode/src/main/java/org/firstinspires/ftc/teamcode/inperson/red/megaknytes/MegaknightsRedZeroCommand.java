@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
@@ -17,11 +16,12 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
-import org.firstinspires.ftc.teamcode.subsystems.Vision;
+import org.firstinspires.ftc.teamcode.subsystems.VisionHG;
+import org.firstinspires.ftc.teamcode.subsystems.VisionStack;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 public class MegaknightsRedZeroCommand extends SequentialCommandGroup {
-    public MegaknightsRedZeroCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Vision vision, Telemetry telemetry) {
+    public MegaknightsRedZeroCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, VisionHG vision, Telemetry telemetry) {
         final int HG_SPEED = 3450;
         final int POWERSHOT_SPEED = 3000;
 
@@ -39,8 +39,8 @@ public class MegaknightsRedZeroCommand extends SequentialCommandGroup {
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
-                //new TurnToGoalCommand(drivetrain, vision, 195),
-                new TurnToCommand(drivetrain, 193),
+                new TurnToGoalCommand(drivetrain, vision, 193),
+                //new TurnToCommand(drivetrain, 193),
 
                 // Shoot 3 rings
                 new FeedRingsCommand(feeder, 3),

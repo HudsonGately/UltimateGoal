@@ -41,6 +41,11 @@ public class HighGoalDetector {
             return pipeline.isRedVisible();
         return pipeline.isBlueVisible();
     }
+
+    public void setOffset(int offset) {
+        pipeline.setxOffset(offset);
+    }
+
     public void init() {
         //Set the pipeline the camera should use and start streaming
         tl.addData("Camera", camera);

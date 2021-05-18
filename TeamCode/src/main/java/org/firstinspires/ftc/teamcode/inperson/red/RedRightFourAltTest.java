@@ -13,10 +13,12 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
+import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
+import org.firstinspires.ftc.teamcode.subsystems.VisionHG;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 @Autonomous(name = "RED Right Four Alt Test", group = "RED")
@@ -42,6 +44,7 @@ public class RedRightFourAltTest extends MatchOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
+    private VisionHG visionHG;
 
     @Override
     public void robotInit() {
@@ -69,13 +72,13 @@ public class RedRightFourAltTest extends MatchOpMode {
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
-
+        visionHG = new VisionHG(hardwareMap, "webcam1", telemetry, UGBasicHighGoalPipeline.Mode.BLUE_ONLY);
     }
 
     @Override
     public void matchStart() {
         feeder.retractFeed();
-        schedule(new RightRedFourAltCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
+        schedule(new RightRedFourAltCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, visionHG, telemetry));
 
     }
 }

@@ -6,15 +6,14 @@ import com.arcrobotics.ftclib.controller.PIDController;
 
 import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Vision;
+import org.firstinspires.ftc.teamcode.subsystems.VisionHG;
+import org.firstinspires.ftc.teamcode.subsystems.VisionStack;
 
 import java.util.logging.Level;
 
-import kotlin.Experimental;
-
 @Config
 public class VisionCommand extends CommandBase {
-    private Vision vision;
+    private VisionHG vision;
     private Drivetrain drivetrain;
 
     private PIDController turningController;
@@ -26,12 +25,13 @@ public class VisionCommand extends CommandBase {
     public static double MAX_SPEED = 0.42;
     public static double TOLERANCE = 0.5;
 
-    public VisionCommand(Drivetrain drivetrain, Vision vision, double range) {
+    public VisionCommand(Drivetrain drivetrain, VisionHG vision, double range) {
         this.drivetrain = drivetrain;
         this.vision = vision;
         this.possibleRange = range;
 
         turningController = new PIDController(VISION_P, VISION_I, VISION_D);
+        turningController.setTolerance(TOLERANCE);
         // f(error) => output
         // f(error) = kP * error (-15 to 15)
         // output (-1 to 1)
@@ -58,7 +58,7 @@ public class VisionCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(vision.getHighGoalAngle()) > possibleRange || Math.abs(vision.getHighGoalAngle()) < TOLERANCE;
+        return Math.abs(vision.getHighGoalAngle()) > possibleRange || turningController.atSetPoint();
     }
 
     @Override

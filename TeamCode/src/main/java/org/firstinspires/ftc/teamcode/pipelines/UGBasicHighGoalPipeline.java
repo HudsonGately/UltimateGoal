@@ -37,6 +37,8 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
     private List<MatOfPoint> currentContours, interiorContours;
     private MatOfPoint biggestContour;
     private Point blueCenter, redCenter;
+    private int xOffset = 0;
+    private int yOffset = 0;
 
     public UGBasicHighGoalPipeline() {
         this(Mode.RED_ONLY);
@@ -164,7 +166,7 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
             biggestContour = Collections.max(filteredContours, Comparator.comparingDouble(t0 -> Imgproc.minAreaRect(new MatOfPoint2f(t0.toArray())).size.area()));
 
             Moments targetMoments = Imgproc.moments(biggestContour);
-            Point targetCenter = new Point((int) (targetMoments.m10 / targetMoments.m00), (int) (targetMoments.m01 / targetMoments.m00));
+            Point targetCenter = new Point((int) (targetMoments.m10 / targetMoments.m00) + xOffset, (int) (targetMoments.m01 / targetMoments.m00) + yOffset);
 
 
             Rect boundingRect = Imgproc.boundingRect(biggestContour);
@@ -190,6 +192,10 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
             return new Point(centerX, centerY);
         }
         return new Point(rect.x + rect.width / 2.0, rect.y + rect.height / 2.0);
+    }
+
+    public void setxOffset(int offset) {
+        this.xOffset = offset;
     }
 }
 

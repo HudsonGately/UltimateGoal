@@ -17,9 +17,6 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
-import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedFourCommand;
-import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedOneCommand;
-import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedZeroCommand;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
 import org.firstinspires.ftc.teamcode.pipelines.UGDetector2;
@@ -27,7 +24,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
-import org.firstinspires.ftc.teamcode.subsystems.Vision;
+import org.firstinspires.ftc.teamcode.subsystems.VisionStack;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 import java.util.HashMap;
@@ -57,7 +54,7 @@ public class MegaknytesRedPSCompAuto extends MatchOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
-    private Vision vision;
+    private VisionStack visionStack;
 
     @Override
     public void robotInit() {
@@ -86,14 +83,14 @@ public class MegaknytesRedPSCompAuto extends MatchOpMode {
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
         drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
-        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.43, 0.56, RED_CAMERA_WIDTH, UGBasicHighGoalPipeline.Mode.RED_ONLY);
+        visionStack = new VisionStack(hardwareMap, "webcam",  telemetry, 0.43, 0.56, RED_CAMERA_WIDTH);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
 
     }
 
     @Override
     public void disabledPeriodic() {
-        Util.logger(this, telemetry, Level.INFO, "Current Stack", vision.getCurrentStack());
+        Util.logger(this, telemetry, Level.INFO, "Current Stack", visionStack.getCurrentStack());
     }
 
     @Override
@@ -111,7 +108,7 @@ public class MegaknytesRedPSCompAuto extends MatchOpMode {
                     put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
                             new RightRedPSZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
-                }}, vision::getCurrentStack)
+                }}, visionStack::getCurrentStack)
         );
 
     }
