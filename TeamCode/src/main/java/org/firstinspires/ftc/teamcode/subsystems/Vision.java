@@ -11,7 +11,9 @@ import org.firstinspires.ftc.teamcode.pipelines.RingPipelineEx;
 import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
 
 import org.firstinspires.ftc.teamcode.Util;
+import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvSwitchableWebcam;
 
 import java.util.logging.Level;
@@ -34,6 +36,8 @@ public class Vision extends SubsystemBase {
     private boolean runningRingDetector;
 
     public Vision(HardwareMap hw, String ringWebcam, String goalWebcam, Telemetry tl, double top, double bottom, double width, UGBasicHighGoalPipeline.Mode color) {
+        this.telemetry = tl;
+
         ringCamera = hw.get(WebcamName.class, "webcam");
         goalCamera = hw.get(WebcamName.class, "webcam1");
 
@@ -47,9 +51,14 @@ public class Vision extends SubsystemBase {
         goalDetector = new CompHGPipeline(color);
 
         switchableWebcam = OpenCvCameraFactory.getInstance().createSwitchableWebcam(cameraMonitorViewId, ringCamera, goalCamera);
+
+        switchableWebcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                switchableWebcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+            }
+        });
         switchableWebcam.openCameraDevice();
-        switchableWebcam.setActiveCamera(ringCamera);
-        switchableWebcam.setPipeline(ringPipeline);
 
         runningRingDetector = true;
     }

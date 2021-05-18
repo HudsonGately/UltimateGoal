@@ -37,11 +37,17 @@ public class VisionTestOpMode extends MatchOpMode {
 
     @Override
     public void configureButtons() {
+        telemetry.addData("Mode", "");
+
         (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).whenPressed(() -> {
            vision.switchToHG();
+            telemetry.addData("Mode", "Starter");
+
         });
         (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whenPressed(() -> {
             vision.switchToStarter();
+            telemetry.addData("Mode", "HG");
+
         });
 
     }
