@@ -39,13 +39,18 @@ public class VisionHG extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Util.logger(this, Level.INFO, "Goal yaw (0 if not visible)", goalDetector.getTargetAngle());
-        Util.logger(this, Level.INFO, "Goal pitch (0 if not visible)", goalDetector.getTargetPitch());
+        try {
+            Util.logger(this, Level.INFO, "Goal yaw (0 if not visible)", goalDetector.getTargetAngle());
+            Util.logger(this, Level.INFO, "Goal pitch (0 if not visible)", goalDetector.getTargetPitch());
+        } catch(Exception e) {
+            telemetry.addData("Goal Camera:", "Note yet online");
+        }
     }
     public void setOffset(int offset) {
         goalDetector.setOffset(offset);
     }
-    public double getHighGoalAngle() { return goalDetector.getTargetAngle(); }
+    public double getHighGoalAngle() {
+        return goalDetector.getTargetAngle(); }
     public boolean isTargetVisible() {
         return goalDetector.isTargetVisible();
     }

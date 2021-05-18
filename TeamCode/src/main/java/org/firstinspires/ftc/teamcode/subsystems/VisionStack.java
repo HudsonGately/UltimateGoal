@@ -53,11 +53,16 @@ public class VisionStack extends SubsystemBase {
 
     @Override
     public void periodic() {
-        currentStack = ringDetector.getStack();
+        try {
+            currentStack = ringDetector.getStack();
 
-        Util.logger(this, Level.INFO, "Current Stack", currentStack);
-        Util.logger(this, Level.INFO, "Bottom", ringDetector.getBottomAverage());
-        Util.logger(this, Level.INFO, "Top", ringDetector.getTopAverage());
+            Util.logger(this, Level.INFO, "Current Stack", currentStack);
+            Util.logger(this, Level.INFO, "Bottom", ringDetector.getBottomAverage());
+            Util.logger(this, Level.INFO, "Top", ringDetector.getTopAverage());
+        } catch(Exception e) {
+            telemetry.addData("Ring Camera:", "Note yet online");
+        }
+
     }
 
     public double getTopAverage() {

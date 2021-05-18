@@ -31,7 +31,6 @@ public class RedMegaknytesZeroTest extends MatchOpMode {
     public static double startPoseY = 0;
     public static double startPoseHeading = 180;
     // Motors
-    private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
     private DcMotorEx shooterMotorFront, shooterMotorBack;
     private MotorEx arm;
@@ -82,7 +81,6 @@ public class RedMegaknytesZeroTest extends MatchOpMode {
     @Override
     public void robotPeriodic() {
         super.robotPeriodic();
-        Util.logger(this, Level.INFO, "Target angle", visionHG.getHighGoalAngle());
     }
 
     @Override
