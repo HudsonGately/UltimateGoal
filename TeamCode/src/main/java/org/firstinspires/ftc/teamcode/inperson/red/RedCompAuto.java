@@ -15,6 +15,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Trajectories;
+import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedFourCommand;
+import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedOneCommand;
+import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedZeroCommand;
 import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
 import org.firstinspires.ftc.teamcode.pipelines.UGDetector2;
 import org.firstinspires.ftc.teamcode.Util;
@@ -30,7 +33,7 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-@Autonomous(name = "Competition Autonomous (Red)", group = "Red")
+@Autonomous(name = "Generic Competition Autonomous (Red)", group = "Red")
 public class RedCompAuto extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;

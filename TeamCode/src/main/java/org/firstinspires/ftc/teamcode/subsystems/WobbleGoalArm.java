@@ -109,7 +109,7 @@ public class WobbleGoalArm extends SubsystemBase {
         controller.setP(0.01);
 
         automatic = true;
-        controller.setSetPoint(9);
+        controller.setSetPoint(5);
     }
     public void liftWobbleGoal() {
         controller.setP(0.025);
@@ -150,6 +150,13 @@ public class WobbleGoalArm extends SubsystemBase {
     public void setTurretMiddle() {
         setLazySusanPosition(0.566);
     }
+    public void setTurretDiagonalRed() {
+        setLazySusanPosition(0.8);
+    }
+    public void setTurretDiagonalBlue(){
+        setLazySusanPosition(0.34);
+    }
+
     public void setOffset() {
         resetEncoder();
         controller.setSetPoint(getAngle());

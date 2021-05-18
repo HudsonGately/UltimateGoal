@@ -1,6 +1,9 @@
-package org.firstinspires.ftc.teamcode.inperson.blue;
+package org.firstinspires.ftc.teamcode.inperson.red.megaknytes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.SelectCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -11,28 +14,39 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.teamcode.Trajectories;
+import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
-import org.firstinspires.ftc.teamcode.inperson.blue.inception.InceptionBlueZeroCommand;
+import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedFourCommand;
+import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedOneCommand;
+import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedZeroCommand;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
+import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
+import org.firstinspires.ftc.teamcode.pipelines.UGDetector2;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
+import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-@Autonomous(name = "Blue Left Zero Test", group = "Blue")
-public class BlueLeftZeroTest extends MatchOpMode {
+import java.util.HashMap;
+import java.util.logging.Level;
+
+@Autonomous(name = "Megaknytes Competition Autonomous (Red + PS)", group = "Red")
+public class MegaknytesRedPSCompAuto extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;
     public static double startPoseHeading = 180;
+    public static double RED_CAMERA_WIDTH = .02;
     // Motors
     private MotorEx leftBackDriveMotor, rightBackDriveMotor, leftFrontDriveMotor, rightFrontDriveMotor;
     private MotorEx intakeMotor;
     private DcMotorEx shooterMotorFront, shooterMotorBack;
     private MotorEx arm;
     private ServoEx feedServo, clawServo, lazySusanServo;
-    private ServoEx intakeServo;
     private TouchSensor wobbleTouchSensor;
+    private ServoEx intakeServo;
 
     // Gamepad
     private GamepadEx driverGamepad;
@@ -43,13 +57,15 @@ public class BlueLeftZeroTest extends MatchOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
+    private Vision vision;
 
     @Override
     public void robotInit() {
-// Drivetrain Hardware Initializations
+        // Drivetrain Hardware Initializations
         // Intake hardware Initializations
         intakeMotor = new MotorEx(hardwareMap, "intake");
         intakeServo = new SimpleServo(hardwareMap, "intake_wall_servo", 0, 180);
+
         // Shooter hardware initializations
         shooterMotorBack = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_back");
         shooterMotorFront = (DcMotorEx) hardwareMap.get(DcMotor.class, "shooter_front");
@@ -69,14 +85,34 @@ public class BlueLeftZeroTest extends MatchOpMode {
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
+        drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
+        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.43, 0.56, RED_CAMERA_WIDTH, UGBasicHighGoalPipeline.Mode.RED_ONLY);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
 
     }
 
     @Override
+    public void disabledPeriodic() {
+        Util.logger(this, telemetry, Level.INFO, "Current Stack", vision.getCurrentStack());
+    }
+
+    @Override
     public void matchStart() {
         feeder.retractFeed();
-        schedule(new InceptionBlueZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
+        wobbleGoalArm.setOffset();
+        schedule(
+                new SelectCommand(new HashMap<Object, Command>() {{
+                    put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
+                            new MegaknightsRedFourCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
+                    ));
+                    put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
+                            new RightRedPSOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
+                    ));
+                    put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
+                            new RightRedPSZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
+                    ));
+                }}, vision::getCurrentStack)
+        );
 
     }
 }

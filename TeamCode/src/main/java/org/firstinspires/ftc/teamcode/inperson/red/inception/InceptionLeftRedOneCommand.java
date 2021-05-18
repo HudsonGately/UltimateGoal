@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.inperson.red;
+package org.firstinspires.ftc.teamcode.inperson.red.inception;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -11,7 +11,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -21,14 +20,13 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 @Config
-public class LeftRedFourCommand extends SequentialCommandGroup {
+public class InceptionLeftRedOneCommand extends SequentialCommandGroup {
     public static int HG_SPEED = 3450;
     public static int POWERSHOT_SPEED = 2850;
-    public LeftRedFourCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
+    public InceptionLeftRedOneCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
 
 
         addCommands(
-                new WaitCommand(5000),
                 // Setup
                 new InstantCommand(wobbleGoalArm::setTurretMiddle),
                 new InstantCommand(wobbleGoalArm::closeClaw),
@@ -48,14 +46,16 @@ public class LeftRedFourCommand extends SequentialCommandGroup {
 
                 //Placek Wobble Goal
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-
+                new SplineCommand(drivetrain, new Vector2d(35, 4), Math.toRadians(0), true),
 
                 new InstantCommand(wobbleGoalArm::setTurretFarRight, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(64, -27.5), 0, true),
+                new TurnToCommand(drivetrain, 165),
                 new PlaceWobbleGoal(wobbleGoalArm),
+                new TurnToCommand(drivetrain, 180),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(11, 0), Math.toRadians(180))
+                new WaitCommand(500),
+                new SplineCommand(drivetrain, new Vector2d(11, 8), Math.toRadians(180))
 
 
                 );

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.inperson.red;
+package org.firstinspires.ftc.teamcode.inperson.red.inception;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -21,10 +21,10 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 @Config
-public class LeftRedFourCommand extends SequentialCommandGroup {
+public class InceptionLeftRedFourCommand extends SequentialCommandGroup {
     public static int HG_SPEED = 3450;
     public static int POWERSHOT_SPEED = 2850;
-    public LeftRedFourCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
+    public InceptionLeftRedFourCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
 
 
         addCommands(
@@ -50,12 +50,14 @@ public class LeftRedFourCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
 
 
-                new InstantCommand(wobbleGoalArm::setTurretFarRight, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(64, -27.5), 0, true),
+                new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm),
+                new SplineCommand(drivetrain, new Vector2d(64, -18), 0, true),
+                new TurnCommand(drivetrain, 90),
                 new PlaceWobbleGoal(wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(11, 0), Math.toRadians(180))
+                new DriveForwardCommand(drivetrain, -4),
+                new SplineCommand(drivetrain, new Vector2d(11, 8), Math.toRadians(180), true)
 
 
                 );
