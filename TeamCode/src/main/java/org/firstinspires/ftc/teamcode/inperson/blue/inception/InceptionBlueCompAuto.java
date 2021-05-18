@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.inperson.blue.megaknytes.MegaknightsBlueZe
 import org.firstinspires.ftc.teamcode.inperson.red.megaknytes.MegaknightsRedFourCommand;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
-import org.firstinspires.ftc.teamcode.pipelines.UGDetector2;
+import org.firstinspires.ftc.teamcode.pipelines.RingPipelineEx;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
@@ -102,13 +102,13 @@ public class InceptionBlueCompAuto extends MatchOpMode {
         wobbleGoalArm.setOffset();
         schedule(
                 new SelectCommand(new HashMap<Object, Command>() {{
-                    put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.FOUR, new SequentialCommandGroup(
                             new LeftBlueFourCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
-                    put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.ONE, new SequentialCommandGroup(
                             new LeftBlueOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
-                    put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.ZERO, new SequentialCommandGroup(
                             new InceptionBlueZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
                 }}, vision::getCurrentStack)

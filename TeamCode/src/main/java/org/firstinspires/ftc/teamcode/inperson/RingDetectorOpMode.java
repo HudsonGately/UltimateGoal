@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Util;
@@ -16,7 +17,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.logging.Level;
 
-@Autonomous(name = "Vision Test")
+@TeleOp(name = "Ring Vision Test")
 public class RingDetectorOpMode extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;
@@ -84,15 +85,11 @@ public class RingDetectorOpMode extends MatchOpMode {
 
     @Override
     public void disabledPeriodic() {
-
+        run();
     }
 
     @Override
     public void robotPeriodic() {
-        Util.logger(this, Level.INFO, "Top Y Height", topHeight);
-        Util.logger(this, Level.INFO, "bottom Y Height", bottomHeight);
-        Util.logger(this, Level.INFO, "width", width);
-        Util.logger(this, Level.INFO, "num rings", vision.getCurrentStack());
     }
 
     @Override

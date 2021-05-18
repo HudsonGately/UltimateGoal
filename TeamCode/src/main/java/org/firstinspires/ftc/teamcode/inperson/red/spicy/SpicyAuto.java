@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.inperson.red.spicy;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -17,7 +18,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.inperson.red.RightRedFourAltCommand;
 import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
-import org.firstinspires.ftc.teamcode.pipelines.UGDetector2;
+import org.firstinspires.ftc.teamcode.pipelines.RingPipelineEx;
 import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
@@ -100,13 +101,14 @@ public class SpicyAuto extends MatchOpMode {
         wobbleGoalArm.setOffset();
         schedule(
                 new SelectCommand(new HashMap<Object, Command>() {{
-                    put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.FOUR, new SequentialCommandGroup(
                             new RightRedFourAltCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
-                    put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.ONE, new SequentialCommandGroup(
                             new RightRedOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
-                    put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.ZERO, new SequentialCommandGroup(
+                            new InstantCommand(vision::switchToHG, vision),
                             new RightRedZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, vision, telemetry)
                     ));
                 }}, vision::getCurrentStack)

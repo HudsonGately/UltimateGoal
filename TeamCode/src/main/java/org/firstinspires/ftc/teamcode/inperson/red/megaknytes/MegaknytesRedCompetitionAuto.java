@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.inperson.red.megaknytes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -21,8 +22,8 @@ import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedFourCommand;
 import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedOneCommand;
 import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedZeroCommand;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
+import org.firstinspires.ftc.teamcode.pipelines.RingPipelineEx;
 import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
-import org.firstinspires.ftc.teamcode.pipelines.UGDetector2;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
@@ -87,6 +88,7 @@ public class MegaknytesRedCompetitionAuto extends MatchOpMode {
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
         drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
         vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.43, 0.56, RED_CAMERA_WIDTH, UGBasicHighGoalPipeline.Mode.RED_ONLY);
+        vision.switchToStarter();
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
 
     }
@@ -102,13 +104,16 @@ public class MegaknytesRedCompetitionAuto extends MatchOpMode {
         wobbleGoalArm.setOffset();
         schedule(
                 new SelectCommand(new HashMap<Object, Command>() {{
-                    put(UGDetector2.Stack.FOUR, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.FOUR, new SequentialCommandGroup(
+                            new InstantCommand(vision::switchToHG, vision),
                             new MegaknightsRedFourCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
-                    put(UGDetector2.Stack.ONE, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.ONE, new SequentialCommandGroup(
+                            new InstantCommand(vision::switchToHG, vision),
                             new MegaknightsRedOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
-                    put(UGDetector2.Stack.ZERO, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.ZERO, new SequentialCommandGroup(
+                            new InstantCommand(vision::switchToHG, vision),
                             new MegaknightsRedZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, vision, telemetry)
                     ));
                 }}, vision::getCurrentStack)

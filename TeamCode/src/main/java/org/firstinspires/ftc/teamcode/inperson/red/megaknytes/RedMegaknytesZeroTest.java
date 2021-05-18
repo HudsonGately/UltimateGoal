@@ -87,6 +87,7 @@ public class RedMegaknytesZeroTest extends MatchOpMode {
     @Override
     public void matchStart() {
         feeder.retractFeed();
+        vision.switchToHG();
         schedule(new MegaknightsRedZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, vision, telemetry));
 
     }

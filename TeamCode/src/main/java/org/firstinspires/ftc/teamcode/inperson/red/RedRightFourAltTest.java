@@ -75,6 +75,7 @@ public class RedRightFourAltTest extends MatchOpMode {
     @Override
     public void matchStart() {
         feeder.retractFeed();
+
         schedule(new RightRedFourAltCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
 
     }
