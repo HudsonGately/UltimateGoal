@@ -35,6 +35,7 @@ public class BlueMidGoalCommand extends SequentialCommandGroup {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(MG_SPEED), shooterWheels),
 
                 // Drive to spot
+                new DriveForwardCommand(drivetrain, -15),
                 new SplineCommand(drivetrain, new Vector2d(-5, -70), 0, true),
                 new TurnToCommand(drivetrain, 170),
 
