@@ -29,8 +29,7 @@ public class HGDetectorOpMode extends MatchOpMode {
         driverGamepad = new GamepadEx(gamepad1);
         //This will instantiate an OpenCvCamera object for the camera we'll be using
 
-        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.5, 0.5, 0, UGBasicHighGoalPipeline.Mode.BLUE_ONLY);
-        vision.switchToHG();
+        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.43, 0.56, 0.5, UGBasicHighGoalPipeline.Mode.BLUE_ONLY, false);
     }
 
     @Override
@@ -54,6 +53,8 @@ public class HGDetectorOpMode extends MatchOpMode {
     @Override
     public void robotPeriodic() {
     }
+
+
 
     @Override
     public void matchStart() {

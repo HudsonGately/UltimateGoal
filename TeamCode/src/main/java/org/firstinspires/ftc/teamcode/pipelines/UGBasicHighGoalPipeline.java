@@ -196,6 +196,9 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
     public void setXOffset(int offset) {
         this.xOffset = offset;
     }
+    public int getxOffset() {
+        return xOffset;
+    }
 }
 
 

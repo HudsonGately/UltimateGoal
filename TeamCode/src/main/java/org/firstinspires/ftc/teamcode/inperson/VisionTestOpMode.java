@@ -41,12 +41,12 @@ public class VisionTestOpMode extends MatchOpMode {
 
         (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).whenPressed(() -> {
            vision.switchToHG();
-            telemetry.addData("Mode", "Starter");
+            telemetry.addData("Mode", "HG");
 
         });
         (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whenPressed(() -> {
             vision.switchToStarter();
-            telemetry.addData("Mode", "HG");
+            telemetry.addData("Mode", "StarterW");
 
         });
 
@@ -54,7 +54,7 @@ public class VisionTestOpMode extends MatchOpMode {
 
     @Override
     public void disabledPeriodic() {
-        run();
+
     }
 
     @Override

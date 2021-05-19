@@ -51,11 +51,11 @@ public class RingDetectorOpMode extends MatchOpMode {
 
         (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whenPressed(() -> {
             bottomHeight -= 0.02;
-            vision.setTopPercent(bottomHeight, width);
+            vision.setBottomPercent(bottomHeight, width);
         });
-        (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whenPressed(() -> {
+        (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whenPressed(() -> {
             bottomHeight += 0.02;
-            vision.setTopPercent(bottomHeight, width);
+            vision.setBottomPercent(bottomHeight, width);
         });
 
         (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> {
@@ -64,7 +64,7 @@ public class RingDetectorOpMode extends MatchOpMode {
             vision.setBottomPercent(bottomHeight, width);
         });
 
-        (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_LEFT)).whenPressed(() -> {
+        (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_RIGHT)).whenPressed(() -> {
             width += 0.01;
             vision.setTopPercent(topHeight, width);
             vision.setBottomPercent(bottomHeight, width);
@@ -90,6 +90,9 @@ public class RingDetectorOpMode extends MatchOpMode {
 
     @Override
     public void robotPeriodic() {
+        telemetry.addData("top height", topHeight);
+        telemetry.addData("bottom height", bottomHeight);
+        telemetry.addData("width", width);
     }
 
     @Override

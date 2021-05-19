@@ -35,7 +35,7 @@ public class Vision extends SubsystemBase {
 
     private boolean runningRingDetector;
 
-    public Vision(HardwareMap hw, String ringWebcam, String goalWebcam, Telemetry tl, double top, double bottom, double width, UGBasicHighGoalPipeline.Mode color) {
+    public Vision(HardwareMap hw, String ringWebcam, String goalWebcam, Telemetry tl, double top, double bottom, double width, UGBasicHighGoalPipeline.Mode color, boolean initRing) {
         this.telemetry = tl;
 
         ringCamera = hw.get(WebcamName.class, "webcam");
@@ -44,26 +44,41 @@ public class Vision extends SubsystemBase {
         int cameraMonitorViewId = hw.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hw.appContext.getPackageName());
 
         ringPipeline = new RingPipelineEx();
-        ringPipeline.setBottomRectangle(bottom, width);
-        ringPipeline.setTopRectangle(top, width);
+        ringPipeline.setBottomRectangle(width, bottom);
+        ringPipeline.setTopRectangle(width, top);
         ringPipeline.setRectangleSize(5, 5);
 
         goalDetector = new CompHGPipeline(color);
+        if (color == UGBasicHighGoalPipeline.Mode.RED_ONLY)
+            goalDetector.setXOffset(-30);
+        else
+            goalDetector.setXOffset(-38);
+        runningRingDetector = initRing;
 
-        switchableWebcam = OpenCvCameraFactory.getInstance().createSwitchableWebcam(cameraMonitorViewId, ringCamera, goalCamera);
-
+        if (runningRingDetector) {
+            switchableWebcam = OpenCvCameraFactory.getInstance().createSwitchableWebcam(cameraMonitorViewId, ringCamera, goalCamera);
+            switchableWebcam.setPipeline(ringPipeline);
+        } else {
+            switchableWebcam = OpenCvCameraFactory.getInstance().createSwitchableWebcam(cameraMonitorViewId, goalCamera, ringCamera);
+            switchableWebcam.setPipeline(goalDetector);
+        }
         switchableWebcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
+
                 switchableWebcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+
             }
+
         });
         switchableWebcam.openCameraDevice();
 
-        runningRingDetector = true;
+    }
+    public Vision(HardwareMap hw, String ringWebcam, String goalWebcam, Telemetry tl, double top, double bottom, double width, UGBasicHighGoalPipeline.Mode color) {
+        this(hw, ringWebcam, goalWebcam, tl, top, bottom, width, color, true);
     }
 
-    public void switchToHG() {
+        public void switchToHG() {
         if (isRunningHGDetector())
             return;
 
@@ -88,22 +103,24 @@ public class Vision extends SubsystemBase {
             Util.logger(this, telemetry, Level.INFO, "Current Stack", currentStack);
             Util.logger(this, telemetry, Level.INFO, "Bottom", ringPipeline.getBottomAverage());
             Util.logger(this, telemetry, Level.INFO, "Top", ringPipeline.getTopAverage());
+
         }
 
         if (isRunningHGDetector()) {
             Util.logger(this, telemetry, Level.INFO, "Goal yaw (0 if not visible)", goalDetector.getTargetAngle());
             Util.logger(this, telemetry, Level.INFO, "Goal pitch (0 if not visible)", goalDetector.getTargetPitch());
+            Util.logger(this, telemetry, Level.INFO, "Offset", goalDetector.getxOffset());
         }
     }
 
 
 
 
-    public void setBottomPercent(double bottomPercent, double width) { ringPipeline.setBottomRectangle(bottomPercent, width);
+    public void setBottomPercent(double bottomPercent, double width) { ringPipeline.setBottomRectangle(width, bottomPercent);
     }
 
     public void setTopPercent(double topPercent, double width) {
-        ringPipeline.setBottomRectangle(topPercent, width);
+        ringPipeline.setTopRectangle(width, topPercent);
     }
     public double getTopAverage() {
         return ringPipeline.getTopAverage();

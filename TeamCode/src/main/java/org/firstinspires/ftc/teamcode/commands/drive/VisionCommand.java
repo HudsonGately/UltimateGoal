@@ -20,7 +20,7 @@ public class VisionCommand extends CommandBase {
     private PIDController turningController;
     private double possibleRange;
 
-    public static double VISION_P = 0.038;
+    public static double VISION_P = 0.03;
     public static double VISION_I = 0.000001;
     public static double VISION_D = 0.00001;
     public static double MAX_SPEED = 0.42;
