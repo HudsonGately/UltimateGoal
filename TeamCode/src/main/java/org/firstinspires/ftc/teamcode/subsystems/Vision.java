@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -35,11 +37,17 @@ public class Vision extends SubsystemBase {
 
     private boolean runningRingDetector;
 
+    private ServoEx poggers;
+
+    private double homepos = 0.5;
+    private double homeViz = 1;
     public Vision(HardwareMap hw, String ringWebcam, String goalWebcam, Telemetry tl, double top, double bottom, double width, UGBasicHighGoalPipeline.Mode color, boolean initRing) {
         this.telemetry = tl;
 
         ringCamera = hw.get(WebcamName.class, "webcam");
         goalCamera = hw.get(WebcamName.class, "webcam1");
+        poggers = new SimpleServo(hw, "vision_servo", 0, 180);
+        poggers.setPosition(homepos);
 
         int cameraMonitorViewId = hw.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hw.appContext.getPackageName());
 
@@ -104,13 +112,20 @@ public class Vision extends SubsystemBase {
             Util.logger(this, telemetry, Level.INFO, "Bottom", ringPipeline.getBottomAverage());
             Util.logger(this, telemetry, Level.INFO, "Top", ringPipeline.getTopAverage());
 
+            poggers.setPosition(homepos);
         }
 
         if (isRunningHGDetector()) {
             Util.logger(this, telemetry, Level.INFO, "Goal yaw (0 if not visible)", goalDetector.getTargetAngle());
             Util.logger(this, telemetry, Level.INFO, "Goal pitch (0 if not visible)", goalDetector.getTargetPitch());
             Util.logger(this, telemetry, Level.INFO, "Offset", goalDetector.getxOffset());
+            if(goalDetector.isTargetVisible()) {
+                poggers.setPosition(homeViz);
+            } else {
+                poggers.setPosition(homepos);
+            }
         }
+
     }
 
 
