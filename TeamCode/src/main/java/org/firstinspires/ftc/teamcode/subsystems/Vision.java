@@ -39,8 +39,8 @@ public class Vision extends SubsystemBase {
 
     private ServoEx poggers;
 
-    private double homepos = 0.5;
-    private double homeViz = 1;
+    private double homepos = 0.41;
+    private double homeViz = .12;
     public Vision(HardwareMap hw, String ringWebcam, String goalWebcam, Telemetry tl, double top, double bottom, double width, UGBasicHighGoalPipeline.Mode color, boolean initRing) {
         this.telemetry = tl;
 

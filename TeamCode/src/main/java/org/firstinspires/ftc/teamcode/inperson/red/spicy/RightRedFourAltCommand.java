@@ -56,10 +56,10 @@ public class RightRedFourAltCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 new DriveForwardCommand(drivetrain, 30),
                 // Drive to Rings
-                new InstantCommand(intake::dropIntake, intake),
+                new InstantCommand(intake::autodropIntake, intake),
                 new InstantCommand(intake::intake, intake),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(3300), shooterWheels),
-                new SplineCommand(drivetrain, new Vector2d(-47, 15.5), Math.toRadians(180)),
+                new SplineCommand(drivetrain, new Vector2d(-43, 15.5), Math.toRadians(180)),
 
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
@@ -69,9 +69,10 @@ public class RightRedFourAltCommand extends SequentialCommandGroup {
                 new InstantCommand(intake::outtake, intake),
                 new WaitCommand(300),
                 new InstantCommand(intake::intake, intake),
+                new TurnToCommand(drivetrain, 180),
                 new TurnToGoalCommand(drivetrain,vision, 180),
                 new FeedRingsCommand(feeder, 4),
-                new DriveForwardCommand(drivetrain, -20),
+                new DriveForwardCommand(drivetrain, -16),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
                 new InstantCommand(intake::stop, intake)
 

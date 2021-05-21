@@ -24,7 +24,7 @@ public class VisionCommand extends CommandBase {
     public static double VISION_I = 0.000001;
     public static double VISION_D = 0.00001;
     public static double MAX_SPEED = 0.42;
-    public static double TOLERANCE = 0.5;
+    public static double TOLERANCE = 0.75;
 
     public VisionCommand(Drivetrain drivetrain, Vision vision, double range) {
         this.drivetrain = drivetrain;
@@ -36,8 +36,6 @@ public class VisionCommand extends CommandBase {
         // f(error) = kP * error (-15 to 15)
         // output (-1 to 1)
         // (-0.5 to 0.5)
-
-
     }
 
     @Override

@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.inperson.red;
+package org.firstinspires.ftc.teamcode.inperson.blue;
 
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -9,7 +8,6 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
 import org.firstinspires.ftc.teamcode.commands.drive.DriveForwardCommand;
-import org.firstinspires.ftc.teamcode.commands.drive.SplineCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.drive.TurnToCommand;
 import org.firstinspires.ftc.teamcode.commands.shooter.FeedRingsCommand;
@@ -19,10 +17,9 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-public class RedMidGoalCommand extends SequentialCommandGroup {
-    public RedMidGoalCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
+public class RightBlueZeroCommand extends SequentialCommandGroup {
+    public RightBlueZeroCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
         final int HG_SPEED = 3450;
-        final int MG_SPEED = 2700;
         final int POWERSHOT_SPEED = 3000;
 
         addCommands(
@@ -32,19 +29,32 @@ public class RedMidGoalCommand extends SequentialCommandGroup {
                 new InstantCommand(feeder::retractFeed),
 
                 // Spin up wheels
-                new InstantCommand(() -> shooterWheels.setShooterRPM(MG_SPEED), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(HG_SPEED), shooterWheels),
 
-                // Drive to spot
-                new DriveForwardCommand(drivetrain, -15),
-                new SplineCommand(drivetrain, new Vector2d(-5, 70), 0, true),
-                new TurnToCommand(drivetrain, 180),
+                // Drive to Spot
+                new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
+                new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
+                new TurnToCommand(drivetrain, 195),
 
-                // Shoot 3 rings
+                // Shokot 3k ringsk
                 new FeedRingsCommand(feeder, 3),
 
-                //Park
+
+                //Place Wobble Goal
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-                new DriveForwardCommand(drivetrain, -15)
+                new TurnToCommand(drivetrain, 170),
+                new TurnCommand(drivetrain, -105),
+                new DriveForwardCommand(drivetrain, 17),
+                new PlaceWobbleGoal(wobbleGoalArm),
+                new TurnCommand(drivetrain, 35),
+                new DriveForwardCommand(drivetrain, -40)
+
+
+
+
+
+
+
 
         );
     }

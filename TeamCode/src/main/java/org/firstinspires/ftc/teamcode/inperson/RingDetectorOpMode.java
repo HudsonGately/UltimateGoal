@@ -41,20 +41,20 @@ public class RingDetectorOpMode extends MatchOpMode {
     @Override
     public void configureButtons() {
         (new GamepadButton(driverGamepad, GamepadKeys.Button.Y)).whenPressed(() -> {
-            topHeight -= 0.02;
+            topHeight -= 0.01;
             vision.setTopPercent(topHeight, width);
         });
         (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whenPressed(() -> {
-            topHeight += 0.02;
+            topHeight += 0.01;
             vision.setTopPercent(topHeight, width);
         });
 
         (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_UP)).whenPressed(() -> {
-            bottomHeight -= 0.02;
+            bottomHeight -= 0.01;
             vision.setBottomPercent(bottomHeight, width);
         });
         (new GamepadButton(driverGamepad, GamepadKeys.Button.DPAD_DOWN)).whenPressed(() -> {
-            bottomHeight += 0.02;
+            bottomHeight += 0.01;
             vision.setBottomPercent(bottomHeight, width);
         });
 

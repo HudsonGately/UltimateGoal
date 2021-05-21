@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.inperson.red.megaknytes;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -18,6 +19,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
+import org.firstinspires.ftc.teamcode.inperson.VisionConstants;
 import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedFourCommand;
 import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedOneCommand;
 import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedZeroCommand;
@@ -34,7 +36,7 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-@Autonomous(name = "Megaknytes Competition Autonomous (Red)", group = "Red")
+@Autonomous(name = "Megaknytes Competition Autonomous (Red Right)", group = "Red")
 public class MegaknytesRedCompetitionAuto extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;
@@ -86,8 +88,8 @@ public class MegaknytesRedCompetitionAuto extends MatchOpMode {
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
-        drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
-        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.43, 0.56, RED_CAMERA_WIDTH, UGBasicHighGoalPipeline.Mode.RED_ONLY);
+
+        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, VisionConstants.RED_RIGHT_VISION.TOP_HEIGHT, VisionConstants.RED_RIGHT_VISION.BOTTOM_HEIGHT, VisionConstants.RED_RIGHT_VISION.WIDTH, UGBasicHighGoalPipeline.Mode.RED_ONLY);
         vision.switchToStarter();
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
 
@@ -104,15 +106,15 @@ public class MegaknytesRedCompetitionAuto extends MatchOpMode {
         wobbleGoalArm.setOffset();
         schedule(
                 new SelectCommand(new HashMap<Object, Command>() {{
-                    put(RingPipelineEx.Stack.FOUR, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.FOUR, new ParallelCommandGroup(
                             new InstantCommand(vision::switchToHG, vision),
                             new MegaknightsRedFourCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
-                    put(RingPipelineEx.Stack.ONE, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.ONE, new ParallelCommandGroup(
                             new InstantCommand(vision::switchToHG, vision),
                             new MegaknightsRedOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
-                    put(RingPipelineEx.Stack.ZERO, new SequentialCommandGroup(
+                    put(RingPipelineEx.Stack.ZERO, new ParallelCommandGroup(
                             new InstantCommand(vision::switchToHG, vision),
                             new MegaknightsRedZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, vision, telemetry)
                     ));

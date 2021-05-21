@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -14,13 +15,16 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedFourAltCommand;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
+import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
+import org.firstinspires.ftc.teamcode.subsystems.Vision;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 @Autonomous(name = "RED Right Four Alt Test", group = "RED")
+@Disabled
 public class RedRightFourAltTest extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;
@@ -43,6 +47,7 @@ public class RedRightFourAltTest extends MatchOpMode {
     private ShooterFeeder feeder;
     private Intake intake;
     private WobbleGoalArm wobbleGoalArm;
+    private Vision vision;
 
     @Override
     public void robotInit() {
@@ -70,6 +75,7 @@ public class RedRightFourAltTest extends MatchOpMode {
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
+        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.43, 0.56, 0.5, UGBasicHighGoalPipeline.Mode.RED_ONLY, false);
 
     }
 
@@ -77,7 +83,7 @@ public class RedRightFourAltTest extends MatchOpMode {
     public void matchStart() {
         feeder.retractFeed();
 
-        schedule(new RightRedFourAltCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry));
+        schedule(new RightRedFourAltCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, vision, telemetry));
 
     }
 }

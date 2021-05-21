@@ -7,12 +7,12 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
-import org.firstinspires.ftc.teamcode.inperson.blue.spicy.RightBlueFourCommand;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
 @Autonomous(name = "Blue Right Four Test", group = "Blue")
+@Disabled
 public class BlueRightFourTest extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;

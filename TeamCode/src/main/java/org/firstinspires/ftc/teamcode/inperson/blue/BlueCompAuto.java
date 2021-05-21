@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Trajectories;
+import org.firstinspires.ftc.teamcode.inperson.VisionConstants;
 import org.firstinspires.ftc.teamcode.inperson.blue.inception.LeftBlueFourCommand;
 import org.firstinspires.ftc.teamcode.inperson.blue.inception.LeftBlueOneCommand;
 import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
@@ -85,7 +86,7 @@ public class BlueCompAuto extends MatchOpMode {
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
         drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
-        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.36, 0.52, BLUE_CAMERA_WIDTH, UGBasicHighGoalPipeline.Mode.BLUE_ONLY);
+        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, VisionConstants.BLUE_LEFT_VISION.TOP_HEIGHT, VisionConstants.BLUE_LEFT_VISION.BOTTOM_HEIGHT, VisionConstants.BLUE_LEFT_VISION.WIDTH, UGBasicHighGoalPipeline.Mode.BLUE_ONLY);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
 
     }

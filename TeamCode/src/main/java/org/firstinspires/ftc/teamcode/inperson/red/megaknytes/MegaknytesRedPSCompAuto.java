@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
+import org.firstinspires.ftc.teamcode.inperson.VisionConstants;
 import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedFourCommand;
 import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedOneCommand;
 import org.firstinspires.ftc.teamcode.inperson.red.spicy.RightRedZeroCommand;
@@ -34,7 +35,7 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-@Autonomous(name = "Megaknytes Competition Autonomous (Red + PS)", group = "Red")
+@Autonomous(name = "Megaknytes Competition Autonomous (Red Right + PS)", group = "Red")
 public class MegaknytesRedPSCompAuto extends MatchOpMode {
     public static double startPoseX = -62.5;
     public static double startPoseY = 0;
@@ -86,8 +87,7 @@ public class MegaknytesRedPSCompAuto extends MatchOpMode {
         shooterWheels = new ShooterWheels(shooterMotorFront, shooterMotorBack, telemetry);
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
-        drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
-        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.43, 0.56, RED_CAMERA_WIDTH, UGBasicHighGoalPipeline.Mode.RED_ONLY);
+        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, VisionConstants.RED_RIGHT_VISION.TOP_HEIGHT, VisionConstants.RED_RIGHT_VISION.BOTTOM_HEIGHT, VisionConstants.RED_RIGHT_VISION.WIDTH, UGBasicHighGoalPipeline.Mode.RED_ONLY);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
 
     }

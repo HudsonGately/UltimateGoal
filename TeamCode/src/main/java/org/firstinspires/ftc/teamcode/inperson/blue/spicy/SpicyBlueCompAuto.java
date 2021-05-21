@@ -17,9 +17,10 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.teamcode.Trajectories;
 import org.firstinspires.ftc.teamcode.Util;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
-import org.firstinspires.ftc.teamcode.inperson.blue.megaknytes.MegaknightsBlueOneCommand;
-import org.firstinspires.ftc.teamcode.inperson.blue.megaknytes.MegaknightsBlueZeroCommand;
-import org.firstinspires.ftc.teamcode.inperson.red.megaknytes.MegaknightsRedFourCommand;
+import org.firstinspires.ftc.teamcode.inperson.VisionConstants;
+import org.firstinspires.ftc.teamcode.inperson.blue.RightBlueFourCommand;
+import org.firstinspires.ftc.teamcode.inperson.blue.RightBlueOneCommand;
+import org.firstinspires.ftc.teamcode.inperson.blue.RightBlueZeroCommand;
 import org.firstinspires.ftc.teamcode.opmodes.MatchOpMode;
 import org.firstinspires.ftc.teamcode.pipelines.RingPipelineEx;
 import org.firstinspires.ftc.teamcode.pipelines.UGBasicHighGoalPipeline;
@@ -86,7 +87,7 @@ public class SpicyBlueCompAuto extends MatchOpMode {
         feeder = new ShooterFeeder(feedServo, telemetry);
         wobbleGoalArm = new WobbleGoalArm(arm, lazySusanServo, clawServo, wobbleTouchSensor, telemetry);
         drivetrain.setPoseEstimate(Trajectories.BlueLeftTape.startPose);
-        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, 0.36, 0.52, BLUE_CAMERA_WIDTH, UGBasicHighGoalPipeline.Mode.BLUE_ONLY);
+        vision = new Vision(hardwareMap, "webcam", "webcam1", telemetry, VisionConstants.BLUE_LEFT_VISION.TOP_HEIGHT, VisionConstants.BLUE_LEFT_VISION.BOTTOM_HEIGHT, VisionConstants.BLUE_LEFT_VISION.WIDTH, UGBasicHighGoalPipeline.Mode.BLUE_ONLY);
         drivetrain.setPoseEstimate(new Pose2d(startPoseX, startPoseY, Math.toRadians(startPoseHeading)));
 
     }
@@ -103,13 +104,13 @@ public class SpicyBlueCompAuto extends MatchOpMode {
         schedule(
                 new SelectCommand(new HashMap<Object, Command>() {{
                     put(RingPipelineEx.Stack.FOUR, new SequentialCommandGroup(
-                            new RightBlueFourCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
+                            new SpicyBlueFourCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
                     put(RingPipelineEx.Stack.ONE, new SequentialCommandGroup(
-                            new RightBlueOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
+                            new SpicyBlueOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
                     put(RingPipelineEx.Stack.ZERO, new SequentialCommandGroup(
-                            new RightBlueZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
+                            new SpicyBlueZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
                 }}, vision::getCurrentStack)
         );
