@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.inperson.blue;
+package org.firstinspires.ftc.teamcode.inperson.blue.spicy;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-public class RightBlueOneCommand extends SequentialCommandGroup {
-    public RightBlueOneCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
+public class RightBlueZeroCommand extends SequentialCommandGroup {
+    public RightBlueZeroCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
         final int HG_SPEED = 3450;
         final int POWERSHOT_SPEED = 3000;
 
@@ -33,7 +33,7 @@ public class RightBlueOneCommand extends SequentialCommandGroup {
 
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
-                        new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
+                new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
                 new TurnToCommand(drivetrain, 195),
 
                 // Shokot 3k ringsk
@@ -42,21 +42,12 @@ public class RightBlueOneCommand extends SequentialCommandGroup {
 
                 //Place Wobble Goal
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-                new TurnToCommand(drivetrain, 180),
-                new DriveForwardCommand(drivetrain, -50),
-                new InstantCommand(wobbleGoalArm::setTurretLeft,wobbleGoalArm),
-                new WaitCommand(500),
-                new InstantCommand(wobbleGoalArm::placeWobbleGoal,wobbleGoalArm),
-                new WaitCommand(1000),
-                new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
-                new WaitCommand(500),
-                new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
-                new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
-                new DriveForwardCommand(drivetrain, 40),
-                new TurnCommand(drivetrain, -90),
-                new DriveForwardCommand(drivetrain, -10)
-
-
+                new TurnToCommand(drivetrain, 170),
+                new TurnCommand(drivetrain, -105),
+                new DriveForwardCommand(drivetrain, 17),
+                new PlaceWobbleGoal(wobbleGoalArm),
+                new TurnCommand(drivetrain, 35),
+                new DriveForwardCommand(drivetrain, -40)
 
 
 
