@@ -109,7 +109,6 @@ public class SpicyAuto extends MatchOpMode {
                             new RightRedSpicyOneCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, telemetry)
                     ));
                     put(RingPipelineEx.Stack.ZERO, new ParallelCommandGroup(
-                            new InstantCommand(vision::switchToHG, vision),
                             new RightRedSpizyZeroCommand(drivetrain, shooterWheels, feeder, intake, wobbleGoalArm, vision, telemetry)
                     ));
                 }}, vision::getCurrentStack)

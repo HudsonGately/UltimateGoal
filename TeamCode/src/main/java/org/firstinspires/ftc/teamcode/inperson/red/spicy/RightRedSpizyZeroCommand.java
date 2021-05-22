@@ -49,8 +49,8 @@ public class RightRedSpizyZeroCommand extends SequentialCommandGroup {
                 new TurnCommand(drivetrain,90),
                 new DriveForwardCommand(drivetrain, -5),
                 new PlaceWobbleGoal(wobbleGoalArm),
-                new DriveForwardCommand(drivetrain, -3)
-                
+                new DriveForwardCommand(drivetrain, -30)
+
 
 
 

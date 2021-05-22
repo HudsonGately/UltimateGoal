@@ -183,7 +183,7 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
         Rect boundingRect = Imgproc.boundingRect(contour);
         double aspectRatio = (double) boundingRect.width / (double) boundingRect.height;
         Imgproc.putText(adjustedColorSpace, Double.toString(aspectRatio), new Point(boundingRect.x, boundingRect.y), 2, 1, new Scalar(255, 255, 255));
-        return Imgproc.contourArea(contour) > 50  && aspectRatio > 0.6 && aspectRatio < 1.8;
+        return Imgproc.contourArea(contour) > 50  && aspectRatio > 0.55 && aspectRatio < 1.85;
     }
 
     public Point getCenterofRect(Rect rect) {
