@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode.inperson.red.fellowship;
+package org.firstinspires.ftc.teamcode.inperson.blue.gprobotics;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.PlaceWobbleGoal;
@@ -19,8 +18,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterFeeder;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterWheels;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleGoalArm;
 
-public class FellowshipRedOneCommand extends SequentialCommandGroup {
-    public FellowshipRedOneCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
+public class GPBlueZeroCommand extends SequentialCommandGroup {
+    public GPBlueZeroCommand(Drivetrain drivetrain, ShooterWheels shooterWheels, ShooterFeeder feeder, Intake intake, WobbleGoalArm wobbleGoalArm, Telemetry telemetry) {
         final int HG_SPEED = 3450;
         final int POWERSHOT_SPEED = 3000;
 
@@ -30,33 +29,26 @@ public class FellowshipRedOneCommand extends SequentialCommandGroup {
                 new InstantCommand(wobbleGoalArm::closeClaw),
                 new InstantCommand(feeder::retractFeed),
 
+
                 // Spin up wheels
                 new InstantCommand(() -> shooterWheels.setShooterRPM(HG_SPEED), shooterWheels),
 
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
-                new TurnToCommand(drivetrain, 197),
-
+                //new TurnToGoalCommand(drivetrain, vision, 195),
+                new TurnToCommand(drivetrain, 170),
                 // Shoot 3 rings
                 new FeedRingsCommand(feeder, 3),
                 //Place Wobble Goal
-                new TurnToCommand(drivetrain, 170),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels),
-                new DriveForwardCommand(drivetrain, -45),
-                new InstantCommand(wobbleGoalArm::setTurretLeft,wobbleGoalArm),
-                new WaitCommand(500),
+                new SplineCommand(drivetrain, new Vector2d(20, 8), Math.toRadians(0), true),
                 new PlaceWobbleGoal(wobbleGoalArm),
-                new WaitCommand(500),
-                new InstantCommand(wobbleGoalArm::openClaw, wobbleGoalArm),
-                new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
-                new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
-                new WaitCommand(5000),
-                new SplineCommand(drivetrain, new Vector2d(5, -15), Math.toRadians(0)),
-                // new DriveForwardCommand(drivetrain, 30),
-                new TurnToCommand(drivetrain,0, true)
-
-                // new DriveForwardCommand(drivetrain, 10)
+                new DriveForwardCommand(drivetrain, -40),
+                new WaitCommand(10000),
+                new InstantCommand(intake::intake, intake),
+                new SplineCommand(drivetrain, new Vector2d(15, -14), Math.toRadians(180)),
+                new InstantCommand(intake::stop, intake)
 
 
 
@@ -66,7 +58,8 @@ public class FellowshipRedOneCommand extends SequentialCommandGroup {
 
 
 
-        );
+
+
+                );
     }
 }
-

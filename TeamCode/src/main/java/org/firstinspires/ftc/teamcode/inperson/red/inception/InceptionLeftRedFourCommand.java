@@ -51,13 +51,13 @@ public class InceptionLeftRedFourCommand extends SequentialCommandGroup {
 
 
                 new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm),
-                new SplineCommand(drivetrain, new Vector2d(64, -18), 0, true),
+                new SplineCommand(drivetrain, new Vector2d(64, -21), 0, true),
                 new TurnCommand(drivetrain, 90),
                 new PlaceWobbleGoal(wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::liftWobbleGoal, wobbleGoalArm),
                 new InstantCommand(wobbleGoalArm::setTurretMiddle, wobbleGoalArm),
                 new DriveForwardCommand(drivetrain, -4),
-                new SplineCommand(drivetrain, new Vector2d(11, 8), Math.toRadians(180), true)
+                new SplineCommand(drivetrain, new Vector2d(11, 9.5), Math.toRadians(180), true)
 
 
                 );

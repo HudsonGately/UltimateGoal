@@ -85,6 +85,7 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
 
         if(currentMode == Mode.BLUE_ONLY || currentMode == Mode.BOTH)
         {
+            MIN_COLOR_THRESHOLD = 142;
             // Extract necessary Channels to apropritae Mats
             Core.extractChannel(adjustedColorSpace, currentChannel, YCBCR_CR_CHANNEL);
             blueCenter = findTarget(input, currentChannel);
@@ -93,8 +94,10 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
             }
         }
         // Convert RGB input to YCrCB, this is for better Red and blue identification
+
         currentThreshold.release();
         currentChannel.release();
+
         adjustedColorSpace.release();
         return input;
 
@@ -136,6 +139,11 @@ public class UGBasicHighGoalPipeline extends OpenCvPipeline {
         int kernelSize = 3;
         Mat element = Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT, new Size( kernelSize + 1,  kernelSize + 1),
                 new Point(kernelSize, kernelSize));
+        if (currentMode == Mode.BLUE_ONLY) {
+            kernelSize = 6;
+            element = Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT, new Size( kernelSize + 1,  kernelSize + 1),
+                    new Point(kernelSize, kernelSize));
+        }
         Imgproc.dilate(currentThreshold, currentThreshold, element);
 
         // Finding the contours along with its heirarchy (so we can find interior/child contours)

@@ -36,7 +36,7 @@ public class FellowshipRedFourCommand extends SequentialCommandGroup {
                 // Drive to Spot
                 new ParallelCommandGroup(new DriveForwardCommand(drivetrain, -60),
                         new WaitCommand(200).andThen(new InstantCommand(wobbleGoalArm::midWobbleGoal, wobbleGoalArm))),
-                new TurnToCommand(drivetrain, 193),
+                new TurnToCommand(drivetrain, 197),
 
                 // Shoot 3 rings
                 new FeedRingsCommand(feeder, 3),

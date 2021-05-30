@@ -106,7 +106,7 @@ public class BlueTeleop extends MatchOpMode {
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
         (new GamepadButton(driverGamepad, GamepadKeys.Button.LEFT_STICK_BUTTON)).whileHeld(new VisionCommand(drivetrain, vision, 30));
         powershotButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.B)).toggleWhenPressed(
-                new InstantCommand(() -> shooterWheels.setShooterRPM(3000), shooterWheels),
+                new InstantCommand(() -> shooterWheels.setShooterRPM(2900), shooterWheels),
                 new InstantCommand(() -> shooterWheels.setShooterRPM(0), shooterWheels));
         intakeButton = (new GamepadTrigger(driverGamepad, GamepadKeys.Trigger.LEFT_TRIGGER)).whileHeld(intake::intake).whenReleased(intake::stop);
         outtakeButton = (new GamepadButton(driverGamepad, GamepadKeys.Button.X)).whileHeld(intake::outtake).whenReleased(intake::stop);
